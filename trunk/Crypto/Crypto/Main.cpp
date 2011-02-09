@@ -8,9 +8,10 @@
 
 int main(int argc, char *argv[])
 {
-	char* enc;
+	char* enc = VigenereEncodeMessage("MyMessage", "privatekey");
+	printf("%s\n", enc);
 
-	enc = VigenereMessage("MyMessage", "LOL");
-	printf("%s", enc);
+	char* un = VigenereDecodeMessage(enc, "privatekey");
+	printf("%s\n", un);
 	return 0;
 }
