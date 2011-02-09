@@ -33,4 +33,5 @@ const char table[26][26] = {
 { 'Y','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X' },
 { 'Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y' } };
 
-char* VigenereMessage(char* message, char* key);
+char* VigenereEncodeMessage(char* message, char* key);
+char* VigenereDecodeMessage(char* message, char* key);

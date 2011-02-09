@@ -61,7 +61,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Vigenere.c" />
+    <ClCompile Include="Vigenere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypto.h" />
