@@ -64,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypto.h" />
+    <ClInclude Include="MD5.h" />
+    <ClInclude Include="SHA1.h" />
+    <ClInclude Include="Vigenere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
