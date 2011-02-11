@@ -1,4 +1,5 @@
-﻿/*
+﻿#pragma once
+/*
 The RSA algorithm involves three steps: key generation, encryption and decryption.
 
 [edit]Key generation
@@ -56,12 +57,44 @@ m = 27902753(mod 3233) = 65.
 Both of these calculations can be computed efficiently using the square-and-multiply algorithm for modular exponentiation. In real life situations the primes selected would be much larger; in our example it would be relatively trivial to factor n, 3233, obtained from the freely available public key back to the primes p and q. Given e, also from the public key, we could then compute d and so acquire the private key.
 */
 
+const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
 
-long generatePrime()
-{
-	return 7; // needs to be random lol
-}
+#ifndef DIM
+  #define DIM(v) (sizeof(v)/sizeof((v)[0]))
+  #define DIMof(type,member)   DIM(((type *)0)->member)
+#endif
+
+#define is_RSA(a) ((a)>=1 && (a)<=3)
+
+#define BAD_ALGO  4
+#define BAD_KEY   7
+#define BAD_SIGN  8
+
+struct mpi_struct { int hidden_stuff; };
+typedef struct mpi_struct *MPI;
+
+typedef struct {
+    MPI n;	    /* modulus */
+    MPI e;	    /* exponent */
+} RSA_public_key;
+
+
+typedef struct {
+    MPI n;	    /* public modulus */
+    MPI e;	    /* public exponent */
+    MPI d;	    /* exponent */
+    MPI p;	    /* prime  p. */
+    MPI q;	    /* prime  q. */
+    MPI u;	    /* inverse of p mod q. */
+} RSA_private_key;
+
+long generatePrime();
 
 long totient();
 
-long mod(long, long);
+void test_keys(RSA_private_key *sk, unsigned nbits);
+void generate(RSA_private_key *sk, unsigned nbits);
+int  check_private_key( RSA_private_key *sk );
+
+void pub( MPI output, MPI input, RSA_public_key* key);
+void priv( MPI output, MPI input, RSA_private_key* key);
