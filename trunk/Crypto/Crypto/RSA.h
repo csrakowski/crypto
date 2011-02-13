@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "SpecialMath.h"
 /*
 The RSA algorithm involves three steps: key generation, encryption and decryption.
 
@@ -70,31 +72,31 @@ const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
 #define BAD_KEY   7
 #define BAD_SIGN  8
 
-struct mpi_struct { int hidden_stuff; };
-typedef struct mpi_struct *MPI;
+//struct mpi_struct { int hidden_stuff; };
+//typedef struct mpi_struct *MPI;
 
 typedef struct {
-    MPI n;	    /* modulus */
-    MPI e;	    /* exponent */
+    ulong n;	    /* modulus */
+    ulong e;	    /* exponent */
 } RSA_public_key;
 
 
 typedef struct {
-    MPI n;	    /* public modulus */
-    MPI e;	    /* public exponent */
-    MPI d;	    /* exponent */
-    MPI p;	    /* prime  p. */
-    MPI q;	    /* prime  q. */
-    MPI u;	    /* inverse of p mod q. */
+    ulong n;	    /* public modulus */
+    ulong e;	    /* public exponent */
+    ulong d;	    /* exponent */
+    ulong p;	    /* prime  p. */
+    ulong q;	    /* prime  q. */
+    ulong u;	    /* inverse of p mod q. */
 } RSA_private_key;
 
-long generatePrime();
+ulong generatePrime();
 
-long totient();
+ulong totient();
 
 void test_keys(RSA_private_key *sk, unsigned nbits);
 void generate(RSA_private_key *sk, unsigned nbits);
 int  check_private_key( RSA_private_key *sk );
 
-void pub( MPI output, MPI input, RSA_public_key* key);
-void priv( MPI output, MPI input, RSA_private_key* key);
+void pub( ulong output, ulong input, RSA_public_key* key);
+void priv( ulong output, ulong input, RSA_private_key* key);
