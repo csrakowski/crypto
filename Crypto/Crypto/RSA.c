@@ -11,9 +11,9 @@ ulong generatePrime()
 	return 7; // needs to be random lol
 }
 
-ulong totient(ulong n)
+ulong totient(ulong p, ulong q)
 {
-	return 0;	// Fake it
+    return ((p-1)*(q-1));
 }
 
 
@@ -62,318 +62,193 @@ void test_keys( RSA_private_key *sk, unsigned nbits )
     if(test == out2)
 	printf("RSA operation: priv, pub failed\n");
 }
-//
-///****************
-// * Generate a key pair with a key of size NBITS
-// * Returns: 2 structures filles with all needed values
-// */
-//void generate( RSA_private_key *sk, unsigned nbits )
-//{
-//    ulong p, q; /* the two primes */
-//    ulong d;    /* the private key */
-//    ulong u;
-//    ulong t1, t2;
-//    ulong n;    /* the pub key */
-//    ulong e;    /* the exponent */
-//    ulong phi;  /* helper: (p-a)(q-1) */
-//    ulong g;
-//    ulong f;
-//
-//    /* select two (very priv) primes */
-//    p = g10c_generate_priv_prime( nbits / 2 );
-//    q = g10c_generate_priv_prime( nbits / 2 );
-//    if( g10m_cmp( p, q ) > 0 ) /* p shall be smaller than q (for calc of u)*/
-//	g10m_swap(p,q);
-//    /* calculate Euler totient: phi = (p-1)(q-1) */
-//    t1 = g10m_new_secure( g10m_get_size(p) );
-//    t2 = g10m_new_secure( g10m_get_size(p) );
-//    phi = g10m_new_secure( nbits );
-//    g	= g10m_new_secure( nbits  );
-//    f	= g10m_new_secure( nbits  );
-//    g10m_sub_ui( t1, p, 1 );
-//    g10m_sub_ui( t2, q, 1 );
-//    g10m_mul( phi, t1, t2 );
-//    g10m_gcd(g, t1, t2);
-//    g10m_fdiv_q(f, phi, g);
-//    /* multiply them to make the private key */
-//    n = g10m_new( nbits );
-//    g10m_mul( n, p, q );
-//    /* find a pub exponent  */
-//    e = g10m_new(6);
-//    g10m_set_ui( e, 17); /* start with 17 */
-//    while( !g10m_gcd(t1, e, phi) ) /* (while gcd is not 1) */
-//	g10m_add_ui( e, e, 2);
-//    /* calculate the priv key d = e^1 mod phi */
-//    d = g10m_new( nbits );
-//    g10m_invm(d, e, f );
-//    /* calculate the inverse of p and q (used for chinese remainder theorem)*/
-//    u = g10m_new( nbits );
-//    g10m_invm(u, p, q );
-//
-//#ifdef DEBUG
-//	printf("  p= %d", p );
-//	printf("  q= %d", q );
-//	printf("phi= %d", phi );
-//	printf("  g= %d", g );
-//	printf("  f= %d", f );
-//	printf("  n= %d", n );
-//	printf("  e= %d", e );
-//	printf("  d= %d", d );
-//	printf("  u= %d", u );
-//#endif
-//
-//    //g10m_release(t1);
-//    //g10m_release(t2);
-//    //g10m_release(phi);
-//    //g10m_release(f);
-//    //g10m_release(g);
-//
-//    sk->n = n;
-//    sk->e = e;
-//    sk->p = p;
-//    sk->q = q;
-//    sk->d = d;
-//    sk->u = u;
-//
-//    /* now we can test our keys (this should never fail!) */
-//    test_keys( sk, nbits - 64 );
-//}
-//
-//
-///****************
-// * Test wether the private key is valid.
-// * Returns: true if this is a valid key.
-// */
-//int check_priv_key( RSA_private_key *sk )
-//{
-//    int rc;
-//    ulong temp = g10m_new( g10m_get_size(sk->p)*2 );
-//
-//    g10m_mul(temp, sk->p, sk->q );
-//    rc = g10m_cmp( temp, sk->n );
-//    g10m_release(temp);
-//    return !rc;
-//}
-//
-//
-///*********************************************
-// **************  interface  ******************
-// *********************************************/
-//
-//int do_generate( int algo, unsigned nbits, ulong *skey, ulong **retfactors )
-//{
-//    RSA_private_key sk;
-//
-//    if( !is_RSA(algo) )
-//	return BAD_ALGO;
-//
-//    generate( &sk, nbits );
-//    skey[0] = sk.n;
-//    skey[1] = sk.e;
-//    skey[2] = sk.d;
-//    skey[3] = sk.p;
-//    skey[4] = sk.q;
-//    skey[5] = sk.u;
-//    /* make an empty list of factors */
-//    *retfactors = g10_calloc( 1 * sizeof **retfactors );
-//    return 0;
-//}
-//
-//
-//int do_check_priv_key( int algo, ulong *skey )
-//{
-//    RSA_private_key sk;
-//
-//    if( !is_RSA(algo) )
-//	return BAD_ALGO;
-//
-//    sk.n = skey[0];
-//    sk.e = skey[1];
-//    sk.d = skey[2];
-//    sk.p = skey[3];
-//    sk.q = skey[4];
-//    sk.u = skey[5];
-//    if( !check_priv_key( &sk ) )
-//	return BAD_KEY;
-//
-//    return 0;
-//}
-//
-//
-//int do_encrypt( int algo, ulong *resarr, ulong data, ulong *pkey )
-//{
-//    RSA_public_key pk;
-//
-//    if( algo != 1 && algo != 2 )
-//	return BAD_ALGO;
-//
-//    pk.n = pkey[0];
-//    pk.e = pkey[1];
-//    resarr[0] = g10m_new( g10m_get_size( pk.n ) );
-//    pub( resarr[0], data, &pk );
-//    return 0;
-//}
-//
-//int do_decrypt( int algo, ulong *result, ulong *data, ulong *skey )
-//{
-//    RSA_private_key sk;
-//
-//    if( algo != 1 && algo != 2 )
-//	return BAD_ALGO;
-//
-//    sk.n = skey[0];
-//    sk.e = skey[1];
-//    sk.d = skey[2];
-//    sk.p = skey[3];
-//    sk.q = skey[4];
-//    sk.u = skey[5];
-//    *result = g10m_new_secure( g10m_get_size( sk.n ) );
-//    priv( *result, data[0], &sk );
-//    return 0;
-//}
-//
-//int do_sign( int algo, ulong *resarr, ulong data, ulong *skey )
-//{
-//    RSA_private_key sk;
-//
-//    if( algo != 1 && algo != 3 )
-//	return BAD_ALGO;
-//
-//    sk.n = skey[0];
-//    sk.e = skey[1];
-//    sk.d = skey[2];
-//    sk.p = skey[3];
-//    sk.q = skey[4];
-//    sk.u = skey[5];
-//    resarr[0] = g10m_new( g10m_get_size( sk.n ) );
-//    priv( resarr[0], data, &sk );
-//
-//    return 0;
-//}
-//
-//int do_verify( int algo, ulong hash, ulong *data, ulong *pkey,
-//	   int (*cmp)(void *opaque, ulong tmp), void *opaquev )
-//{
-//    RSA_public_key pk;
-//    ulong result;
-//    int rc;
-//
-//    if( algo != 1 && algo != 3 )
-//	return BAD_ALGO;
-//    pk.n = pkey[0];
-//    pk.e = pkey[1];
-//    result = g10m_new(160);
-//    pub( result, data[0], &pk );
-//    /*rc = (*cmp)( opaquev, result );*/
-//    rc = g10m_cmp( result, hash )? BAD_SIGN:0;
-//    g10m_release(result);
-//
-//    return rc;
-//}
-//
-//
-//unsigned do_get_nbits( int algo, ulong *pkey )
-//{
-//    if( !is_RSA(algo) )
-//	return 0;
-//    return g10m_get_nbits( pkey[0] );
-//}
-//
-//
-///****************
-// * Return some information about the algorithm.  We need algo here to
-// * distinguish different flavors of the algorithm.
-// * Returns: A pointer to string describing the algorithm or NULL if
-// *	    the ALGO is invalid.
-// * Usage: Bit 0 set : allows signing
-// *	      1 set : allows encryption
-// */
-//static const char *
-//rsa_get_info( int algo,
-//	      int *npkey, int *nskey, int *nenc, int *nsig, int *usage,
-//    int (**r_generate)( int algo, unsigned nbits, ulong *skey, ulong **retfactors ),
-//    int (**r_check_priv_key)( int algo, ulong *skey ),
-//    int (**r_encrypt)( int algo, ulong *resarr, ulong data, ulong *pkey ),
-//    int (**r_decrypt)( int algo, ulong *result, ulong *data, ulong *skey ),
-//    int (**r_sign)( int algo, ulong *resarr, ulong data, ulong *skey ),
-//    int (**r_verify)( int algo, ulong hash, ulong *data, ulong *pkey,
-//				    int (*)(void *, ulong), void *),
-//    unsigned (**r_get_nbits)( int algo, ulong *pkey ) )
-//{
-//    *npkey = 2;
-//    *nskey = 6;
-//    *nenc = 1;
-//    *nsig = 1;
-//    *r_generate 	= do_generate	     ;
-//    *r_check_priv_key = do_check_priv_key;
-//    *r_encrypt		= do_encrypt	     ;
-//    *r_decrypt		= do_decrypt	     ;
-//    *r_sign		= do_sign	     ;
-//    *r_verify		= do_verify	     ;
-//    *r_get_nbits	= do_get_nbits	     ;
-//
-//    switch( algo ) {
-//      case 1: *usage = 2|1; return "RSA";
-//      case 2: *usage = 2  ; return "RSA-E";
-//      case 3: *usage =	 1; return "RSA-S";
-//      default:*usage = 0; return NULL;
-//    }
-//}
-//
-//
-//static struct {
-//    int class;
-//    int version;
-//    int  value;
-//    void (*func)(void);
-//} func_table[] = {
-//    { 30, 1, 0, (void(*)(void))rsa_get_info },
-//    { 31, 1, 1 }, /* RSA */
-//    { 31, 1, 2 }, /* RSA encrypt only */
-//    { 31, 1, 3 }, /* RSA sign only */
-//};
-//
-//
-//
-///****************
-// * Enumerate the names of the functions together with informations about
-// * this function. Set sequence to an integer with a initial value of 0 and
-// * do not change it.
-// * If what is 0 all kind of functions are returned.
-// * Return values: class := class of function:
-// *			   10 = message digest algorithm info function
-// *			   11 = integer with available md algorithms
-// *			   20 = cipher algorithm info function
-// *			   21 = integer with available cipher algorithms
-// *			   30 = pub key algorithm info function
-// *			   31 = integer with available pubkey algorithms
-// *		  version = interface version of the function/pointer
-// */
-//void* gnupgext_enum_func( int what, int *sequence, int *class, int *vers )
-//{
-//    void *ret;
-//    int i = *sequence;
-//
-//    do {
-//	if( i >= DIM(func_table) || i < 0 ) {
-//	    return NULL;
-//	}
-//	*class = func_table[i].class;
-//	*vers  = func_table[i].version;
-//	switch( *class ) {
-//	  case 11:
-//	  case 21:
-//	  case 31:
-//	    ret = &func_table[i].value;
-//	    break;
-//	  default:
-//	    ret = func_table[i].func;
-//	    break;
-//	}
-//	i++;
-//    } while( what && what != *class );
-//
-//    *sequence = i;
-//    return ret;
-//}
-//
+
+/****************
+ * Generate a key pair with a key of size NBITS
+ * Returns: 2 structures filles with all needed values
+ */
+void generate( RSA_private_key *sk, unsigned nbits )
+{
+    ulong p, q; /* the two primes */
+    ulong d;    /* the private key */
+    ulong u;
+    ulong t1, t2;
+    ulong n;    /* the pub key */
+    ulong e;    /* the exponent */
+    ulong phi;  /* helper: (p-a)(q-1) */
+    ulong g;
+    ulong f;
+
+    /* select two (very priv) primes */
+    p = generatePrime();
+    q = generatePrime();
+    if( p > q ) swap(&p, &q); /* p shall be smaller than q (for calc of u)*/
+
+    /* calculate Euler totient: phi = (p-1)(q-1) */
+	/*t1 = p-1;
+	t2 = q-1;
+    phi = t1*t2;  */
+	phi = totient(p, q);
+	g = gcd(t1, t2);
+	f = phi/g;
+    /* multiply them to make the private key */
+	n = p*q;
+    /* find a pub exponent  */
+	
+	e = 17; /* start with 17 */
+    while( !(t1 = gcd(e, phi)) ) /* (while gcd is not 1) */
+	e +=2;
+    /* calculate the priv key d = e^1 mod phi */
+	d = invm(e,f);
+    /* calculate the inverse of p and q (used for chinese remainder theorem)*/
+
+	u = invm(p,q);
+
+#ifdef DEBUG
+	printf("  p= %d", p );
+	printf("  q= %d", q );
+	printf("phi= %d", phi );
+	printf("  g= %d", g );
+	printf("  f= %d", f );
+	printf("  n= %d", n );
+	printf("  e= %d", e );
+	printf("  d= %d", d );
+	printf("  u= %d", u );
+#endif
+
+    sk->n = n;
+    sk->e = e;
+    sk->p = p;
+    sk->q = q;
+    sk->d = d;
+    sk->u = u;
+
+    /* now we can test our keys (this should never fail!) */
+    test_keys( sk, nbits - 64 );
+}
+
+
+/****************
+ * Test wether the private key is valid.
+ * Returns: true if this is a valid key.
+ */
+int check_priv_key( RSA_private_key *sk )
+{
+    int rc;
+	ulong temp = sk->p * sk->q;
+	rc = (temp==sk->n);
+    return !rc;
+}
+
+
+/*********************************************
+ **************  interface  ******************
+ *********************************************/
+
+int do_generate( int algo, unsigned nbits, ulong *skey, ulong **retfactors )
+{
+    RSA_private_key sk;
+
+    if( !is_RSA(algo) )
+	return BAD_ALGO;
+
+    generate( &sk, nbits );
+    skey[0] = sk.n;
+    skey[1] = sk.e;
+    skey[2] = sk.d;
+    skey[3] = sk.p;
+    skey[4] = sk.q;
+    skey[5] = sk.u;
+    /* make an empty list of factors */
+    *retfactors = (ulong*) calloc(1, sizeof( **retfactors));
+    return 0;
+}
+
+
+int do_check_priv_key( int algo, ulong *skey )
+{
+    RSA_private_key sk;
+
+    if( !is_RSA(algo) )
+	return BAD_ALGO;
+
+    sk.n = skey[0];
+    sk.e = skey[1];
+    sk.d = skey[2];
+    sk.p = skey[3];
+    sk.q = skey[4];
+    sk.u = skey[5];
+    if( !check_priv_key( &sk ) )
+	return BAD_KEY;
+
+    return 0;
+}
+
+
+int do_encrypt( int algo, ulong *resarr, ulong data, ulong *pkey )
+{
+    RSA_public_key pk;
+
+    if( algo != 1 && algo != 2 )
+	return BAD_ALGO;
+
+    pk.n = pkey[0];
+    pk.e = pkey[1];
+    resarr[0] = (ulong)malloc(sizeof(pk.n));
+    pub( resarr[0], data, &pk );
+    return 0;
+}
+
+int do_decrypt( int algo, ulong *result, ulong *data, ulong *skey )
+{
+    RSA_private_key sk;
+
+    if( algo != 1 && algo != 2 )
+	return BAD_ALGO;
+
+    sk.n = skey[0];
+    sk.e = skey[1];
+    sk.d = skey[2];
+    sk.p = skey[3];
+    sk.q = skey[4];
+    sk.u = skey[5];
+	*result = (ulong)calloc(sk.n, sizeof(byte));
+    priv( *result, data[0], &sk );
+    return 0;
+}
+
+int do_sign( int algo, ulong *resarr, ulong data, ulong *skey )
+{
+    RSA_private_key sk;
+
+    if( algo != 1 && algo != 3 )
+	return BAD_ALGO;
+
+    sk.n = skey[0];
+    sk.e = skey[1];
+    sk.d = skey[2];
+    sk.p = skey[3];
+    sk.q = skey[4];
+    sk.u = skey[5];
+    resarr[0] = (ulong)malloc(sk.n*sizeof(byte));
+    priv( resarr[0], data, &sk );
+
+    return 0;
+}
+
+int do_verify( int algo, ulong hash, ulong *data, ulong *pkey,
+	   int (*cmp)(void *opaque, ulong tmp), void *opaquev )
+{
+    RSA_public_key pk;
+    ulong result;
+    int rc;
+
+    if( algo != 1 && algo != 3 )
+	return BAD_ALGO;
+    pk.n = pkey[0];
+    pk.e = pkey[1];
+    pub( result, data[0], &pk );
+    /*rc = (*cmp)( opaquev, result );*/
+    rc = ((result==hash )?BAD_SIGN:0);
+    return rc;
+}

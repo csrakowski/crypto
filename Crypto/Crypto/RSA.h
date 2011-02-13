@@ -92,7 +92,7 @@ typedef struct {
 
 ulong generatePrime();
 
-ulong totient();
+ulong totient(ulong n);
 
 void test_keys(RSA_private_key *sk, unsigned nbits);
 void generate(RSA_private_key *sk, unsigned nbits);
