@@ -1,7 +1,5 @@
-//#include "Crypto.h"
+#include "Crypto.h"
 #include <stdio.h>
-
-#include "SpecialMath.h"
 
 /*****************************\
 * Christiaan Rakowski
@@ -22,6 +20,13 @@ int main(int argc, char *argv[])
 	//	ulong r = crandom();
 	//	printf("%d", r);
 	//}
+
+	RSA_private_key privkey;
+	RSA_public_key pubkey;
+
+	//generate(&privkey, 8);
+	test_keys(&privkey, 8);
+
 
 	return 0;
 }
