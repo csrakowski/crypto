@@ -90,10 +90,6 @@ typedef struct {
     ulong u;	    /* inverse of p mod q. */
 } RSA_private_key;
 
-ulong generatePrime();
-
-ulong totient(ulong n);
-
 void test_keys(RSA_private_key *sk, unsigned nbits);
 void generate(RSA_private_key *sk, unsigned nbits);
 int  check_private_key( RSA_private_key *sk );

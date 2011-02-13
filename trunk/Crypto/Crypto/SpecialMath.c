@@ -14,6 +14,44 @@ ulong gcd(ulong a, ulong b)
 	return a;
 }
 
+ulong generatePrime(ulong length)
+{
+	randomize();
+	long int i;
+	long double rand_num,calc,result_div,check,min,max,prime,is_prime;
+	min=powl(10,length-1);
+	max=powl(10,length);
+	do{
+		do{
+			rand_num=random(max);
+		}while(rand_num<=min);
+		for(i=2;i<rand_num;i++)
+		{
+			calc=rand_num/i;
+			result_div=floor(calc);
+			check=result_div*i;
+			if(check==rand_num)
+			{
+				break;
+			}
+			else if(check<rand_num || rand_num==2)
+			{
+				continue;
+			}
+		}    
+		is_prime=rand_num;
+	}
+	while(check==rand_num);
+	prime=is_prime;
+	return prime;
+}
+
+
+ulong totient(ulong p, ulong q)
+{
+return ((p-1)*(q-1));
+}
+
 ulong ipow(ulong base, ulong exp)
 {
     ulong result = 1;

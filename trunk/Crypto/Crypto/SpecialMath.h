@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+
 typedef unsigned long  ulong;
 typedef unsigned short ushort;
 typedef unsigned char  byte;
@@ -12,8 +14,8 @@ typedef unsigned char  byte;
 
 void swap(ulong* a, ulong* b);
 ulong gcd(ulong a, ulong b);
-
+ulong generatePrime(ulong length);
+ulong totient(ulong p, ulong q);
 ulong ipow(ulong base, ulong exp);
 ulong crandom();
-
 ulong invm(ulong a, ulong n);

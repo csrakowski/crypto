@@ -6,16 +6,6 @@
 #include <assert.h>
 #include "SpecialMath.h"
 
-ulong generatePrime()
-{
-	return 7; // needs to be random lol
-}
-
-ulong totient(ulong p, ulong q)
-{
-    return ((p-1)*(q-1));
-}
-
 
 /****************
  * Public key operation. Encrypt INPUT with PKEY and put result into OUTPUT.
