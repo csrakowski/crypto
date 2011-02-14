@@ -65,7 +65,7 @@
     <ClCompile Include="RSA.c" />
     <ClCompile Include="SHA1.cpp" />
     <ClCompile Include="SpecialMath.c" />
-    <ClCompile Include="Vigenere.cpp" />
+    <ClCompile Include="Vigenere.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypto.h" />
