@@ -61,7 +61,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Makefile" />
     <ClCompile Include="MD5.cpp" />
     <ClCompile Include="RSA.c" />
     <ClCompile Include="SHA1.cpp" />
