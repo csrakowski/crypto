@@ -72,9 +72,6 @@ const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
 #define BAD_KEY   7
 #define BAD_SIGN  8
 
-//struct mpi_struct { int hidden_stuff; };
-//typedef struct mpi_struct *MPI;
-
 typedef struct {
     ulong n;	    /* modulus */
     ulong e;	    /* exponent */

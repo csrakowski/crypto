@@ -12,8 +12,8 @@ char* VigenereEncodeMessage(char* message, char* key)
 {
 	unsigned int across, down, i, j;
 	char* encMessage = (char*)malloc(strlen(message)*sizeof(char));
-	strcpy(encMessage, message);
-	
+	//strcpy(encMessage, message);
+	strcpy_s(encMessage,strlen(message),message);
 
 	for(j = 0; j < strlen(encMessage); j++)
 	{
@@ -57,7 +57,9 @@ char* VigenereDecodeMessage(char* message, char* key)
 {
 	unsigned int across, down, i, j;
 	char* unMessage = (char*)malloc(strlen(message)*sizeof(char));
-	strcpy(unMessage, message);	
+	//strcpy(unMessage, message);
+	strcpy_s(unMessage,strlen(message),message);
+
 
 	for(j = 0; j < strlen(message); j++)
 	{
