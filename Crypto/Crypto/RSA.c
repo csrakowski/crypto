@@ -36,7 +36,7 @@ void priv(ulong output, ulong input, RSA_private_key *key )
 void test_keys( RSA_private_key *sk, unsigned nbits )
 {
     RSA_public_key pk;
-    ulong test, out1, out2;
+    ulong test, out1 = 0, out2 = 0;
 
     pk.n = sk->n;
     pk.e = sk->e;
@@ -62,7 +62,7 @@ void generate( RSA_private_key *sk, unsigned nbits )
     ulong p, q; /* the two primes */
     ulong d;    /* the private key */
     ulong u;
-    ulong t1, t2;
+    ulong t1 = 0, t2 = 0;
     ulong n;    /* the pub key */
     ulong e;    /* the exponent */
     ulong phi;  /* helper: (p-a)(q-1) */
@@ -70,8 +70,8 @@ void generate( RSA_private_key *sk, unsigned nbits )
     ulong f;
 
     /* select two (very priv) primes */
-    p = generatePrime(128);
-    q = generatePrime(128);
+    p = generatePrime();
+    q = generatePrime();
     if( p > q ) swap(&p, &q); /* p shall be smaller than q (for calc of u)*/
 
     /* calculate Euler totient: phi = (p-1)(q-1) */
@@ -230,7 +230,7 @@ int do_verify( int algo, ulong hash, ulong *data, ulong *pkey,
 	   int (*cmp)(void *opaque, ulong tmp), void *opaquev )
 {
     RSA_public_key pk;
-    ulong result;
+    ulong result = 0;
     int rc;
 
     if( algo != 1 && algo != 3 )
