@@ -2,9 +2,18 @@
 
 #include <math.h>
 
-typedef unsigned long  ulong;
-typedef unsigned short ushort;
-typedef unsigned char  byte;
+/*****************************\
+* Christiaan Rakowski
+* Crypto Collection
+\*****************************/
+
+typedef unsigned long	ulong;
+typedef unsigned int	uint;
+typedef unsigned short	ushort;
+typedef unsigned char	byte;
+
+#define BIT(b) (1<<b)
+#define TOGGLEBIT(x, b) (x^=BIT(b))
 
 #define MAX(a,b) ((a>b)?a:b)
 #define MAX3(a,b,c) ((MAX(a,b)>c)?MAX(a,b):c)
@@ -14,7 +23,7 @@ typedef unsigned char  byte;
 
 void swap(ulong* a, ulong* b);
 ulong gcd(ulong a, ulong b);
-ulong generatePrime(ulong length);
+ulong generatePrime();
 ulong totient(ulong p, ulong q);
 ulong ipow(ulong base, ulong exp);
 ulong crandom();

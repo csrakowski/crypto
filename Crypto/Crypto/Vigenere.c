@@ -3,10 +3,15 @@
 #include <ctype.h>
 #include <string.h>
 
+/*****************************\
+* Christiaan Rakowski
+* Crypto Collection
+\*****************************/
+
 char* VigenereEncodeMessage(char* message, char* key)
 {
 	unsigned int across, down, i, j;
-	char* encMessage = (char*)malloc(strlen(message)*sizeof(char)); //new char[strlen(message)];
+	char* encMessage = (char*)malloc(strlen(message)*sizeof(char));
 	strcpy(encMessage, message);
 	
 
@@ -51,7 +56,7 @@ char* VigenereEncodeMessage(char* message, char* key)
 char* VigenereDecodeMessage(char* message, char* key)
 {
 	unsigned int across, down, i, j;
-	char* unMessage = (char*)malloc(strlen(message)*sizeof(char)); //new char[strlen(message)];
+	char* unMessage = (char*)malloc(strlen(message)*sizeof(char));
 	strcpy(unMessage, message);	
 
 	for(j = 0; j < strlen(message); j++)
