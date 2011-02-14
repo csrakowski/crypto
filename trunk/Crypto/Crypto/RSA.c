@@ -70,8 +70,8 @@ void generate( RSA_private_key *sk, unsigned nbits )
     ulong f;
 
     /* select two (very priv) primes */
-    p = generatePrime();
-    q = generatePrime();
+    p = generatePrime(128);
+    q = generatePrime(128);
     if( p > q ) swap(&p, &q); /* p shall be smaller than q (for calc of u)*/
 
     /* calculate Euler totient: phi = (p-1)(q-1) */
