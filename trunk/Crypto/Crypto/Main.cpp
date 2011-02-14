@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 	//}
 
 	RSA_private_key privkey;
-	RSA_public_key pubkey;
+	//RSA_public_key pubkey;
 
-	//generate(&privkey, 8);
+	generate(&privkey, 8);
 	test_keys(&privkey, 8);
 
 
