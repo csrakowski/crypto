@@ -59,12 +59,11 @@ m = 27902753(mod 3233) = 65.
 Both of these calculations can be computed efficiently using the square-and-multiply algorithm for modular exponentiation. In real life situations the primes selected would be much larger; in our example it would be relatively trivial to factor n, 3233, obtained from the freely available public key back to the primes p and q. Given e, also from the public key, we could then compute d and so acquire the private key.
 */
 
-const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
-
-#ifndef DIM
-  #define DIM(v) (sizeof(v)/sizeof((v)[0]))
-  #define DIMof(type,member)   DIM(((type *)0)->member)
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
 
 #define is_RSA(a) ((a)>=1 && (a)<=3)
 
@@ -91,5 +90,9 @@ void test_keys(RSA_private_key *sk, unsigned nbits);
 void generate(RSA_private_key *sk, unsigned nbits);
 int  check_private_key( RSA_private_key *sk );
 
-void pub( ulong output, ulong input, RSA_public_key* key);
-void priv( ulong output, ulong input, RSA_private_key* key);
+void pub( ulong* output, ulong* input, RSA_public_key* key);
+void priv( ulong* output, ulong* input, RSA_private_key* key);
+
+#ifdef __cplusplus
+}
+#endif

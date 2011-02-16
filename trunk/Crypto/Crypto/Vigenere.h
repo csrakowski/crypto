@@ -5,6 +5,10 @@
 * Crypto Collection
 \*****************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 const char table[26][26] = {
 { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' },
 { 'B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A' },
@@ -35,3 +39,7 @@ const char table[26][26] = {
 
 char* VigenereEncodeMessage(char* message, char* key);
 char* VigenereDecodeMessage(char* message, char* key);
+
+#ifdef __cplusplus
+}
+#endif

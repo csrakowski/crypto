@@ -4,10 +4,10 @@
 
 void swap(ulong* a, ulong* b)
 {
-	ulong t;
-	t = *a;
-	*a = *b;
-	*b = t;
+	ulong* t;
+	t = a;
+	a = b;
+	b = t;
 }
 
 ulong gcd(ulong a, ulong b)
@@ -15,7 +15,19 @@ ulong gcd(ulong a, ulong b)
 	return a;
 }
 
-ulong generatePrime()
+ulong crandom(void)
+{
+	ulong* seed = (ulong*)malloc(sizeof(ulong));
+	ulong* seed2 = (ulong*)malloc(sizeof(ulong));
+	srand( (uint)((time(0)*(*seed+1)*rand())+(1^*seed2)) );
+	*seed = rand();
+	free(seed);
+	free(seed2);
+	return ((ulong)rand());
+	//return ((ulong)((rand()<<(sizeof(uint)>>1))|rand()));
+}
+
+ulong generatePrime(void)
 {
 	ulong prime, i;
 
@@ -53,14 +65,6 @@ ulong ipow(ulong base, ulong exp)
         base *= base;
     }
     return result;
-}
-
-ulong crandom()
-{
-	ulong* seed = (ulong*)malloc(sizeof(ulong));
-	srand( (uint)((time(0)*(*seed+1))*rand()) );
-	free(seed);
-	return ((ulong)rand());
 }
 
  /****************
