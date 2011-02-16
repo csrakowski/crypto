@@ -7,6 +7,10 @@
 * Crypto Collection
 \*****************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned short	ushort;
@@ -23,8 +27,12 @@ typedef unsigned char	byte;
 
 void swap(ulong* a, ulong* b);
 ulong gcd(ulong a, ulong b);
-ulong generatePrime();
+ulong crandom(void);
+ulong generatePrime(void);
 ulong totient(ulong p, ulong q);
 ulong ipow(ulong base, ulong exp);
-ulong crandom();
 ulong invm(ulong a, ulong n);
+
+#ifdef __cplusplus
+}
+#endif

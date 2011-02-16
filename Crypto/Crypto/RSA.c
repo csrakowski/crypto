@@ -14,9 +14,9 @@
  *
  * Where c is OUTPUT, m is INPUT and e,n are elements of PKEY.
  */
-void pub(ulong output, ulong input, RSA_public_key *key )
+void pub(ulong* output, ulong* input, RSA_public_key *key )
 {
-	output = ((ipow(input, key->e)) % key->n);
+	*output = ((ipow(*input, key->e)) % key->n);
 }
 
 /****************
@@ -28,9 +28,9 @@ void pub(ulong output, ulong input, RSA_public_key *key )
  *
  * FIXME: We should better use the Chinese Remainder Theorem
  */
-void priv(ulong output, ulong input, RSA_private_key *key )
+void priv(ulong* output, ulong* input, RSA_private_key *key )
 {
-	output = ((ipow(input, key->d)) % key->n);
+	*output = ((ipow(*input, key->d)) % key->n);
 }
 
 void test_keys( RSA_private_key *sk, unsigned nbits )
@@ -43,12 +43,12 @@ void test_keys( RSA_private_key *sk, unsigned nbits )
 		
 	test = crandom();
 
-    pub( out1, test, &pk );
-    priv( out2, out1, sk );
+    pub( &out1, &test, &pk );
+    priv( &out2,& out1, sk );
     if(test == out2)
 	printf("RSA operation: pub, priv failed\n");
-    priv( out1, test, sk );
-    pub( out2, out1, &pk );
+    priv( &out1, &test, sk );
+    pub( &out2, &out1, &pk );
     if(test == out2)
 	printf("RSA operation: priv, pub failed\n");
 }
@@ -75,11 +75,8 @@ void generate( RSA_private_key *sk, unsigned nbits )
     if( p > q ) swap(&p, &q); /* p shall be smaller than q (for calc of u)*/
 
     /* calculate Euler totient: phi = (p-1)(q-1) */
-	/*t1 = p-1;
-	t2 = q-1;
-    phi = t1*t2;  */
 	phi = totient(p, q);
-	g = gcd(t1, t2);
+	g = gcd((p-1), (q-1));
 	f = phi/g;
     /* multiply them to make the private key */
 	n = p*q;
@@ -94,16 +91,16 @@ void generate( RSA_private_key *sk, unsigned nbits )
 
 	u = invm(p,q);
 
-#ifdef DEBUG
-	printf("  p= %d", p );
-	printf("  q= %d", q );
-	printf("phi= %d", phi );
-	printf("  g= %d", g );
-	printf("  f= %d", f );
-	printf("  n= %d", n );
-	printf("  e= %d", e );
-	printf("  d= %d", d );
-	printf("  u= %d", u );
+#ifdef _DEBUG
+	printf("  p= %ld\n", p );
+	printf("  q= %ld\n", q );
+	printf("phi= %ld\n", phi );
+	printf("  g= %ld\n", g );
+	printf("  f= %ld\n", f );
+	printf("  n= %ld\n", n );
+	printf("  e= %ld\n", e );
+	printf("  d= %ld\n", d );
+	printf("  u= %ld\n", u );
 #endif
 
     sk->n = n;
@@ -185,7 +182,7 @@ int do_encrypt( int algo, ulong *resarr, ulong data, ulong *pkey )
     pk.n = pkey[0];
     pk.e = pkey[1];
     resarr[0] = (ulong)malloc(sizeof(pk.n));
-    pub( resarr[0], data, &pk );
+    pub( &resarr[0], &data, &pk );
     return 0;
 }
 
@@ -203,7 +200,7 @@ int do_decrypt( int algo, ulong *result, ulong *data, ulong *skey )
     sk.q = skey[4];
     sk.u = skey[5];
 	*result = (ulong)calloc(sk.n, sizeof(byte));
-    priv( *result, data[0], &sk );
+    priv( result, &data[0], &sk );
     return 0;
 }
 
@@ -221,7 +218,7 @@ int do_sign( int algo, ulong *resarr, ulong data, ulong *skey )
     sk.q = skey[4];
     sk.u = skey[5];
     resarr[0] = (ulong)malloc(sk.n*sizeof(byte));
-    priv( resarr[0], data, &sk );
+    priv( &resarr[0], &data, &sk );
 
     return 0;
 }
@@ -237,8 +234,34 @@ int do_verify( int algo, ulong hash, ulong *data, ulong *pkey,
 	return BAD_ALGO;
     pk.n = pkey[0];
     pk.e = pkey[1];
-    pub( result, data[0], &pk );
+    pub( &result, &data[0], &pk );
     /*rc = (*cmp)( opaquev, result );*/
     rc = ((result==hash )?BAD_SIGN:0);
     return rc;
 }
+
+/*
+
+stap	handeling	berekening	opmerking
+1	Alice kiest twee priemgetallen p en q	p = 17 en q = 11	in werkelijkheid zijn deze getallen zeer groot
+2	berekening n = p x q	n = 17 x 11 = 187	n is haar eerste publieke sleutel
+3	bepaling van e	e= 7	e en (p - 1) x (q - 1) moeten relatief priem zijn.
+Het getal e is haar tweede publieke sleutel
+4	Bob stuurt de letter X
+Voor X kiezen we 88
+(ASCII-tabel)
+De boodschap M = 88	De encryptie (cijfertekst) wordt berekend met:
+C = Me (mod n) wordt:
+C= 887 (mod 187)	Bob zoekt dus eerst de beide publieke sleutels van Alice
+5	bepaling van de waarde van C	C = 894432 (mod 187)
+C= 11 (mod 187)	Hiervoor kun je de applet gebruiken
+6	Alice ontvangt het bericht en bepaalt haar decryptiesleutel d	e x d = 1 (mod (p – 1) x (q – 1)
+7 x d = 1 (mod 160)
+dus d = 23	De waarde van d, de inverse kan bepaald worden met het uitgebreide Algoritme van Euclides
+7	Alice ontcijfert het bericht	M = Cd (mod n)
+M = 1123 (mod 187)
+M = 88 (mod 187)	1123 = 1116 x 118 x 114 x 112 x 11
+Zie het 
+modulorekenen
+8	Alice ziet de letter terug	88 is X	
+*/
