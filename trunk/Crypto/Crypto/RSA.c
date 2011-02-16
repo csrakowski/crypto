@@ -14,7 +14,8 @@
  */
 void encrypt(ulong* output, ulong* input, RSA_public_key *key )
 {
-	*output = ((ipow(*input, key->e)) % key->n);
+	ulong meh = (ipow(*input, key->e));
+	*output = (meh % key->n);
 }
 
 /****************
@@ -28,7 +29,8 @@ void encrypt(ulong* output, ulong* input, RSA_public_key *key )
  */
 void decrypt(ulong* output, ulong* input, RSA_private_key *key )
 {
-	*output = ((ipow(*input, key->d)) % key->n);
+	ulong meh = (ipow(*input, key->d));
+	*output = (meh % key->n);
 }
 
 void test_keys( RSA_private_key *sk )
@@ -42,7 +44,7 @@ void test_keys( RSA_private_key *sk )
 	test = crandom();
 
     encrypt( &out1, &test, &pk );
-    decrypt( &out2,& out1, sk );
+    decrypt( &out2, &out1, sk );
     if(test == out2)
 	printf("RSA operation: pub, priv failed\n");
     decrypt( &out1, &test, sk );
@@ -79,14 +81,14 @@ void generate( RSA_private_key *sk )
 	n = p*q;
     /* find a pub exponent  */
 	
-	e = 876851; /* start with 17 */
+	e = 593; /* start with 17 */
     while(gcd(e, phi) != 1)
 	{
 		//printf("%d\n", e);
 		e+=2;
 	}
     /* calculate the priv key d = e^1 mod phi */
-	d = invm(e,f);
+	d = invm(e, phi);
     /* calculate the inverse of p and q (used for chinese remainder theorem)*/
 	u = invm(p,q);
 

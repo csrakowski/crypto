@@ -5,10 +5,10 @@
 
 void swap(ulong* a, ulong* b)
 {
-	ulong* t;
-	t = a;
-	a = b;
-	b = t;
+	ulong t;
+	t = *a;
+	*a = *b;
+	*b = t;
 }
 
 ulong gcd(ulong a, ulong b)
@@ -59,14 +59,14 @@ ulong totient(ulong p, ulong q)
 
 ulong ipow(ulong base, ulong exp)
 {
-	if(exp == 0) return 1;
-	if(base== 0) return 0;
-	for(exp; exp>1; exp--)
-	{
-		base*=base;
-	}
-	return base;
-/*
+	//if(exp == 0) return 1;
+	//if(base== 0) return 0;
+	//for(exp; exp>1; exp--)
+	//{
+	//	base*=base;
+	//}
+	//return base;
+
     ulong result = 1;
     while (exp)
     {
@@ -76,7 +76,7 @@ ulong ipow(ulong base, ulong exp)
         base *= base;
     }
     return result;
-	*/
+	
 }
 
  /****************

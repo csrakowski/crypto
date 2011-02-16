@@ -21,22 +21,21 @@ int main(int argc, char *argv[])
 		printf("%ld\n", r);
 	}*/
 
-	RSA_private_key privkey;
-	RSA_public_key pubkey;
+	//RSA_private_key privkey;
+	//RSA_public_key pubkey;
 
-	generate(&privkey);
-	test_keys(&privkey);
-	pubkey.n = privkey.n;
-	pubkey.e = privkey.e;
+	//generate(&privkey);
+	//pubkey.n = privkey.n;
+	//pubkey.e = privkey.e;
 
-	ulong in = 0xABCDEF;
-	ulong out;
-	ulong result;
-	printf("Input: %X\n", in);
-	encrypt(&result, &out, &pubkey);	
-	printf("Output: %X\n", out);
-	decrypt(&out, &in, &privkey);
-	printf("Result: %X\n", result);
+	//ulong in = 0xABCDEF;
+	//ulong out;
+	//ulong result;
+	//printf("Input: %lX\n", in);
+	//encrypt(&out, &in, &pubkey);	
+	//printf("Output: %lX\n", out);
+	//decrypt(&result, &out, &privkey);
+	//printf("Result: %lX\n", result);
 
 	return 0;
 }
