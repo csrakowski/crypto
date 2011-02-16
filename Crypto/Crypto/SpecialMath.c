@@ -1,6 +1,7 @@
 #include "SpecialMath.h"
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 
 void swap(ulong* a, ulong* b)
 {
@@ -12,7 +13,9 @@ void swap(ulong* a, ulong* b)
 
 ulong gcd(ulong a, ulong b)
 {
-	return a;
+	if(a == 0) return b;
+	if(b == 0) return a;
+	return gcd(b, (a%b));
 }
 
 ulong crandom(void)
@@ -56,6 +59,14 @@ ulong totient(ulong p, ulong q)
 
 ulong ipow(ulong base, ulong exp)
 {
+	if(exp == 0) return 1;
+	if(base== 0) return 0;
+	for(exp; exp>1; exp--)
+	{
+		base*=base;
+	}
+	return base;
+/*
     ulong result = 1;
     while (exp)
     {
@@ -65,6 +76,7 @@ ulong ipow(ulong base, ulong exp)
         base *= base;
     }
     return result;
+	*/
 }
 
  /****************
@@ -75,7 +87,7 @@ ulong ipow(ulong base, ulong exp)
 ulong invm(ulong a, ulong n)
 {
 	int x;
-	for(x=0; x<100000000; x++)	//BRUTEFORCE!!!
+	for(x=0; x<ULONG_MAX; x++)	//BRUTEFORCE!!!
 	{
 		if(((a*x)%n) == 1)
 		{

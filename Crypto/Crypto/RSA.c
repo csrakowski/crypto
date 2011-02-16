@@ -33,7 +33,7 @@ void priv(ulong* output, ulong* input, RSA_private_key *key )
 	*output = ((ipow(*input, key->d)) % key->n);
 }
 
-void test_keys( RSA_private_key *sk, unsigned nbits )
+void test_keys( RSA_private_key *sk )
 {
     RSA_public_key pk;
     ulong test, out1 = 0, out2 = 0;
@@ -57,19 +57,18 @@ void test_keys( RSA_private_key *sk, unsigned nbits )
  * Generate a key pair with a key of size NBITS
  * Returns: 2 structures filles with all needed values
  */
-void generate( RSA_private_key *sk, unsigned nbits )
+void generate( RSA_private_key *sk )
 {
     ulong p, q; /* the two primes */
     ulong d;    /* the private key */
     ulong u;
-    ulong t1 = 0, t2 = 0;
     ulong n;    /* the pub key */
     ulong e;    /* the exponent */
     ulong phi;  /* helper: (p-a)(q-1) */
     ulong g;
     ulong f;
 
-    /* select two (very priv) primes */
+    /* select two primes */
     p = generatePrime();
     q = generatePrime();
     if( p > q ) swap(&p, &q); /* p shall be smaller than q (for calc of u)*/
@@ -82,13 +81,15 @@ void generate( RSA_private_key *sk, unsigned nbits )
 	n = p*q;
     /* find a pub exponent  */
 	
-	e = 17; /* start with 17 */
-    while( !(t1 = gcd(e, phi)) ) /* (while gcd is not 1) */
-	e +=2;
+	e = 876851; /* start with 17 */
+    while(gcd(e, phi) != 1)
+	{
+		//printf("%d\n", e);
+		e+=2;
+	}
     /* calculate the priv key d = e^1 mod phi */
 	d = invm(e,f);
     /* calculate the inverse of p and q (used for chinese remainder theorem)*/
-
 	u = invm(p,q);
 
 #ifdef _DEBUG
@@ -111,7 +112,7 @@ void generate( RSA_private_key *sk, unsigned nbits )
     sk->u = u;
 
     /* now we can test our keys (this should never fail!) */
-    test_keys( sk, nbits - 64 );
+    test_keys(sk);
 }
 
 
