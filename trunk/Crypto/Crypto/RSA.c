@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
 #include "SpecialMath.h"
 
 
@@ -14,7 +12,7 @@
  *
  * Where c is OUTPUT, m is INPUT and e,n are elements of PKEY.
  */
-void pub(ulong* output, ulong* input, RSA_public_key *key )
+void encrypt(ulong* output, ulong* input, RSA_public_key *key )
 {
 	*output = ((ipow(*input, key->e)) % key->n);
 }
@@ -28,7 +26,7 @@ void pub(ulong* output, ulong* input, RSA_public_key *key )
  *
  * FIXME: We should better use the Chinese Remainder Theorem
  */
-void priv(ulong* output, ulong* input, RSA_private_key *key )
+void decrypt(ulong* output, ulong* input, RSA_private_key *key )
 {
 	*output = ((ipow(*input, key->d)) % key->n);
 }
@@ -43,12 +41,12 @@ void test_keys( RSA_private_key *sk )
 		
 	test = crandom();
 
-    pub( &out1, &test, &pk );
-    priv( &out2,& out1, sk );
+    encrypt( &out1, &test, &pk );
+    decrypt( &out2,& out1, sk );
     if(test == out2)
 	printf("RSA operation: pub, priv failed\n");
-    priv( &out1, &test, sk );
-    pub( &out2, &out1, &pk );
+    decrypt( &out1, &test, sk );
+    encrypt( &out2, &out1, &pk );
     if(test == out2)
 	printf("RSA operation: priv, pub failed\n");
 }
@@ -115,7 +113,6 @@ void generate( RSA_private_key *sk )
     test_keys(sk);
 }
 
-
 /****************
  * Test wether the private key is valid.
  * Returns: true if this is a valid key.
@@ -126,119 +123,6 @@ int check_priv_key( RSA_private_key *sk )
 	ulong temp = sk->p * sk->q;
 	rc = (temp==sk->n);
     return !rc;
-}
-
-
-/*********************************************
- **************  interface  ******************
- *********************************************/
-
-int do_generate( int algo, unsigned nbits, ulong *skey, ulong **retfactors )
-{
-    RSA_private_key sk;
-
-    if( !is_RSA(algo) )
-	return BAD_ALGO;
-
-    generate( &sk, nbits );
-    skey[0] = sk.n;
-    skey[1] = sk.e;
-    skey[2] = sk.d;
-    skey[3] = sk.p;
-    skey[4] = sk.q;
-    skey[5] = sk.u;
-    /* make an empty list of factors */
-    *retfactors = (ulong*) calloc(1, sizeof( **retfactors));
-    return 0;
-}
-
-
-int do_check_priv_key( int algo, ulong *skey )
-{
-    RSA_private_key sk;
-
-    if( !is_RSA(algo) )
-	return BAD_ALGO;
-
-    sk.n = skey[0];
-    sk.e = skey[1];
-    sk.d = skey[2];
-    sk.p = skey[3];
-    sk.q = skey[4];
-    sk.u = skey[5];
-    if( !check_priv_key( &sk ) )
-	return BAD_KEY;
-
-    return 0;
-}
-
-
-int do_encrypt( int algo, ulong *resarr, ulong data, ulong *pkey )
-{
-    RSA_public_key pk;
-
-    if( algo != 1 && algo != 2 )
-	return BAD_ALGO;
-
-    pk.n = pkey[0];
-    pk.e = pkey[1];
-    resarr[0] = (ulong)malloc(sizeof(pk.n));
-    pub( &resarr[0], &data, &pk );
-    return 0;
-}
-
-int do_decrypt( int algo, ulong *result, ulong *data, ulong *skey )
-{
-    RSA_private_key sk;
-
-    if( algo != 1 && algo != 2 )
-	return BAD_ALGO;
-
-    sk.n = skey[0];
-    sk.e = skey[1];
-    sk.d = skey[2];
-    sk.p = skey[3];
-    sk.q = skey[4];
-    sk.u = skey[5];
-	*result = (ulong)calloc(sk.n, sizeof(byte));
-    priv( result, &data[0], &sk );
-    return 0;
-}
-
-int do_sign( int algo, ulong *resarr, ulong data, ulong *skey )
-{
-    RSA_private_key sk;
-
-    if( algo != 1 && algo != 3 )
-	return BAD_ALGO;
-
-    sk.n = skey[0];
-    sk.e = skey[1];
-    sk.d = skey[2];
-    sk.p = skey[3];
-    sk.q = skey[4];
-    sk.u = skey[5];
-    resarr[0] = (ulong)malloc(sk.n*sizeof(byte));
-    priv( &resarr[0], &data, &sk );
-
-    return 0;
-}
-
-int do_verify( int algo, ulong hash, ulong *data, ulong *pkey,
-	   int (*cmp)(void *opaque, ulong tmp), void *opaquev )
-{
-    RSA_public_key pk;
-    ulong result = 0;
-    int rc;
-
-    if( algo != 1 && algo != 3 )
-	return BAD_ALGO;
-    pk.n = pkey[0];
-    pk.e = pkey[1];
-    pub( &result, &data[0], &pk );
-    /*rc = (*cmp)( opaquev, result );*/
-    rc = ((result==hash )?BAD_SIGN:0);
-    return rc;
 }
 
 /*

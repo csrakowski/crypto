@@ -63,19 +63,10 @@ Both of these calculations can be computed efficiently using the square-and-mult
 extern "C" {
 #endif
 
-const char * const gnupgext_version = "RSA ($Revision: 1.10 $)";
-
-#define is_RSA(a) ((a)>=1 && (a)<=3)
-
-#define BAD_ALGO  4
-#define BAD_KEY   7
-#define BAD_SIGN  8
-
 typedef struct {
     ulong n;	    /* modulus */
     ulong e;	    /* exponent */
 } RSA_public_key;
-
 
 typedef struct {
     ulong n;	    /* public modulus */
@@ -90,8 +81,8 @@ void test_keys(RSA_private_key *sk);
 void generate(RSA_private_key *sk);
 int  check_private_key( RSA_private_key *sk );
 
-void pub( ulong* output, ulong* input, RSA_public_key* key);
-void priv( ulong* output, ulong* input, RSA_private_key* key);
+void encrypt( ulong* output, ulong* input, RSA_public_key* key);
+void decrypt( ulong* output, ulong* input, RSA_private_key* key);
 
 #ifdef __cplusplus
 }

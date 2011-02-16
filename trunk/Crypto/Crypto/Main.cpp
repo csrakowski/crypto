@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
 	ulong out;
 	ulong result;
 	printf("Input: %X\n", in);
-	priv(&out, &in, &privkey);
+	encrypt(&result, &out, &pubkey);	
 	printf("Output: %X\n", out);
-	pub(&result, &out, &pubkey);
+	decrypt(&out, &in, &privkey);
 	printf("Result: %X\n", result);
 
 	return 0;
