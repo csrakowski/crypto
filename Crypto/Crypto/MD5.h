@@ -66,7 +66,6 @@ void MD5Init(MD5_CTX* mdContext);
 void MD5Update(MD5_CTX* mdContext, unsigned char* inBuf, unsigned int inLen);
 void MD5Final(MD5_CTX* mdContext);
 
-
 void MDPrint (MD5_CTX* mdContext);
 void MDTimeTrial();
 void MDString(char* inString);
