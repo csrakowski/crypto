@@ -67,12 +67,12 @@ void MD5Update(MD5_CTX* mdContext, unsigned char* inBuf, unsigned int inLen);
 void MD5Final(MD5_CTX* mdContext);
 
 
-static void MDPrint (MD5_CTX* mdContext);
-static void MDTimeTrial();
-static void MDString(char* inString);
-static void MDFile(char* filename);
-static void MDFilter();
-static void MDTestSuite();
+void MDPrint (MD5_CTX* mdContext);
+void MDTimeTrial();
+void MDString(char* inString);
+void MDFile(char* filename);
+void MDFilter();
+void MDTestSuite();
 
 
 #ifdef __cplusplus

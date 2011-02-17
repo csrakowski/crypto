@@ -300,7 +300,7 @@ static void Transform(UINT4* buf, UINT4* in)
 Order is from low-order byte to high-order byte of digest.
 Each byte is printed with high-order hexadecimal digit first.
 */
-static void MDPrint(MD5_CTX* mdContext)
+void MDPrint(MD5_CTX* mdContext)
 {
 	int i;
 
@@ -321,7 +321,7 @@ static long TEST_BYTES = (long)TEST_BLOCK_SIZE * (long)TEST_BLOCKS;
 Measures wall time required to digest TEST_BLOCKS * TEST_BLOCK_SIZE
 characters.
 */
-static void MDTimeTrial()
+void MDTimeTrial()
 {
 	MD5_CTX mdContext;
 	time_t endTime, startTime;
@@ -357,7 +357,7 @@ static void MDTimeTrial()
 Prints out message digest, a space, the string (in quotes) and a
 carriage return.
 */
-static void MDString(char* inString)
+void MDString(char* inString)
 {
 	MD5_CTX mdContext;
 	unsigned int len = strlen (inString);
@@ -373,7 +373,7 @@ static void MDString(char* inString)
 Prints out message digest, a space, the file name, and a carriage
 return.
 */
-static void MDFile(char* filename)
+void MDFile(char* filename)
 {
 	FILE *inFile = fopen (filename, "rb");
 	MD5_CTX mdContext;
@@ -397,7 +397,7 @@ static void MDFile(char* filename)
 /* Writes the message digest of the data from stdin onto stdout,
 followed by a carriage return.
 */
-static void MDFilter()
+void MDFilter()
 {
 	MD5_CTX mdContext;
 	int bytes;
@@ -413,7 +413,7 @@ static void MDFilter()
 
 /* Runs a standard suite of test data.
 */
-static void MDTestSuite()
+void MDTestSuite()
 {
 	printf ("MD5 test suite results:\n\n");
 	MDString ("");
