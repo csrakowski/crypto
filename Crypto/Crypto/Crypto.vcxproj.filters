@@ -42,9 +42,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="md5driver.c">
-      <Filter>Source Files\Hash</Filter>
-    </ClCompile>
     <ClCompile Include="MD5.c">
       <Filter>Source Files\Hash</Filter>
     </ClCompile>
