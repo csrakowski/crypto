@@ -57,19 +57,19 @@ int main(int argc, char *argv[])
 		{
 			if (argv[i][0] == '-' && argv[i][1] == 's')
 			{
-				MDString (argv[i] + 2);
+				MDString(argv[i] + 2);
 			}
 			else if (strcmp (argv[i], "-t") == 0)
 			{
-				MDTimeTrial ();
+				MDTimeTrial();
 			}
 			else if (strcmp (argv[i], "-x") == 0)
 			{
-				MDTestSuite ();
+				MDTestSuite();
 			}
 			else
 			{
-				MDFile (argv[i]);
+				MDFile(argv[i]);
 			}
 		}
 	}
