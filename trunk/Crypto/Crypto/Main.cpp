@@ -46,31 +46,23 @@ int main(int argc, char *argv[])
 	** (no args)         -- writes messages digest of stdin onto stdout
 	*/
 
-	if (argc == 1)
+	MD5_CTX hash;
+	int i;
+	for (i = 1; i < argc; i++)
 	{
-		MDFilter();
-	}
-	else
-	{
-		int i;
-		for (i = 1; i < argc; i++)
+		if (strcmp (argv[i], "-s") == 0)
 		{
-			if (argv[i][0] == '-' && argv[i][1] == 's')
-			{
-				MDString(argv[i] + 2);
-			}
-			else if (strcmp (argv[i], "-t") == 0)
-			{
-				MDTimeTrial();
-			}
-			else if (strcmp (argv[i], "-x") == 0)
-			{
-				MDTestSuite();
-			}
-			else
-			{
-				MDFile(argv[i]);
-			}
+			MDString(argv[i] + 3, &hash);
+			MDPrint(&hash);
+		}
+		else if (strcmp (argv[i], "-x") == 0)
+		{
+			MDTestSuite();
+		}
+		else if (strcmp (argv[i], "-f") == 0)
+		{
+			MDFile(argv[i] + 3, &hash);
+			MDPrint(&hash);
 		}
 	}
 	return 0;
