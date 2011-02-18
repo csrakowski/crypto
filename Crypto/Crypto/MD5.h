@@ -3,10 +3,8 @@
 /*****************************\
 * Christiaan Rakowski
 * Crypto Collection
+* Derived work (sorta)
 \*****************************/
-
-//void MD5Hash(char* hash, char* input);
-
 
 /*
  **********************************************************************
@@ -47,6 +45,8 @@
  **********************************************************************
  */
 
+#include "SpecialMath.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -67,10 +67,8 @@ void MD5Update(MD5_CTX* mdContext, unsigned char* inBuf, unsigned int inLen);
 void MD5Final(MD5_CTX* mdContext);
 
 void MDPrint (MD5_CTX* mdContext);
-void MDTimeTrial();
-void MDString(char* inString);
-void MDFile(char* filename);
-void MDFilter();
+void MDString(char* inString, MD5_CTX* mdContext);
+void MDFile(char* filename, MD5_CTX* mdContext);
 void MDTestSuite();
 
 
