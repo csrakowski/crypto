@@ -1,14 +1,5 @@
 /*
 **********************************************************************
-** md5.c                                                            **
-** RSA Data Security, Inc. MD5 Message Digest Algorithm             **
-** Created: 2/17/90 RLR                                             **
-** Revised: 1/91 SRD,AJ,BSK,JT Reference C Version                  **
-**********************************************************************
-*/
-
-/*
-**********************************************************************
 ** Copyright (C) 1990, RSA Data Security, Inc. All rights reserved. **
 **                                                                  **
 ** License to copy and use this software is granted provided that   **
@@ -36,9 +27,6 @@
 #include <time.h>
 #include <string.h>
 #include "MD5.h"
-
-/* forward declaration */
-static void Transform ();
 
 static unsigned char PADDING[64] = {
 	0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -86,9 +74,7 @@ static unsigned char PADDING[64] = {
 void MD5Init (MD5_CTX* mdContext)
 {
 	mdContext->i[0] = mdContext->i[1] = (UINT4)0;
-
-	/* Load magic initialization constants.
-	*/
+	// Load magic initialization constants.
 	mdContext->buf[0] = (UINT4)0x67452301;
 	mdContext->buf[1] = (UINT4)0xefcdab89;
 	mdContext->buf[2] = (UINT4)0x98badcfe;
@@ -106,21 +92,23 @@ void MD5Update(MD5_CTX*  mdContext, unsigned char* inBuf, unsigned int inLen)
 
 	/* update number of bits */
 	if ((mdContext->i[0] + ((UINT4)inLen << 3)) < mdContext->i[0])
+	{
 		mdContext->i[1]++;
+	}
 	mdContext->i[0] += ((UINT4)inLen << 3);
 	mdContext->i[1] += ((UINT4)inLen >> 29);
 
-	while (inLen--) {
+	while (inLen--)
+	{
 		/* add new character to buffer, increment mdi */
 		mdContext->in[mdi++] = *inBuf++;
 
 		/* transform if necessary */
-		if (mdi == 0x40) {
+		if (mdi == 0x40) { // 0x40 = 64 (max size of mdContext->in[])
 			for (i = 0, ii = 0; i < 16; i++, ii += 4)
-				in[i] = (((UINT4)mdContext->in[ii+3]) << 24) |
-				(((UINT4)mdContext->in[ii+2]) << 16) |
-				(((UINT4)mdContext->in[ii+1]) << 8) |
-				((UINT4)mdContext->in[ii]);
+			{
+				in[i] = (((UINT4)mdContext->in[ii+3]) << 24) | (((UINT4)mdContext->in[ii+2]) << 16) | (((UINT4)mdContext->in[ii+1]) << 8) | ((UINT4)mdContext->in[ii]);
+			}
 			Transform (mdContext->buf, in);
 			mdi = 0;
 		}
@@ -147,26 +135,22 @@ void MD5Final (MD5_CTX* mdContext)
 
 	/* append length in bits and transform */
 	for (i = 0, ii = 0; i < 14; i++, ii += 4)
-		in[i] = (((UINT4)mdContext->in[ii+3]) << 24) |
-		(((UINT4)mdContext->in[ii+2]) << 16) |
-		(((UINT4)mdContext->in[ii+1]) << 8) |
-		((UINT4)mdContext->in[ii]);
+	{
+		in[i] = (((UINT4)mdContext->in[ii+3]) << 24) | (((UINT4)mdContext->in[ii+2]) << 16) | (((UINT4)mdContext->in[ii+1]) << 8) | ((UINT4)mdContext->in[ii]);
+	}
 	Transform (mdContext->buf, in);
-
+	
 	/* store buffer in digest */
-	for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-		mdContext->digest[ii] = (unsigned char)(mdContext->buf[i] & 0xFF);
-		mdContext->digest[ii+1] =
-			(unsigned char)((mdContext->buf[i] >> 8) & 0xFF);
-		mdContext->digest[ii+2] =
-			(unsigned char)((mdContext->buf[i] >> 16) & 0xFF);
-		mdContext->digest[ii+3] =
-			(unsigned char)((mdContext->buf[i] >> 24) & 0xFF);
+	for (i = 0, ii = 0; i < 4; i++, ii += 4)
+	{
+		mdContext->digest[ii] =	  (unsigned char)(mdContext->buf[i] & 0xFF);
+		mdContext->digest[ii+1] = (unsigned char)((mdContext->buf[i] >> 8) & 0xFF);
+		mdContext->digest[ii+2] = (unsigned char)((mdContext->buf[i] >> 16) & 0xFF);
+		mdContext->digest[ii+3] = (unsigned char)((mdContext->buf[i] >> 24) & 0xFF);
 	}
 }
 
-/* Basic MD5 step. Transform buf based on in.
-*/
+/* Basic MD5 step. Transform buf based on in. */
 static void Transform(UINT4* buf, UINT4* in)
 {
 	UINT4 a = buf[0], b = buf[1], c = buf[2], d = buf[3];
@@ -265,36 +249,6 @@ static void Transform(UINT4* buf, UINT4* in)
 	buf[3] += d;
 }
 
-/*
-**********************************************************************
-** End of md5.c                                                     **
-******************************* (cut) ********************************
-*/
-
-
-/*
-**********************************************************************
-** md5driver.c -- sample routines to test                           **
-** RSA Data Security, Inc. MD5 message digest algorithm.            **
-** Created: 2/16/90 RLR                                             **
-** Updated: 1/91 SRD                                                **
-**********************************************************************
-*/
-
-/*
-**********************************************************************
-** Copyright (C) 1990, RSA Data Security, Inc. All rights reserved. **
-**                                                                  **
-** RSA Data Security, Inc. makes no representations concerning      **
-** either the merchantability of this software or the suitability   **
-** of this software for any particular purpose.  It is provided "as **
-** is" without express or implied warranty of any kind.             **
-**                                                                  **
-** These notices must be retained in any copies of any part of this **
-** documentation and/or software.                                   **
-**********************************************************************
-*/
-
 /* Prints message digest buffer in mdContext as 32 hexadecimal digits.
 Order is from low-order byte to high-order byte of digest.
 Each byte is printed with high-order hexadecimal digit first.
@@ -313,13 +267,9 @@ carriage return.
 */
 void MDString(char* inString, MD5_CTX* mdContext)
 {
-	unsigned int len = strlen (inString);
-
-	MD5Init (mdContext);
-	MD5Update (mdContext, (unsigned char*)inString, len);
-	MD5Final (mdContext);
-	//MDPrint (mdContext);
-	//printf (" \"%s\"\n\n", inString);
+	MD5Init(mdContext);
+	MD5Update(mdContext, (unsigned char*)inString, strlen(inString));
+	MD5Final(mdContext);
 }
 
 /* Computes the message digest for a specified file.
@@ -340,10 +290,10 @@ void MDFile(char* filename, MD5_CTX* mdContext)
 
 	MD5Init (mdContext);
 	while ((bytes = fread (data, 1, 1024, inFile)) != 0)
+	{
 		MD5Update (mdContext, data, bytes);
+	}
 	MD5Final (mdContext);
-	//MDPrint (mdContext);
-	//printf (" %s\n", filename);
 	fclose (inFile);
 }
 
@@ -351,15 +301,22 @@ void MDFile(char* filename, MD5_CTX* mdContext)
 */
 void MDTestSuite()
 {
-	MD5_CTX* mdContext;
+	MD5_CTX mdContext;
 	printf("MD5 test suite results:\n\n");
-	MDString("", mdContext);
-	MDString("a", mdContext);
-	MDString("abc", mdContext);
-	MDString("message digest", mdContext);
-	MDString("abcdefghijklmnopqrstuvwxyz", mdContext);
-	MDString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mdContext);
-	MDString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", mdContext);
+	MDString("", &mdContext);
+	MDPrint(&mdContext);
+	MDString("a", &mdContext);
+	MDPrint(&mdContext);
+	MDString("abc", &mdContext);
+	MDPrint(&mdContext);
+	MDString("message digest", &mdContext);
+	MDPrint(&mdContext);
+	MDString("abcdefghijklmnopqrstuvwxyz", &mdContext);
+	MDPrint(&mdContext);
+	MDString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &mdContext);
+	MDPrint(&mdContext);
+	MDString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &mdContext);
+	MDPrint(&mdContext);
 }
 
 /*
