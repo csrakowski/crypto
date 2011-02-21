@@ -36,13 +36,6 @@
 #define I(x, y, z) ((y) ^ ((x) | (~z))) 
 
 /* ROTATE_LEFT rotates x left n bits */
-// input 7, 4
-// 7 << 4 = 112 (1110000)
-// 7 >> (32-4=28) = 112
-// 112 | 112 = 112
-// 1, 2
-// 1<<2 = 4
-// 1>>30 = 4
 #define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
 
 /* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4 */
@@ -101,7 +94,8 @@ void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
 		mdContext->in[mdi++] = *inBuf++;
 
 		/* transform if necessary */
-		if (mdi == 0x40) { // 0x40 = 64 (max size of mdContext->in[])
+		if (mdi == 0x40) // 0x40 = 64 (max size of mdContext->in[])
+		{
 			for (i = 0, ii = 0; i < 16; i++, ii += 4)
 			{
 				in[i] = (((ulong)mdContext->in[ii+3]) << 24) | (((ulong)mdContext->in[ii+2]) << 16) | (((ulong)mdContext->in[ii+1]) << 8) | ((ulong)mdContext->in[ii]);
