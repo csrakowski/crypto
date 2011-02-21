@@ -3,7 +3,7 @@
 /*****************************\
 * Christiaan Rakowski
 * Crypto Collection
-* Derived work (sorta)
+* Derived work (sorta, refactored some things and changed layout)
 \*****************************/
 
 /*
@@ -80,7 +80,6 @@ void MDPrint (MD5_CTX* mdContext);
 void MDString(char* inString, MD5_CTX* mdContext);
 void MDFile(char* filename, MD5_CTX* mdContext);
 void MDTestSuite();
-
 
 #ifdef __cplusplus
 }
