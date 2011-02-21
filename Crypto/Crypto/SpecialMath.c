@@ -22,12 +22,14 @@ ulong crandom(void)
 {
 	ulong* seed = (ulong*)malloc(sizeof(ulong));
 	ulong* seed2 = (ulong*)malloc(sizeof(ulong));
-	srand( (uint)((time(0)*(*seed+1)*rand())+(1^*seed2)) );
+	srand( (uint)((time(0)*(*seed+(ulong)seed)*rand())+(sizeof(ulong)^*seed2)) );
 	*seed = rand();
+	*seed2 = (ulong)seed;
 	free(seed);
 	free(seed2);
-	return ((ulong)rand());
-	//return ((ulong)((rand()<<(sizeof(uint)>>1))|rand()));
+	//return ((ulong)rand());	// Too small
+	return ((ulong)((rand()<<(sizeof(uint)<<2))|rand()));		// Decent size, decent speed
+	//return ((ulong)((rand()<<(sizeof(uint)<<3))|(rand()<<(sizeof(uint)<<2))|(rand()<<(sizeof(uint)<<1))|rand()));		// Slow, and not too much better than 2d one on 32 bit
 }
 
 ulong generatePrime(void)
@@ -50,7 +52,6 @@ ulong generatePrime(void)
 	}
 	return prime;
 }
-
 
 ulong totient(ulong p, ulong q)
 {
