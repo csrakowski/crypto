@@ -9,35 +9,33 @@
 
 int main(int argc, char *argv[])
 {
+	// Vigenere
+
 	//char* enc = VigenereEncodeMessage("MyMessage", "privatekey");
 	//printf("%s\n", enc);
 
 	//char* un = VigenereDecodeMessage(enc, "privatekey");
 	//printf("%s\n", un);
 
-	RSA_private_key privkey;
-	RSA_public_key pubkey;
+	// RSA
 
-	generate(&privkey);
-	pubkey.n = privkey.n;
-	pubkey.e = privkey.e;
+	//RSA_private_key privkey;
+	//RSA_public_key pubkey;
 
-	ulong in = 0xABCDEF;
-	ulong out;
-	ulong result;
-	printf("Input: %lX\n", in);
-	encrypt(&out, &in, &pubkey);	
-	printf("Output: %lX\n", out);
-	decrypt(&result, &out, &privkey);
-	printf("Result: %lX\n", result);
+	//generate(&privkey);
+	//pubkey.n = privkey.n;
+	//pubkey.e = privkey.e;
 
-	/* For each command line argument in turn:
-	** filename          -- prints message digest and name of file
-	** -sstring          -- prints message digest and contents of string
-	** -t                -- prints time trial statistics for 1M characters
-	** -x                -- execute a standard suite of test data
-	** (no args)         -- writes messages digest of stdin onto stdout
-	*/
+	//ulong in = 0xABCDEF;
+	//ulong out;
+	//ulong result;
+	//printf("Input: %lX\n", in);
+	//encrypt(&out, &in, &pubkey);	
+	//printf("Output: %lX\n", out);
+	//decrypt(&result, &out, &privkey);
+	//printf("Result: %lX\n", result);
+
+	// MD5
 
 	/*MD5_CTX hash;
 	int i;
@@ -58,5 +56,9 @@ int main(int argc, char *argv[])
 			MDPrint(&hash);
 		}
 	}*/
+
+	// SHA-1
+
+
 	return 0;
 }
