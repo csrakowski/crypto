@@ -17,10 +17,10 @@ typedef struct {
   ulong buf[4];         /* scratch buffer */
   byte in[64];          /* input buffer */
   byte digest[16];		/* actual digest after MD5Final call */
-} MD5_CTX;
+} SHA_CTX;
 
 // Padding for MDFinal
-static unsigned char PADDING[64] = {
+static unsigned char PADDING2[64] = {
 	0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -31,15 +31,15 @@ static unsigned char PADDING[64] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-void MD5Init(MD5_CTX* mdContext);
-void MD5Update(MD5_CTX* mdContext, uchar* inBuf, uint inLen);
-void MD5Final(MD5_CTX* mdContext);
-void Transform(ulong* buf, ulong* in);
+void SHAInit(SHA_CTX* shaContext);
+void SHAUpdate(SHA_CTX* shaContext, uchar* inBuf, uint inLen);
+void SHAFinal(SHA_CTX* shaContext);
+void SHATransform(ulong* buf, ulong* in);
 
-void MDPrint (MD5_CTX* mdContext);
-void MDString(char* inString, MD5_CTX* mdContext);
-void MDFile(char* filename, MD5_CTX* mdContext);
-void MDTestSuite();
+void SHAPrint (SHA_CTX* mdContext);
+void SHAString(char* inString, SHA_CTX* shaContext);
+void SHAFile(char* filename, SHA_CTX* shaContext);
+void SHATestSuite();
 
 #ifdef __cplusplus
 }
