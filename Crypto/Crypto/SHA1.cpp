@@ -123,9 +123,10 @@ void SHAInit (SHA_CTX* shaContext)
 	shaContext->i[0] = shaContext->i[1] = (ulong)0;
 	// Load magic initialization constants.
 	shaContext->buf[0] = (ulong)0x67452301;
-	shaContext->buf[1] = (ulong)0xefcdab89;
-	shaContext->buf[2] = (ulong)0x98badcfe;
+	shaContext->buf[1] = (ulong)0xEFCDAB89;
+	shaContext->buf[2] = (ulong)0x98BADCFE;
 	shaContext->buf[3] = (ulong)0x10325476;
+	shaContext->buf[4] = (ulong)0xC3D2E1F0;
 }
 
 void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
