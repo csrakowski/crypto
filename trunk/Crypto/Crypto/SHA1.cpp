@@ -118,88 +118,88 @@
 		(a) += (b); \
 	}
 
-void MD5Init (MD5_CTX* mdContext)
+void SHAInit (SHA_CTX* shaContext)
 {
-	mdContext->i[0] = mdContext->i[1] = (ulong)0;
+	shaContext->i[0] = shaContext->i[1] = (ulong)0;
 	// Load magic initialization constants.
-	mdContext->buf[0] = (ulong)0x67452301;
-	mdContext->buf[1] = (ulong)0xefcdab89;
-	mdContext->buf[2] = (ulong)0x98badcfe;
-	mdContext->buf[3] = (ulong)0x10325476;
+	shaContext->buf[0] = (ulong)0x67452301;
+	shaContext->buf[1] = (ulong)0xefcdab89;
+	shaContext->buf[2] = (ulong)0x98badcfe;
+	shaContext->buf[3] = (ulong)0x10325476;
 }
 
-void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
+void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
 {
 	ulong in[16];
-	int mdi;
+	int SHAi;
 	unsigned int i, ii;
 
 	/* compute number of bytes mod 64 */
-	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
+	SHAi = (int)((shaContext->i[0] >> 3) & 0x3F);
 
 	/* update number of bits */
-	if ((mdContext->i[0] + ((ulong)inLen << 3)) < mdContext->i[0])
+	if ((shaContext->i[0] + ((ulong)inLen << 3)) < shaContext->i[0])
 	{
-		mdContext->i[1]++;
+		shaContext->i[1]++;
 	}
-	mdContext->i[0] += ((ulong)inLen << 3);
-	mdContext->i[1] += ((ulong)inLen >> 29);
+	shaContext->i[0] += ((ulong)inLen << 3);
+	shaContext->i[1] += ((ulong)inLen >> 29);
 
 	while (inLen--)
 	{
-		/* add new character to buffer, increment mdi */
-		mdContext->in[mdi++] = *inBuf++;
+		/* add new character to buffer, increment SHAi */
+		shaContext->in[SHAi++] = *inBuf++;
 
 		/* transform if necessary */
-		if (mdi == 0x40) // 0x40 = 64 (max size of mdContext->in[])
+		if (SHAi == 0x40) // 0x40 = 64 (max size of shaContext->in[])
 		{
 			for (i = 0, ii = 0; i < 16; i++, ii += 4)
 			{
-				in[i] = (((ulong)mdContext->in[ii+3]) << 24) | (((ulong)mdContext->in[ii+2]) << 16) | (((ulong)mdContext->in[ii+1]) << 8) | ((ulong)mdContext->in[ii]);
+				in[i] = (((ulong)shaContext->in[ii+3]) << 24) | (((ulong)shaContext->in[ii+2]) << 16) | (((ulong)shaContext->in[ii+1]) << 8) | ((ulong)shaContext->in[ii]);
 			}
-			Transform (mdContext->buf, in);
-			mdi = 0;
+			SHATransform (shaContext->buf, in);
+			SHAi = 0;
 		}
 	}
 }
 
-void MD5Final (MD5_CTX* mdContext)
+void SHAFinal (SHA_CTX* shaContext)
 {
 	ulong in[16];
-	int mdi;
+	int SHAi;
 	uint i, ii;
 	uint padLen;
 
 	/* save number of bits */
-	in[14] = mdContext->i[0];
-	in[15] = mdContext->i[1];
+	in[14] = shaContext->i[0];
+	in[15] = shaContext->i[1];
 
 	/* compute number of bytes mod 64 */
-	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
+	SHAi = (int)((shaContext->i[0] >> 3) & 0x3F);
 
 	/* pad out to 56 mod 64 */
-	padLen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
-	MD5Update (mdContext, PADDING, padLen);
+	padLen = (SHAi < 56) ? (56 - SHAi) : (120 - SHAi);
+	SHAUpdate (shaContext, PADDING2, padLen);
 
 	/* append length in bits and transform */
 	for (i = 0, ii = 0; i < 14; i++, ii += 4)
 	{
-		in[i] = (((ulong)mdContext->in[ii+3]) << 24) | (((ulong)mdContext->in[ii+2]) << 16) | (((ulong)mdContext->in[ii+1]) << 8) | ((ulong)mdContext->in[ii]);
+		in[i] = (((ulong)shaContext->in[ii+3]) << 24) | (((ulong)shaContext->in[ii+2]) << 16) | (((ulong)shaContext->in[ii+1]) << 8) | ((ulong)shaContext->in[ii]);
 	}
-	Transform (mdContext->buf, in);
+	SHATransform (shaContext->buf, in);
 	
 	/* store buffer in digest */
 	for (i = 0, ii = 0; i < 4; i++, ii += 4)
 	{
-		mdContext->digest[ii] =	  (byte)(mdContext->buf[i] & 0xFF);
-		mdContext->digest[ii+1] = (byte)((mdContext->buf[i] >> 8) & 0xFF);
-		mdContext->digest[ii+2] = (byte)((mdContext->buf[i] >> 16) & 0xFF);
-		mdContext->digest[ii+3] = (byte)((mdContext->buf[i] >> 24) & 0xFF);
+		shaContext->digest[ii] =	(byte)(shaContext->buf[i] & 0xFF);
+		shaContext->digest[ii+1] =	(byte)((shaContext->buf[i] >> 8) & 0xFF);
+		shaContext->digest[ii+2] =	(byte)((shaContext->buf[i] >> 16) & 0xFF);
+		shaContext->digest[ii+3] =	(byte)((shaContext->buf[i] >> 24) & 0xFF);
 	}
 }
 
-/* Basic MD5 step. Transform buf based on in. */
-static void Transform(ulong* buf, ulong* in)
+/* Basic SHA step. Transform buf based on in. */
+static void SHATransform(ulong* buf, ulong* in)
 {
 	ulong	a = buf[0],
 			b = buf[1],
@@ -300,15 +300,15 @@ static void Transform(ulong* buf, ulong* in)
 	buf[3] += d;
 }
 
-/* Prints message digest buffer in mdContext as 32 hexadecimal digits.
+/* Prints message digest buffer in shaContext as 32 hexadecimal digits.
 Order is from low-order byte to high-order byte of digest.
 Each byte is printed with high-order hexadecimal digit first.
 */
-void MDPrint(MD5_CTX* mdContext)
+void SHAPrint(SHA_CTX* shaContext)
 {
 	int i;
 	for (i = 0; i < 16; i++)
-		printf ("%02x", mdContext->digest[i]);
+		printf ("%02x", shaContext->digest[i]);
 	printf("\n");
 }
 
@@ -316,18 +316,18 @@ void MDPrint(MD5_CTX* mdContext)
 Prints out message digest, a space, the string (in quotes) and a
 carriage return.
 */
-void MDString(char* inString, MD5_CTX* mdContext)
+void SHAString(char* inString, SHA_CTX* shaContext)
 {
-	MD5Init(mdContext);
-	MD5Update(mdContext, (uchar*)inString, strlen(inString));
-	MD5Final(mdContext);
+	SHAInit(shaContext);
+	SHAUpdate(shaContext, (uchar*)inString, strlen(inString));
+	SHAFinal(shaContext);
 }
 
 /* Computes the message digest for a specified file.
 Prints out message digest, a space, the file name, and a carriage
 return.
 */
-void MDFile(char* filename, MD5_CTX* mdContext)
+void SHAFile(char* filename, SHA_CTX* shaContext)
 {
 	int bytes;
 	byte data[1024];
@@ -339,33 +339,33 @@ void MDFile(char* filename, MD5_CTX* mdContext)
 		return;
 	}
 
-	MD5Init (mdContext);
+	SHAInit (shaContext);
 	while ((bytes = fread (data, 1, 1024, inFile)) != 0)
 	{
-		MD5Update (mdContext, data, bytes);
+		SHAUpdate (shaContext, data, bytes);
 	}
-	MD5Final (mdContext);
+	SHAFinal (shaContext);
 	fclose (inFile);
 }
 
 /* Runs a standard suite of test data.
 */
-void MDTestSuite()
+void SHATestSuite()
 {
-	MD5_CTX mdContext;
-	printf("MD5 test suite results:\n\n");
-	MDString("", &mdContext);
-	MDPrint(&mdContext);
-	MDString("a", &mdContext);
-	MDPrint(&mdContext);
-	MDString("abc", &mdContext);
-	MDPrint(&mdContext);
-	MDString("message digest", &mdContext);
-	MDPrint(&mdContext);
-	MDString("abcdefghijklmnopqrstuvwxyz", &mdContext);
-	MDPrint(&mdContext);
-	MDString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &mdContext);
-	MDPrint(&mdContext);
-	MDString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &mdContext);
-	MDPrint(&mdContext);
+	SHA_CTX shaContext;
+	printf("SHA test suite results:\n\n");
+	SHAString("", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("a", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("abc", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("message digest", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("abcdefghijklmnopqrstuvwxyz", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &shaContext);
+	SHAPrint(&shaContext);
+	SHAString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &shaContext);
+	SHAPrint(&shaContext);
 }
