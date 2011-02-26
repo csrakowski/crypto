@@ -14,7 +14,7 @@ extern "C" {
 /* Data structure for MD5 (Message Digest) computation */
 typedef struct {
   ulong i[2];           /* number of _bits_ handled mod 2^64 */
-  ulong buf[4];         /* scratch buffer */
+  ulong buf[5];         /* scratch buffer */
   byte in[64];          /* input buffer */
   byte digest[16];		/* actual digest after MD5Final call */
 } SHA_CTX;
