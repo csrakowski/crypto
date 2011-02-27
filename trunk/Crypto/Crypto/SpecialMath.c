@@ -13,9 +13,25 @@ void swap(ulong* a, ulong* b)
 
 ulong gcd(ulong a, ulong b)
 {
-	if(a == 0) return b;
-	if(b == 0) return a;
-	return gcd(b, (a%b));
+	//if(a == 0) return b;
+	//if(b == 0) return a;
+	//return gcd(b, (a%b));
+
+    int c;
+    if(a<b)
+    {
+        c = a;
+        a = b;
+        b = c;
+    }
+    while(1)
+    {
+  	c = a%b;
+  	if(c==0)
+  	  return b;
+  	a = b;
+  	b = c;
+    }
 }
 
 ulong crandom(void)
@@ -28,13 +44,13 @@ ulong crandom(void)
 	free(seed);
 	free(seed2);
 	//return ((ulong)rand());	// Too small
-	return ((ulong)((rand()<<(sizeof(uint)<<2))|rand()));		// Decent size, decent speed
-	//return ((ulong)((rand()<<(sizeof(uint)<<3))|(rand()<<(sizeof(uint)<<2))|(rand()<<(sizeof(uint)<<1))|rand()));		// Slow, and not too much better than 2d one on 32 bit
+	return (((ulong)((rand()<<(sizeof(ulong)<<2))|rand()))& USHRT_MAX);		// Decent size, decent speed
+	//return ((ulong)((rand()<<(sizeof(ulong)<<3))|(rand()<<(sizeof(ulong)<<2))|(rand()<<(sizeof(ulong)<<1))|rand()));		// Slow, and not too much better than 2d one on 32 bit
 }
 
 ulong generatePrime(void)
 {
-	ulong prime, i;
+	uint prime, i;
 
 	while(1)
 	{
@@ -58,25 +74,25 @@ ulong totient(ulong p, ulong q)
 	return ((p-1)*(q-1));
 }
 
-ulong ipow(ulong base, ulong exp)
+ulong ipow(uint base, uint exp)
 {
-	//if(exp == 0) return 1;
-	//if(base== 0) return 0;
-	//for(exp; exp>1; exp--)
-	//{
-	//	base*=base;
-	//}
-	//return base;
+	if(exp == 0) return 1;
+	if(base== 0) return 0;
+	for(exp; exp>1; exp--)
+	{
+		base*=base;
+	}
+	return base;
 
-    ulong result = 1;
-    while (exp)
-    {
-        if (exp & 1)
-            result *= base;
-        exp >>= 1;
-        base *= base;
-    }
-    return result;
+    //ulong result = 1;
+    //while (exp)
+    //{
+    //    if (exp & 1)
+    //        result *= base;
+    //    exp >>= 1;
+    //    base *= base;
+    //}
+    //return result;
 	
 }
 
@@ -85,14 +101,14 @@ ulong ipow(ulong base, ulong exp)
   * That is: Find the solution x for
   *              1 = (a*x) mod n
   */
-ulong invm(ulong a, ulong n)
+ulong invm(ulong e, ulong n)
 {
-	int x;
-	for(x=0; x<ULONG_MAX; x++)	//BRUTEFORCE!!!
+	ulong d;
+	for(d=0;;d++)	//BRUTEFORCE!!!
 	{
-		if(((a*x)%n) == 1)
+		if(((e*d)%n) == 1)
 		{
-			return x;
+			return d;
 		}
 	}
 	return -1;

@@ -7,7 +7,8 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD SHA
+#define METHOD RSA
+
 int main(int argc, char *argv[])
 {
 	// Vigenere
@@ -31,14 +32,14 @@ int main(int argc, char *argv[])
 	pubkey.n = privkey.n;
 	pubkey.e = privkey.e;
 
-	ulong in = 0xABCDEF;
+	uchar in = 65;
 	ulong out;
-	ulong result;
-	printf("Input: %lX\n", in);
+	uchar result;
+	printf("Input: %d\n", in);
 	encrypt(&out, &in, &pubkey);	
-	printf("Output: %lX\n", out);
+	printf("Output: %d\n", out);
 	decrypt(&result, &out, &privkey);
-	printf("Result: %lX\n", result);
+	printf("Result: %d\n", result);
 #endif
 
 	// MD5

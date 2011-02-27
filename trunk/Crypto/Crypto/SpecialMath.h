@@ -31,8 +31,8 @@ ulong gcd(ulong a, ulong b);
 ulong crandom(void);
 ulong generatePrime(void);
 ulong totient(ulong p, ulong q);
-ulong ipow(ulong base, ulong exp);
-ulong invm(ulong a, ulong n);
+ulong ipow(uint base, uint exp);
+ulong invm(ulong e, ulong n);
 
 #ifdef __cplusplus
 }
