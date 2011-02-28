@@ -11,11 +11,11 @@
 extern "C" {
 #endif
 
-typedef unsigned long	ulong;
-typedef unsigned int	uint;
-typedef unsigned short	ushort;
-typedef unsigned char	uchar;
-typedef unsigned char	byte;
+typedef unsigned long long	ulong;
+typedef unsigned int		uint;
+typedef unsigned short		ushort;
+typedef unsigned char		uchar;
+typedef unsigned char		byte;
 
 #define BIT(b) (1<<b)
 #define TOGGLEBIT(x, b) (x^=BIT(b))

@@ -12,7 +12,7 @@
  *
  * Where c is OUTPUT, m is INPUT and e,n are elements of PKEY.
  */
-void encrypt(ulong* output, uchar* input, RSA_public_key *key )
+void encrypt(ulong* output, ulong* input, RSA_public_key *key )
 {
 	ulong meh = (ipow(*input, key->e));
 #ifdef _DEBUG
@@ -30,7 +30,7 @@ void encrypt(ulong* output, uchar* input, RSA_public_key *key )
  *
  * FIXME: We should better use the Chinese Remainder Theorem
  */
-void decrypt(uchar* output, ulong* input, RSA_private_key *key )
+void decrypt(ulong* output, ulong* input, RSA_private_key *key )
 {
 	ulong meh = (ipow(*input, key->d));
 #ifdef _DEBUG

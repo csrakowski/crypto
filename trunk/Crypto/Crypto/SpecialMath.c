@@ -44,7 +44,7 @@ ulong crandom(void)
 	free(seed);
 	free(seed2);
 	//return ((ulong)rand());	// Too small
-	return (((ulong)((rand()<<(sizeof(ulong)<<2))|rand()))& USHRT_MAX);		// Decent size, decent speed
+	return (((ulong)((rand()<<(sizeof(uint)<<2))|rand()))& UINT_MAX);		// Decent size, decent speed
 	//return ((ulong)((rand()<<(sizeof(ulong)<<3))|(rand()<<(sizeof(ulong)<<2))|(rand()<<(sizeof(ulong)<<1))|rand()));		// Slow, and not too much better than 2d one on 32 bit
 }
 
@@ -76,24 +76,23 @@ ulong totient(ulong p, ulong q)
 
 ulong ipow(uint base, uint exp)
 {
-	if(exp == 0) return 1;
-	if(base== 0) return 0;
-	for(exp; exp>1; exp--)
-	{
-		base*=base;
-	}
-	return base;
+	//if(exp == 0) return 1;
+	//if(base== 0) return 0;
+	//for(exp; exp>1; exp--)
+	//{
+	//	base*=base;
+	//}
+	//return base;
 
-    //ulong result = 1;
-    //while (exp)
-    //{
-    //    if (exp & 1)
-    //        result *= base;
-    //    exp >>= 1;
-    //    base *= base;
-    //}
-    //return result;
-	
+    ulong result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+    return result;	
 }
 
  /****************
