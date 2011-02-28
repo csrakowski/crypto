@@ -7,7 +7,7 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD RSA
+#define METHOD MD5
 
 int main(int argc, char *argv[])
 {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	printf("%s\n", un);
 #endif
 
-	// RSA
+	// RSA - Core algorithm there, stuck on the size of the primes. 16^16 is 64 bit max already :'(
 	// Bruce Schneier knows Alice and Bob's shared secret. http://www.schneierfacts.com/fact/18
 #if METHOD == RSA
 	RSA_private_key privkey;
@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
 	ulong in = 1;
 	ulong out;
 	ulong result;
-	printf("Input: %d\n", in);
+	printf("Input: %ld\n", in);
 	encrypt(&out, &in, &pubkey);	
-	printf("Output: %d\n", out);
+	printf("Output: %ld\n", out);
 	decrypt(&result, &out, &privkey);
-	printf("Result: %d\n", result);
+	printf("Result: %ld\n", result);
 #endif
 
 	// MD5
