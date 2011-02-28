@@ -32,9 +32,9 @@ int main(int argc, char *argv[])
 	pubkey.n = privkey.n;
 	pubkey.e = privkey.e;
 
-	uchar in = 65;
+	ulong in = 1;
 	ulong out;
-	uchar result;
+	ulong result;
 	printf("Input: %d\n", in);
 	encrypt(&out, &in, &pubkey);	
 	printf("Output: %d\n", out);

@@ -23,8 +23,8 @@ void test_keys(RSA_private_key *sk);
 void generate(RSA_private_key *sk);
 int  check_private_key( RSA_private_key *sk );
 
-void encrypt( ulong* output, uchar* input, RSA_public_key* key);
-void decrypt( uchar* output, ulong* input, RSA_private_key* key);
+void encrypt( ulong* output, ulong* input, RSA_public_key* key);
+void decrypt( ulong* output, ulong* input, RSA_private_key* key);
 
 #ifdef __cplusplus
 }
