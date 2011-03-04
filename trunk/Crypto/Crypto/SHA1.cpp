@@ -98,40 +98,40 @@
 /* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4 */
 /* Rotation is separate from addition to prevent recomputation */
 #define FF(a, b, c, d, x, s, ac) \
-	{	(a) += F ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += F ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define GG(a, b, c, d, x, s, ac) \
-	{	(a) += G ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += G ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define HH(a, b, c, d, x, s, ac) \
-	{	(a) += H ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += H ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define II(a, b, c, d, x, s, ac) \
-	{	(a) += I ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += I ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 
 void SHAInit (SHA_CTX* shaContext)
 {
-	shaContext->i[0] = shaContext->i[1] = (ulong)0;
+	shaContext->i[0] = shaContext->i[1] = (uint)0;
 	// Load magic initialization constants.
-	shaContext->buf[0] = (ulong)0x67452301;
-	shaContext->buf[1] = (ulong)0xEFCDAB89;
-	shaContext->buf[2] = (ulong)0x98BADCFE;
-	shaContext->buf[3] = (ulong)0x10325476;
-	shaContext->buf[4] = (ulong)0xC3D2E1F0;
+	shaContext->buf[0] = (uint)0x67452301;
+	shaContext->buf[1] = (uint)0xEFCDAB89;
+	shaContext->buf[2] = (uint)0x98BADCFE;
+	shaContext->buf[3] = (uint)0x10325476;
+	shaContext->buf[4] = (uint)0xC3D2E1F0;
 }
 
 void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
 {
-	ulong in[16];
+	uint in[16];
 	int SHAi;
 	unsigned int i, ii;
 
@@ -139,12 +139,12 @@ void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
 	SHAi = (int)((shaContext->i[0] >> 3) & 0x3F);
 
 	/* update number of bits */
-	if ((shaContext->i[0] + ((ulong)inLen << 3)) < shaContext->i[0])
+	if ((shaContext->i[0] + ((uint)inLen << 3)) < shaContext->i[0])
 	{
 		shaContext->i[1]++;
 	}
-	shaContext->i[0] += ((ulong)inLen << 3);
-	shaContext->i[1] += ((ulong)inLen >> 29);
+	shaContext->i[0] += ((uint)inLen << 3);
+	shaContext->i[1] += ((uint)inLen >> 29);
 
 	while (inLen--)
 	{
@@ -156,7 +156,7 @@ void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
 		{
 			for (i = 0, ii = 0; i < 16; i++, ii += 4)
 			{
-				in[i] = (((ulong)shaContext->in[ii+3]) << 24) | (((ulong)shaContext->in[ii+2]) << 16) | (((ulong)shaContext->in[ii+1]) << 8) | ((ulong)shaContext->in[ii]);
+				in[i] = (((uint)shaContext->in[ii+3]) << 24) | (((uint)shaContext->in[ii+2]) << 16) | (((uint)shaContext->in[ii+1]) << 8) | ((uint)shaContext->in[ii]);
 			}
 			SHATransform (shaContext->buf, in);
 			SHAi = 0;
@@ -166,7 +166,7 @@ void SHAUpdate(SHA_CTX*  shaContext, uchar* inBuf, uint inLen)
 
 void SHAFinal (SHA_CTX* shaContext)
 {
-	ulong in[16];
+	uint in[16];
 	int SHAi;
 	uint i, ii;
 	uint padLen;
@@ -185,7 +185,7 @@ void SHAFinal (SHA_CTX* shaContext)
 	/* append length in bits and transform */
 	for (i = 0, ii = 0; i < 14; i++, ii += 4)
 	{
-		in[i] = (((ulong)shaContext->in[ii+3]) << 24) | (((ulong)shaContext->in[ii+2]) << 16) | (((ulong)shaContext->in[ii+1]) << 8) | ((ulong)shaContext->in[ii]);
+		in[i] = (((uint)shaContext->in[ii+3]) << 24) | (((uint)shaContext->in[ii+2]) << 16) | (((uint)shaContext->in[ii+1]) << 8) | ((uint)shaContext->in[ii]);
 	}
 	SHATransform (shaContext->buf, in);
 	
@@ -200,9 +200,9 @@ void SHAFinal (SHA_CTX* shaContext)
 }
 
 /* Basic SHA step. Transform buf based on in. */
-static void SHATransform(ulong* buf, ulong* in)
+static void SHATransform(uint* buf, uint* in)
 {
-	ulong	a = buf[0],
+	uint	a = buf[0],
 			b = buf[1],
 			c = buf[2],
 			d = buf[3];
