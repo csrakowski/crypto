@@ -17,20 +17,14 @@ ulong gcd(ulong a, ulong b)
 	//if(b == 0) return a;
 	//return gcd(b, (a%b));
 
-    int c;
-    if(a<b)
-    {
-        c = a;
-        a = b;
-        b = c;
-    }
+    ulong c;
+    if(a<b) swap(&a, &b);
     while(1)
     {
-  	c = a%b;
-  	if(c==0)
-  	  return b;
-  	a = b;
-  	b = c;
+  		c = a%b;
+  		if(c==0) return b;
+  		a = b;
+  		b = c;
     }
 }
 
@@ -50,7 +44,7 @@ ulong crandom(void)
 
 ulong generatePrime(void)
 {
-	uint prime, i;
+	ulong prime, i;
 
 	while(1)
 	{

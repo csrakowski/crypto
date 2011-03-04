@@ -41,39 +41,39 @@
 /* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4 */
 /* Rotation is separate from addition to prevent recomputation */
 #define FF(a, b, c, d, x, s, ac) \
-	{	(a) += F ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += F ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define GG(a, b, c, d, x, s, ac) \
-	{	(a) += G ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += G ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define HH(a, b, c, d, x, s, ac) \
-	{	(a) += H ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += H ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 #define II(a, b, c, d, x, s, ac) \
-	{	(a) += I ((b), (c), (d)) + (x) + (ulong)(ac); \
+	{	(a) += I ((b), (c), (d)) + (x) + (uint)(ac); \
 		(a) = ROTATE_LEFT ((a), (s)); \
 		(a) += (b); \
 	}
 
 void MD5Init (MD5_CTX* mdContext)
 {
-	mdContext->i[0] = mdContext->i[1] = (ulong)0;
+	mdContext->i[0] = mdContext->i[1] = (uint)0;
 	// Load magic initialization constants.
-	mdContext->buf[0] = (ulong)0x67452301;
-	mdContext->buf[1] = (ulong)0xefcdab89;
-	mdContext->buf[2] = (ulong)0x98badcfe;
-	mdContext->buf[3] = (ulong)0x10325476;
+	mdContext->buf[0] = (uint)0x67452301;
+	mdContext->buf[1] = (uint)0xefcdab89;
+	mdContext->buf[2] = (uint)0x98badcfe;
+	mdContext->buf[3] = (uint)0x10325476;
 }
 
 void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
 {
-	ulong in[16];
+	uint in[16];
 	int mdi;
 	unsigned int i, ii;
 
@@ -81,12 +81,12 @@ void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
 	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
 
 	/* update number of bits */
-	if ((mdContext->i[0] + ((ulong)inLen << 3)) < mdContext->i[0])
+	if ((mdContext->i[0] + ((uint)inLen << 3)) < mdContext->i[0])
 	{
 		mdContext->i[1]++;
 	}
-	mdContext->i[0] += ((ulong)inLen << 3);
-	mdContext->i[1] += ((ulong)inLen >> 29);
+	mdContext->i[0] += ((uint)inLen << 3);
+	mdContext->i[1] += ((uint)inLen >> 29);
 
 	while (inLen--)
 	{
@@ -98,7 +98,7 @@ void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
 		{
 			for (i = 0, ii = 0; i < 16; i++, ii += 4)
 			{
-				in[i] = (((ulong)mdContext->in[ii+3]) << 24) | (((ulong)mdContext->in[ii+2]) << 16) | (((ulong)mdContext->in[ii+1]) << 8) | ((ulong)mdContext->in[ii]);
+				in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
 			}
 			Transform (mdContext->buf, in);
 			mdi = 0;
@@ -108,7 +108,7 @@ void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
 
 void MD5Final (MD5_CTX* mdContext)
 {
-	ulong in[16];
+	uint in[16];
 	int mdi;
 	uint i, ii;
 	uint padLen;
@@ -127,7 +127,7 @@ void MD5Final (MD5_CTX* mdContext)
 	/* append length in bits and transform */
 	for (i = 0, ii = 0; i < 14; i++, ii += 4)
 	{
-		in[i] = (((ulong)mdContext->in[ii+3]) << 24) | (((ulong)mdContext->in[ii+2]) << 16) | (((ulong)mdContext->in[ii+1]) << 8) | ((ulong)mdContext->in[ii]);
+		in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
 	}
 	Transform (mdContext->buf, in);
 	
@@ -142,9 +142,9 @@ void MD5Final (MD5_CTX* mdContext)
 }
 
 /* Basic MD5 step. Transform buf based on in. */
-static void Transform(ulong* buf, ulong* in)
+static void Transform(uint* buf, uint* in)
 {
-	ulong	a = buf[0],
+	uint	a = buf[0],
 			b = buf[1],
 			c = buf[2],
 			d = buf[3];
@@ -297,24 +297,31 @@ void MDTestSuite()
 {
 	MD5_CTX mdContext;
 	printf("MD5 test suite results:\n\n");
+
 	MDString("", &mdContext);
 	MDPrint(&mdContext);
 	printf("d41d8cd98f00b204e9800998ecf8427e\n\n");
+
 	MDString("a", &mdContext);
 	MDPrint(&mdContext);
 	printf("0cc175b9c0f1b6a831c399e269772661\n\n");
+
 	MDString("abc", &mdContext);
 	MDPrint(&mdContext);
 	printf("900150983cd24fb0d6963f7d28e17f72\n\n");
+
 	MDString("message digest", &mdContext);
 	MDPrint(&mdContext);
 	printf("f96b697d7cb7938d525a2f31aaf161d0\n\n");
+
 	MDString("abcdefghijklmnopqrstuvwxyz", &mdContext);
 	MDPrint(&mdContext);
 	printf("c3fcd3d76192e4007dfb496cca67e13b\n\n");
+
 	MDString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &mdContext);
 	MDPrint(&mdContext);
 	printf("d174ab98d277d9f5a5611c2c9f419d9f\n\n");
+
 	MDString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &mdContext);
 	MDPrint(&mdContext);
 	printf("57edf4a22be3c955ac49da2e2107b67a\n\n");
