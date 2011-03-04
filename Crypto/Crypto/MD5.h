@@ -53,9 +53,9 @@ extern "C" {
 
 /* Data structure for MD5 (Message Digest) computation */
 typedef struct {
-  ulong i[2];           /* number of _bits_ handled mod 2^64 */
-  ulong buf[4];         /* scratch buffer */
-  byte in[64];          /* input buffer */
+  uint i[2];			/* number of _bits_ handled mod 2^64 */
+  uint buf[4];			/* scratch buffer */
+  byte in[64];			/* input buffer */
   byte digest[16];		/* actual digest after MD5Final call */
 } MD5_CTX;
 
@@ -74,7 +74,7 @@ static unsigned char PADDING[64] = {
 void MD5Init(MD5_CTX* mdContext);
 void MD5Update(MD5_CTX* mdContext, uchar* inBuf, uint inLen);
 void MD5Final(MD5_CTX* mdContext);
-void Transform(ulong* buf, ulong* in);
+void Transform(uint* buf, uint* in);
 
 void MDPrint (MD5_CTX* mdContext);
 void MDString(char* inString, MD5_CTX* mdContext);
