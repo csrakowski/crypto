@@ -7,7 +7,7 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD MD5
+#define METHOD SHA
 
 // Ceasar Cipher, not implemented cause of weakness. Added a fact anyway :-P
 // It's often misquoted, but when Bruce Schneier killed Julius Caesar for promoting weak cryptography he actually said, "Et tu, Bruce?" http://www.schneierfacts.com/fact/807
@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 	// SHA-1
 	// SHA = "Schneier has access" SHA2 = "Schneier has access - and a spare too" http://www.schneierfacts.com/fact/867
 #if METHOD == SHA
+	SHATestSuite();
 
 #endif
 	return 0;

@@ -11,15 +11,15 @@
 extern "C" {
 #endif
 
-/* Data structure for MD5 (Message Digest) computation */
+/* Data structure for SHA1 computation */
 typedef struct {
-  ulong i[2];           /* number of _bits_ handled mod 2^64 */
-  ulong buf[5];         /* scratch buffer */
-  byte in[64];          /* input buffer */
+  uint i[2];			/* number of _bits_ handled mod 2^64 */
+  uint buf[5];			/* scratch buffer */
+  byte in[64];			/* input buffer */
   byte digest[16];		/* actual digest after MD5Final call */
 } SHA_CTX;
 
-// Padding for MDFinal
+// Padding for SHAFinal
 static unsigned char PADDING2[64] = {
 	0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -34,7 +34,7 @@ static unsigned char PADDING2[64] = {
 void SHAInit(SHA_CTX* shaContext);
 void SHAUpdate(SHA_CTX* shaContext, uchar* inBuf, uint inLen);
 void SHAFinal(SHA_CTX* shaContext);
-void SHATransform(ulong* buf, ulong* in);
+void SHATransform(uint* buf, uint* in);
 
 void SHAPrint (SHA_CTX* mdContext);
 void SHAString(char* inString, SHA_CTX* shaContext);
