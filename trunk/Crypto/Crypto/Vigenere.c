@@ -1,4 +1,5 @@
 #include "Vigenere.h"
+#include "SpecialMath.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -10,10 +11,10 @@
 
 char* VigenereEncodeMessage(char* message, char* key)
 {
-	unsigned int across, down, i, j;
+	uint across, down, i, j;
 	char* encMessage = (char*)malloc(strlen(message)*sizeof(char));
-	strcpy_s(encMessage,strlen(message),message);
-
+	strcpy_s(encMessage, strlen(message), message);
+	
 	for(j = 0; j < strlen(encMessage); j++)
 	{
 		for(i = 0; i < 26; i++)

@@ -1,5 +1,11 @@
 ﻿#pragma once
 
+/*****************************\
+* Christiaan Rakowski
+* Crypto Collection
+\*****************************/
+
+
 #include "SpecialMath.h"
 
 #ifdef __cplusplus
