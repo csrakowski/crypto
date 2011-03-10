@@ -10,8 +10,8 @@
 extern "C" {
 #endif
 
-char* VigenereEncodeMessage(char* message, char* key);
-char* VigenereDecodeMessage(char* message, char* key);
+void VigenereEncodeMessage(char* encMessage, char* message, char* key);
+void VigenereDecodeMessage(char* message, char* encMessage, char* key);
 
 #ifdef __cplusplus
 }

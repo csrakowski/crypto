@@ -9,90 +9,68 @@
 * Crypto Collection
 \*****************************/
 
-char* VigenereEncodeMessage(char* message, char* key)
+void VigenereEncodeMessage(char* encMessage, char* message, char* key)
 {
-	uint across, down, i, j;
-	char* encMessage = (char*)malloc(strlen(message)*sizeof(char));
-	strcpy_s(encMessage, strlen(message), message);
+	uint i, j;
+	uint across = 0, down = 0;
+	uint len = strlen(message)+1;
+	uint keylen = strlen(key);
+	strcpy_s(encMessage, len, message);
 	
-	for(j = 0; j < strlen(encMessage); j++)
+	for(j = 0; j < len; j++)
 	{
-		for(i = 0; i < 26; i++)
+		if(isalpha(message[j]) && isalpha(key[(j%keylen)]))
 		{
-			if( !(isalpha(message[j])))
+			for(i = 0; i < 26; i++)
 			{
-				across = 30;
-				break;
+				if((toupper(message[j]) == table[0][i]))
+				{
+					across = i;
+					break;
+				}
 			}
-
-			if( ( toupper(message[j]) == table[0][i]))
+			for(i = 0; i < 26; i++)
 			{
-				across = i;
-				break;
+				if((toupper(key[(j%keylen)]) == table[i][0]))
+				{
+					down = i;
+					break;
+				}
 			}
-		}
-		
-		for(i = 0; i < 26; i++)
-		{	
-			if( !(isalpha(message[j])))
-			{
-				down = 30;
-				break;
-			}
-				
-			if( ( toupper(key[j]) == table[i][0]))
-			{
-				down = i;
-				break;
-			}
-		}
-		
-		if(across != 30 && down != 30)
 			encMessage[j] = table[down][across];
+		}
 	}
-	return encMessage;
 }
 
-char* VigenereDecodeMessage(char* message, char* key)
+void VigenereDecodeMessage(char* message, char* encMessage, char* key)
 {
-	unsigned int across, down, i, j;
-	char* unMessage = (char*)malloc(strlen(message)*sizeof(char));
-	strcpy_s(unMessage,strlen(message),message);
+	uint i, j;
+	uint across = 0, down = 0;
+	uint len = strlen(encMessage)+1;
+	uint keylen = strlen(key);
+	strcpy_s(message, len, encMessage);
 
-	for(j = 0; j < strlen(message); j++)
+	for(j = 0; j < len; j++)
 	{
-		for(i = 0; i < 26; i++)
+		if(isalpha(encMessage[j]) && isalpha(key[(j%keylen)]))
 		{
-			if( !(isalpha(key[j])))
+			for(i = 0; i < 26; i++)
 			{
-				across = 30;
-				break;
+				if((toupper(key[(j%keylen)]) == table[0][i]))
+				{
+					across = i;
+					break;
+				}
 			}
-			
-			if( ( toupper(key[j]) == table[0][i]))
+			for(i = 0; i < 26; i++)
 			{
-				across = i;
-				break;
+				if((toupper(encMessage[j]) == table[i][across]))
+				{
+					down = i;
+					break;
+				}
 			}
+			message[j] = table[down][0];
 		}
-		
-		for(i = 0; i < 26; i++)
-		{
-			if( !(isalpha(message[j])))
-			{
-				down = 30;
-				break;
-			}
-			
-			if( ( toupper(message[j]) == table[i][across]))
-			{
-				down = i;
-				break;
-			}
-		}
-		
-		if(down != 30)
-			unMessage[j] = table[down][0];
 	}
-	return unMessage;
 }
