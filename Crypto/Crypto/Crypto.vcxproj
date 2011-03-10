@@ -63,7 +63,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MD5.c" />
     <ClCompile Include="RSA.c" />
-    <ClCompile Include="SHA1.cpp" />
+    <ClCompile Include="SHA1.c" />
     <ClCompile Include="SpecialMath.c" />
     <ClCompile Include="Vigenere.c" />
   </ItemGroup>

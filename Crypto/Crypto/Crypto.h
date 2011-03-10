@@ -20,4 +20,4 @@
 #define VIGENERE	0
 #define RSA			1
 #define MD5			2
-#define SHA			3
+#define SHA1		3

@@ -13,33 +13,20 @@ extern "C" {
 
 /* Data structure for SHA1 computation */
 typedef struct {
-  uint i[2];			/* number of _bits_ handled mod 2^64 */
-  uint buf[5];			/* scratch buffer */
-  byte in[64];			/* input buffer */
-  byte digest[16];		/* actual digest after MD5Final call */
-} SHA_CTX;
+    ulong state[5];
+    ulong count[2];
+    byte buffer[64];
+	byte digest[20];
+} SHA1_CTX;
 
-// Padding for SHAFinal
-static unsigned char PADDING2[64] = {
-	0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
+void SHA1Init(SHA1_CTX* context);
+void SHA1Update(SHA1_CTX* context, uchar* data, uint len);
+void SHA1Final(SHA1_CTX* context);
 
-void SHAInit(SHA_CTX* shaContext);
-void SHAUpdate(SHA_CTX* shaContext, uchar* inBuf, uint inLen);
-void SHAFinal(SHA_CTX* shaContext);
-void SHATransform(uint* buf, uint* in);
-
-void SHAPrint (SHA_CTX* mdContext);
-void SHAString(char* inString, SHA_CTX* shaContext);
-void SHAFile(char* filename, SHA_CTX* shaContext);
-void SHATestSuite();
+void SHA1Print (SHA1_CTX* context);
+void SHA1String(char* inString, SHA1_CTX* context);
+void SHA1File(char* filename, SHA1_CTX* context);
+void SHA1TestSuite(void);
 
 #ifdef __cplusplus
 }
