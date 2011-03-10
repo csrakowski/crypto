@@ -13,8 +13,8 @@ extern "C" {
 
 /* Data structure for SHA1 computation */
 typedef struct {
-    ulong state[5];
-    ulong count[2];
+    uint state[5];
+    uint count[2];
     byte buffer[64];
 	byte digest[20];
 } SHA1_CTX;
