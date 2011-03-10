@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SHA1.cpp">
-      <Filter>Source Files\Hash</Filter>
-    </ClCompile>
     <ClCompile Include="RSA.c">
       <Filter>Source Files\Encrypt</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MD5.c">
+      <Filter>Source Files\Hash</Filter>
+    </ClCompile>
+    <ClCompile Include="SHA1.c">
       <Filter>Source Files\Hash</Filter>
     </ClCompile>
   </ItemGroup>

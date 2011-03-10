@@ -61,88 +61,20 @@
 		(a) += (b); \
 	}
 
-void MD5Init (MD5_CTX* mdContext)
-{
-	mdContext->i[0] = mdContext->i[1] = (uint)0;
-	// Load magic initialization constants.
-	mdContext->buf[0] = (uint)0x67452301;
-	mdContext->buf[1] = (uint)0xefcdab89;
-	mdContext->buf[2] = (uint)0x98badcfe;
-	mdContext->buf[3] = (uint)0x10325476;
-}
-
-void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
-{
-	uint in[16];
-	int mdi;
-	unsigned int i, ii;
-
-	/* compute number of bytes mod 64 */
-	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
-
-	/* update number of bits */
-	if ((mdContext->i[0] + ((uint)inLen << 3)) < mdContext->i[0])
-	{
-		mdContext->i[1]++;
-	}
-	mdContext->i[0] += ((uint)inLen << 3);
-	mdContext->i[1] += ((uint)inLen >> 29);
-
-	while (inLen--)
-	{
-		/* add new character to buffer, increment mdi */
-		mdContext->in[mdi++] = *inBuf++;
-
-		/* transform if necessary */
-		if (mdi == 0x40) // 0x40 = 64 (max size of mdContext->in[])
-		{
-			for (i = 0, ii = 0; i < 16; i++, ii += 4)
-			{
-				in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
-			}
-			Transform (mdContext->buf, in);
-			mdi = 0;
-		}
-	}
-}
-
-void MD5Final (MD5_CTX* mdContext)
-{
-	uint in[16];
-	int mdi;
-	uint i, ii;
-	uint padLen;
-
-	/* save number of bits */
-	in[14] = mdContext->i[0];
-	in[15] = mdContext->i[1];
-
-	/* compute number of bytes mod 64 */
-	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
-
-	/* pad out to 56 mod 64 */
-	padLen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
-	MD5Update (mdContext, PADDING, padLen);
-
-	/* append length in bits and transform */
-	for (i = 0, ii = 0; i < 14; i++, ii += 4)
-	{
-		in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
-	}
-	Transform (mdContext->buf, in);
-	
-	/* store buffer in digest */
-	for (i = 0, ii = 0; i < 4; i++, ii += 4)
-	{
-		mdContext->digest[ii] =	  (byte)(mdContext->buf[i] & 0xFF);
-		mdContext->digest[ii+1] = (byte)((mdContext->buf[i] >> 8) & 0xFF);
-		mdContext->digest[ii+2] = (byte)((mdContext->buf[i] >> 16) & 0xFF);
-		mdContext->digest[ii+3] = (byte)((mdContext->buf[i] >> 24) & 0xFF);
-	}
-}
+// Padding for MDFinal
+static unsigned char PADDING[64] = {
+	0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
 
 /* Basic MD5 step. Transform buf based on in. */
-static void Transform(uint* buf, uint* in)
+void MD5Transform(uint* buf, uint* in)
 {
 	uint	a = buf[0],
 			b = buf[1],
@@ -243,11 +175,91 @@ static void Transform(uint* buf, uint* in)
 	buf[3] += d;
 }
 
+void MD5Init (MD5_CTX* mdContext)
+{
+	mdContext->i[0] = mdContext->i[1] = (uint)0;
+	// Load magic initialization constants.
+	mdContext->buf[0] = (uint)0x67452301;
+	mdContext->buf[1] = (uint)0xefcdab89;
+	mdContext->buf[2] = (uint)0x98badcfe;
+	mdContext->buf[3] = (uint)0x10325476;
+}
+
+void MD5Update(MD5_CTX*  mdContext, uchar* inBuf, uint inLen)
+{
+	uint in[16];
+	int mdi;
+	unsigned int i, ii;
+
+	/* compute number of bytes mod 64 */
+	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
+
+	/* update number of bits */
+	if ((mdContext->i[0] + ((uint)inLen << 3)) < mdContext->i[0])
+	{
+		mdContext->i[1]++;
+	}
+	mdContext->i[0] += ((uint)inLen << 3);
+	mdContext->i[1] += ((uint)inLen >> 29);
+
+	while (inLen--)
+	{
+		/* add new character to buffer, increment mdi */
+		mdContext->in[mdi++] = *inBuf++;
+
+		/* transform if necessary */
+		if (mdi == 0x40) // 0x40 = 64 (max size of mdContext->in[])
+		{
+			for (i = 0, ii = 0; i < 16; i++, ii += 4)
+			{
+				in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
+			}
+			MD5Transform (mdContext->buf, in);
+			mdi = 0;
+		}
+	}
+}
+
+void MD5Final (MD5_CTX* mdContext)
+{
+	uint in[16];
+	int mdi;
+	uint i, ii;
+	uint padLen;
+
+	/* save number of bits */
+	in[14] = mdContext->i[0];
+	in[15] = mdContext->i[1];
+
+	/* compute number of bytes mod 64 */
+	mdi = (int)((mdContext->i[0] >> 3) & 0x3F);
+
+	/* pad out to 56 mod 64 */
+	padLen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
+	MD5Update (mdContext, PADDING, padLen);
+
+	/* append length in bits and transform */
+	for (i = 0, ii = 0; i < 14; i++, ii += 4)
+	{
+		in[i] = (((uint)mdContext->in[ii+3]) << 24) | (((uint)mdContext->in[ii+2]) << 16) | (((uint)mdContext->in[ii+1]) << 8) | ((uint)mdContext->in[ii]);
+	}
+	MD5Transform (mdContext->buf, in);
+	
+	/* store buffer in digest */
+	for (i = 0, ii = 0; i < 4; i++, ii += 4)
+	{
+		mdContext->digest[ii] =	  (byte)(mdContext->buf[i] & 0xFF);
+		mdContext->digest[ii+1] = (byte)((mdContext->buf[i] >> 8) & 0xFF);
+		mdContext->digest[ii+2] = (byte)((mdContext->buf[i] >> 16) & 0xFF);
+		mdContext->digest[ii+3] = (byte)((mdContext->buf[i] >> 24) & 0xFF);
+	}
+}
+
 /* Prints message digest buffer in mdContext as 32 hexadecimal digits.
 Order is from low-order byte to high-order byte of digest.
 Each byte is printed with high-order hexadecimal digit first.
 */
-void MDPrint(MD5_CTX* mdContext)
+void MD5Print(MD5_CTX* mdContext)
 {
 	int i;
 	for (i = 0; i < 16; i++)
@@ -259,7 +271,7 @@ void MDPrint(MD5_CTX* mdContext)
 Prints out message digest, a space, the string (in quotes) and a
 carriage return.
 */
-void MDString(char* inString, MD5_CTX* mdContext)
+void MD5String(char* inString, MD5_CTX* mdContext)
 {
 	MD5Init(mdContext);
 	MD5Update(mdContext, (uchar*)inString, strlen(inString));
@@ -270,7 +282,7 @@ void MDString(char* inString, MD5_CTX* mdContext)
 Prints out message digest, a space, the file name, and a carriage
 return.
 */
-void MDFile(char* filename, MD5_CTX* mdContext)
+void MD5File(char* filename, MD5_CTX* mdContext)
 {
 	int bytes;
 	byte data[1024];
@@ -293,36 +305,36 @@ void MDFile(char* filename, MD5_CTX* mdContext)
 
 /* Runs a standard suite of test data.
 */
-void MDTestSuite()
+void MD5TestSuite()
 {
 	MD5_CTX mdContext;
 	printf("MD5 test suite results:\n\n");
 
-	MDString("", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("", &mdContext);
+	MD5Print(&mdContext);
 	printf("d41d8cd98f00b204e9800998ecf8427e\n\n");
 
-	MDString("a", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("a", &mdContext);
+	MD5Print(&mdContext);
 	printf("0cc175b9c0f1b6a831c399e269772661\n\n");
 
-	MDString("abc", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("abc", &mdContext);
+	MD5Print(&mdContext);
 	printf("900150983cd24fb0d6963f7d28e17f72\n\n");
 
-	MDString("message digest", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("message digest", &mdContext);
+	MD5Print(&mdContext);
 	printf("f96b697d7cb7938d525a2f31aaf161d0\n\n");
 
-	MDString("abcdefghijklmnopqrstuvwxyz", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("abcdefghijklmnopqrstuvwxyz", &mdContext);
+	MD5Print(&mdContext);
 	printf("c3fcd3d76192e4007dfb496cca67e13b\n\n");
 
-	MDString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", &mdContext);
+	MD5Print(&mdContext);
 	printf("d174ab98d277d9f5a5611c2c9f419d9f\n\n");
 
-	MDString("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &mdContext);
-	MDPrint(&mdContext);
+	MD5String("12345678901234567890123456789012345678901234567890123456789012345678901234567890", &mdContext);
+	MD5Print(&mdContext);
 	printf("57edf4a22be3c955ac49da2e2107b67a\n\n");
 }
