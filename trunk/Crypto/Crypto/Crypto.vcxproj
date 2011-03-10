@@ -74,6 +74,7 @@
     <ClInclude Include="SHA1.h" />
     <ClInclude Include="SpecialMath.h" />
     <ClInclude Include="Vigenere.h" />
+    <ClInclude Include="VigenereTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
