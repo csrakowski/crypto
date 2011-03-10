@@ -3,6 +3,9 @@
 /*****************************\
 * Christiaan Rakowski
 * Crypto Collection
+* Derived work:
+* Origional work by nguyenduc@icu.ac.kr
+* http://code.google.com/p/libmcrypto/
 \*****************************/
 
 #include "SpecialMath.h"
