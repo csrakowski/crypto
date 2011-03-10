@@ -183,7 +183,7 @@ void SHA1Update(SHA1_CTX* context, uchar* data, uint len)
 
 void SHA1Final(SHA1_CTX* context)
 {
-	ulong i, j;
+	uint i, j;
     byte finalcount[8];
 
     for (i = 0; i < 8; i++) {
