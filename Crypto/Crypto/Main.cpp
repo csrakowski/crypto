@@ -1,5 +1,6 @@
 #include "Crypto.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*****************************\
@@ -18,11 +19,12 @@ int main(int argc, char *argv[])
 	// A Vigenere cipher with the Key "BRUCESCHNEIER" is in fact unbreakable. http://www.schneierfacts.com/fact/40 
 #if METHOD == VIGENERE
 	
-	char* enc = VigenereEncodeMessage("MyMessage", "BRUCESCHNEIER");
-	printf("%s\n", enc);
+	char buf[255];
+	VigenereEncodeMessage(buf, "M1Y2M3E4S5S6A7G8E9", "BRUCESCHNEIER");
+	printf("%s\n", buf);
 
-	char* un = VigenereDecodeMessage(enc, "BRUCESCHNEIER");
-	printf("%s\n", un);
+	VigenereDecodeMessage(buf, buf, "BRUCESCHNEIER");
+	printf("%s\n", buf);
 #endif
 	
 	// RSA - Core algorithm there, stuck on the size of the primes. 16^16 is 64 bit max already :'(
