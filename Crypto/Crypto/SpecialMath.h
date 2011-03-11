@@ -32,6 +32,7 @@ ulong crandom(void);
 ulong generatePrime(void);
 ulong totient(ulong p, ulong q);
 ulong ipow(uint base, uint exp);
+int mod(int a, int n);
 ulong invm(ulong e, ulong n);
 
 #ifdef __cplusplus

@@ -10,6 +10,7 @@
 
 //--------------------Encryption----------------------------
 #include "Vigenere.h"
+#include "Ceasar.h"
 #include "RSA.h"
 
 //----------------------Hashing-----------------------------
@@ -17,7 +18,8 @@
 #include "SHA1.h"
 
 //----------------------Settings----------------------------
-#define VIGENERE	0
-#define RSA			1
-#define MD5			2
-#define SHA1		3
+#define CEASAR		0
+#define VIGENERE	1
+#define RSA			2
+#define MD5			3
+#define SHA1		4

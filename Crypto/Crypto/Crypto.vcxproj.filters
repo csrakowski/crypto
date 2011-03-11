@@ -45,6 +45,9 @@
     <ClCompile Include="SHA1.c">
       <Filter>Source Files\Hash</Filter>
     </ClCompile>
+    <ClCompile Include="Ceasar.c">
+      <Filter>Source Files\Encrypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypto.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VigenereTable.h">
+      <Filter>Header Files\Encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Ceasar.h">
       <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
   </ItemGroup>
