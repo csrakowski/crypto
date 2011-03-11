@@ -89,6 +89,22 @@ ulong ipow(uint base, uint exp)
     return result;	
 }
 
+int mod(int a, int n)
+{
+	if(a>=0)
+	{
+		return (a%n);
+	}
+	else
+	{
+		while(a < 0)
+		{
+			a = n+a;	
+		}
+		return a;
+	}
+}
+
  /****************
   * Calculate the multiplicative inverse X of A mod N
   * That is: Find the solution x for

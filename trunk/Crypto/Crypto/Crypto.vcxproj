@@ -60,6 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ceasar.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MD5.c" />
     <ClCompile Include="RSA.c" />
@@ -68,6 +69,7 @@
     <ClCompile Include="Vigenere.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ceasar.h" />
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="RSA.h" />

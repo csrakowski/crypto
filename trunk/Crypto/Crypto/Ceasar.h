@@ -4,14 +4,14 @@
 * Christiaan Rakowski
 * Crypto Collection
 \*****************************/
-#include "VigenereTable.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void VigenereEncipher(char* message, char* key);
-void VigenereDecipher(char* message, char* key);
+const static char alphabet[] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+
+void CeasarCipher(char* message, int shift);
 
 #ifdef __cplusplus
 }
