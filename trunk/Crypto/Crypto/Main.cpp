@@ -20,14 +20,14 @@ int main(int argc, char *argv[])
 	char buf[255];
 	sprintf_s(buf, "MYMESSAGE");
 	printf("Plain: %s\n", buf);
-	CeasarCipher(buf, 12);
+	CeasarCipher(buf, 7);
 	printf("Ciphered: %s\n", buf);
-	CeasarCipher(buf, -12);
+	CeasarCipher(buf, -7);
 	printf("Deciphered: %s\n", buf);
 #endif
 
 	// Vigenere Cipher
-	// Safety:	Bruteforcing will take a long time if keylength is of decent size
+	// Safety:	Bruteforcing is possible, but will take some time if key and message are of decent size.
 	// FunFact:	A Vigenere cipher with the Key "BRUCESCHNEIER" is in fact unbreakable. http://www.schneierfacts.com/fact/40 
 #if METHOD == VIGENERE	
 	char buf[255];
