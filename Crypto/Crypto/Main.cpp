@@ -8,7 +8,7 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD CEASAR
+#define METHOD GPG
 
 
 int main(int argc, char *argv[])
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	// Safety	Will follow soon
 	// FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
 #if METHOD == GPG
-
+	
 #endif
 
 	// MD5 Hash
