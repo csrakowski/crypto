@@ -25,15 +25,15 @@
     <Filter Include="Source Files\Hash">
       <UniqueIdentifier>{f0288477-b617-4c47-86e3-edc10bbc4ec5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{a6cd9d79-494a-4ad6-9c46-d50c305831fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{618e5a71-7c82-40c5-bc43-083c63858e1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RSA.c">
-      <Filter>Source Files\Encrypt</Filter>
-    </ClCompile>
-    <ClCompile Include="SpecialMath.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vigenere.c">
       <Filter>Source Files\Encrypt</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
@@ -48,6 +48,15 @@
     <ClCompile Include="Ceasar.c">
       <Filter>Source Files\Encrypt</Filter>
     </ClCompile>
+    <ClCompile Include="Vigenere.c">
+      <Filter>Source Files\Encrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialMath.c">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="GPG.c">
+      <Filter>Source Files\Encrypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypto.h">
@@ -59,19 +68,22 @@
     <ClInclude Include="SHA1.h">
       <Filter>Header Files\Hash</Filter>
     </ClInclude>
-    <ClInclude Include="Vigenere.h">
-      <Filter>Header Files\Encrypt</Filter>
-    </ClInclude>
     <ClInclude Include="RSA.h">
       <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialMath.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Ceasar.h">
+      <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
     <ClInclude Include="VigenereTable.h">
       <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
-    <ClInclude Include="Ceasar.h">
+    <ClInclude Include="Vigenere.h">
+      <Filter>Header Files\Encrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialMath.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GPG.h">
       <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
   </ItemGroup>

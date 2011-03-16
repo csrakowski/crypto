@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
 	// RSA Encryption - Core algorithm there, stuck on the size of the primes. 16^16 is 64 bit max already :'(
 	// Safety:	RSA is very scalable, the bigger the prime numbers are the stronger the encryption will be, thus making RSA a very secure choice.
-	// Funfact:	Bruce Schneier knows Alice and Bob's shared secret. http://www.schneierfacts.com/fact/18
+	// FunFact:	Bruce Schneier knows Alice and Bob's shared secret. http://www.schneierfacts.com/fact/18
 #if METHOD == RSA
 	RSA_private_key privkey;
 	RSA_public_key pubkey;
@@ -58,6 +58,13 @@ int main(int argc, char *argv[])
 	printf("Output: %ld\n", out);
 	decrypt(&result, &out, &privkey);
 	printf("Result: %ld\n", result);
+#endif
+
+	// GPG Encryption
+	// Safety	Will follow soon
+	// FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
+#if METHOD == GPG
+
 #endif
 
 	// MD5 Hash
