@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 #endif
 
 	// GPG Encryption
-	// Safety	Will follow soon
+	// Safety	It's not called Pretty Good Privacy for a reason, the algorithm offers a very nice encryption.
 	// FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
 #if METHOD == GPG
 	
