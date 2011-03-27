@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	// FunFact:	A Vigenere cipher with the Key "BRUCESCHNEIER" is in fact unbreakable. http://www.schneierfacts.com/fact/40 
 #if METHOD == VIGENERE	
 	char buf[255];
-	sprintf_s(buf, "A Vigenere cipher with the Key BRUCESCHNEIER is in fact unbreakable.");
+	sprintf_s(buf, "There are no hidden hints here");
 	printf("Plain: %s\n", buf);
 	VigenereEncipher(buf, "BRUCESCHNEIER");
 	printf("Ciphered: %s\n", buf);	
