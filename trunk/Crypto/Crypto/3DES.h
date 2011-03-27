@@ -9,7 +9,11 @@
 extern "C" {
 #endif
 
+void encryptDES();
+void decryptDES();
 
+void encrypt3DES();
+void decrypt3DES();
 
 #ifdef __cplusplus
 }

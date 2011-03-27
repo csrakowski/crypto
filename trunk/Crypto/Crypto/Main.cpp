@@ -39,9 +39,10 @@ int main(int argc, char *argv[])
 	printf("Deciphered: %s\n", buf);
 #endif
 
-	// RSA Encryption - Core algorithm there, stuck on the size of the primes. 16^16 is 64 bit max already :'(
+	// RSA Encryption
 	// Safety:	RSA is very scalable, the bigger the prime numbers are the stronger the encryption will be, thus making RSA a very secure choice.
 	// FunFact:	Bruce Schneier knows Alice and Bob's shared secret. http://www.schneierfacts.com/fact/18
+	// Note: Core algorithm there, stuck on the size of the primes. 16^16 is 64 bit max already. Will implement a big number libary later.
 #if METHOD == RSA
 	RSA_private_key privkey;
 	RSA_public_key pubkey;
@@ -65,7 +66,8 @@ int main(int argc, char *argv[])
 	// FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
 	//			There was no DES fun fact, so I'll leave the PGP one.
 #if METHOD == TRIPLEDES
-	
+	encrypt3DES();
+	decrypt3DES();
 #endif
 
 	// MD5 Hash
