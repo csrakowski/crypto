@@ -54,7 +54,7 @@
     <ClCompile Include="SpecialMath.c">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
-    <ClCompile Include="GPG.c">
+    <ClCompile Include="3DES.c">
       <Filter>Source Files\Encrypt</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,7 +83,7 @@
     <ClInclude Include="SpecialMath.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="GPG.h">
+    <ClInclude Include="3DES.h">
       <Filter>Header Files\Encrypt</Filter>
     </ClInclude>
   </ItemGroup>
