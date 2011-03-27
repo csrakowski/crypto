@@ -8,7 +8,7 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD GPG
+#define METHOD TRIPLEDES
 
 
 int main(int argc, char *argv[])
@@ -60,10 +60,11 @@ int main(int argc, char *argv[])
 	printf("Result: %ld\n", result);
 #endif
 
-	// GPG Encryption
-	// Safety	It's not called Pretty Good Privacy for a reason, the algorithm offers a very nice encryption.
+	// 3DES (Triple DES) Encryption
+	// Safety	Due to the key size it's not as secure as you can get with RSA, but it is still a valid choice
 	// FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
-#if METHOD == GPG
+	//			There was no DES fun fact, so I'll leave the PGP one.
+#if METHOD == TRIPLEDES
 	
 #endif
 

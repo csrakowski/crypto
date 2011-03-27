@@ -12,7 +12,7 @@
 #include "Vigenere.h"
 #include "Ceasar.h"
 #include "RSA.h"
-#include "GPG.h"
+#include "3DES.h"
 
 //----------------------Hashing-----------------------------
 #include "MD5.h"
@@ -22,6 +22,6 @@
 #define CEASAR		0
 #define VIGENERE	1
 #define RSA			2
-#define GPG			3
+#define TRIPLEDES	3
 #define MD5			4
 #define SHA1		5
