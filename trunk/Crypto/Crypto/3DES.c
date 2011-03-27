@@ -15,9 +15,9 @@ void decryptDES()
 
 void encrypt3DES()
 {
-	encryptDES();	//k1
-	decryptDES();	//k2
 	encryptDES();	//k3
+	decryptDES();	//k2
+	encryptDES();	//k1
 }
 
 void decrypt3DES()
