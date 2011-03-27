@@ -8,7 +8,7 @@
 * Crypto Collection
 \*****************************/
 
-#define METHOD TRIPLEDES
+#define METHOD VIGENERE
 
 
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	// FunFact:	A Vigenere cipher with the Key "BRUCESCHNEIER" is in fact unbreakable. http://www.schneierfacts.com/fact/40 
 #if METHOD == VIGENERE	
 	char buf[255];
-	sprintf_s(buf, "M1Y2M3E4S5S6A7G8E9");
+	sprintf_s(buf, "A Vigenere cipher with the Key BRUCESCHNEIER is in fact unbreakable.");
 	printf("Plain: %s\n", buf);
 	VigenereEncipher(buf, "BRUCESCHNEIER");
 	printf("Ciphered: %s\n", buf);	
