@@ -228,6 +228,36 @@ void SHA1TestSuite()
 
 int main(int argc, char *argv[])
 {
-	SHA1TestSuite();
-	return 0;
+	int i = 0;
+
+	if(argc < 3)
+	{
+		i = 1;
+	}
+	
+	if(i == 0)
+	{
+		SHA1_CTX ctx;
+		if(strcmp(argv[1], "-f") == 0)
+		{
+			SHA1File(argv[2], &ctx);
+			SHA1Print(&ctx);
+			return 0;
+		}
+		else if(strcmp(argv[1], "-s") == 0)
+		{
+			char* buf;
+			for(i=2; i<argc; i++)
+			{
+				buf = argv[i];
+				buf += strlen(argv[i]);
+			}
+			SHA1String(buf, &ctx);
+			SHA1Print(&ctx);
+			return 0;
+		}
+	}
+
+	printf("Invalid input, usage SHA1 <-f or -s> <file or string>\n");
+	return 1;
 }

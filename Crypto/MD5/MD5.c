@@ -350,8 +350,36 @@ void MD5TestSuite()
 
 int main(int argc, char *argv[])
 {
+	int i = 0;
 
-	MD5TestSuite();
+	if(argc < 3)
+	{
+		i = 1;
+	}
+	
+	if(i == 0)
+	{
+		MD5_CTX ctx;
+		if(strcmp(argv[1], "-f") == 0)
+		{
+			MD5File(argv[2], &ctx);
+			MD5Print(&ctx);
+			return 0;
+		}
+		else if(strcmp(argv[1], "-s") == 0)
+		{
+			char* buf;
+			for(i=2; i<argc; i++)
+			{
+				buf = argv[i];
+				buf += strlen(argv[i]);
+			}
+			MD5String(buf, &ctx);
+			MD5Print(&ctx);
+			return 0;
+		}
+	}
 
-	return 0;
+	printf("Invalid input, usage MD5 <-f or -s> <file or string>\n");
+	return 1;
 }
