@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ceasar.c" />
-    <ClCompile Include="Main.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
