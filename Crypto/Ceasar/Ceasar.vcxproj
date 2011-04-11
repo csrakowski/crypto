@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}</ProjectGuid>
-    <RootNamespace>Crypto</RootNamespace>
+    <ProjectGuid>{60F043D4-7B14-4CC7-80FC-921D785E364A}</ProjectGuid>
+    <RootNamespace>Ceasar</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -60,12 +60,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SpecialMath.c" />
+    <ClInclude Include="Ceasar.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h" />
-    <ClInclude Include="SpecialMath.h" />
+    <ClCompile Include="Ceasar.c" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}</ProjectGuid>
-    <RootNamespace>Crypto</RootNamespace>
+    <ProjectGuid>{0D3B2AB0-2808-4A94-8536-8CBEBC0156D5}</ProjectGuid>
+    <RootNamespace>SHA1</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -61,11 +61,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SpecialMath.c" />
+    <ClCompile Include="SHA1.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h" />
-    <ClInclude Include="SpecialMath.h" />
+    <ClInclude Include="SHA1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
