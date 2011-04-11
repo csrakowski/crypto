@@ -9,6 +9,7 @@
 #include "Vigenere.h"
 #include "../Crypto/SpecialMath.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 
@@ -74,4 +75,50 @@ void VigenereDecipher(char* message, char* key)
 			message[j] = table[down][0];
 		}
 	}
+}
+
+int main(int argc, char *argv[])
+{
+	int i = 0;
+
+	if(argc < 4)
+	{
+		i = 1;
+	}
+	
+	if(i == 0)
+	{
+		if(argv[1] == "-e")
+		{
+			for(i=3; i<argc; i++)
+			{
+				VigenereEncipher(argv[i], argv[2]);
+				printf("%s ", argv[i]);
+			}
+			return 0;
+		}
+		else if(argv[1] == "-d")
+		{
+			for(i=3; i<argc; i++)
+			{
+				VigenereDecipher(argv[i], argv[2]);
+				printf("%s ", argv[i]);				
+			}
+			return 0;
+		}
+	}
+
+	printf("Invalid input, usage Vigenere <-d or -e> <password> <message>\n");
+	return 1;
+
+
+
+	//char buf[255];
+	//printf("Plain: %s\n", buf);
+	//VigenereEncipher(buf, "BRUCESCHNEIER");
+	//printf("Ciphered: %s\n", buf);	
+	//VigenereDecipher(buf, "BRUCESCHNEIER");
+	//printf("Deciphered: %s\n", buf);
+
+	return 0;
 }

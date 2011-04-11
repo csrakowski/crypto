@@ -128,3 +128,22 @@ int check_priv_key( RSA_private_key *sk )
 	rc = (temp==sk->n);
     return !rc;
 }
+
+int main(int argc, char *argv[])
+{
+	ulong in = 1, out, result;
+	RSA_private_key privkey;
+	RSA_public_key pubkey;
+	
+	generate(&privkey);
+	pubkey.n = privkey.n;
+	pubkey.e = privkey.e;
+
+	printf("Input: %ld\n", in);
+	encrypt(&out, &in, &pubkey);	
+	printf("Output: %ld\n", out);
+	decrypt(&result, &out, &privkey);
+	printf("Result: %ld\n", result);
+
+	return 0;
+}
