@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {	
 	char buf[255];
-	sprintf_s(buf, "MYMESSAGE");
+	sprintf_s(buf, "%s", "MYMESSAGE");
 	printf("Plain: %s\n", buf);
 	CeasarCipher(buf, 7);
 	printf("Ciphered: %s\n", buf);
