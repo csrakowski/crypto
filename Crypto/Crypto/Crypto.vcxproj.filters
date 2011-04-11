@@ -23,9 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SpecialMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>

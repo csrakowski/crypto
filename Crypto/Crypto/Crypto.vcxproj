@@ -64,7 +64,6 @@
     <ClCompile Include="SpecialMath.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h" />
     <ClInclude Include="SpecialMath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
