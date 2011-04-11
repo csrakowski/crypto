@@ -21,16 +21,25 @@ void decryptDES()
 
 void encrypt3DES()
 {
-	encryptDES();	//k3
-	decryptDES();	//k2
 	encryptDES();	//k1
+	decryptDES();	//k2
+	encryptDES();	//k3
 }
 
 void decrypt3DES()
 {
-	decryptDES();	//k1
-	encryptDES();	//k2
 	decryptDES();	//k3
+	encryptDES();	//k2
+	decryptDES();	//k1
+}
+
+
+int main(int argc, char *argv[])
+{
+	encrypt3DES();
+	decrypt3DES();
+
+	return 0;
 }
 
 

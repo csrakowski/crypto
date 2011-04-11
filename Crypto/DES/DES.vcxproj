@@ -61,7 +61,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3DES.c" />
-    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DES.h" />
