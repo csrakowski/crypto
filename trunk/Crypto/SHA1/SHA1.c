@@ -225,3 +225,9 @@ void SHA1TestSuite()
 	SHA1Print(&context);
 	printf("50abf5706a150990a08b2c5ea40fa0e585554732\n\n");	
 }
+
+int main(int argc, char *argv[])
+{
+	SHA1TestSuite();
+	return 0;
+}

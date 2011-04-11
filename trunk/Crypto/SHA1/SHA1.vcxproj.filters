@@ -18,9 +18,6 @@
     <ClCompile Include="SHA1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SHA1.h">

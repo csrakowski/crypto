@@ -60,7 +60,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vigenere.c" />
   </ItemGroup>
   <ItemGroup>

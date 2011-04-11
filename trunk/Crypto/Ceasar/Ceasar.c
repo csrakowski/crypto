@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
 		printf("%s ", argv[i]);
 	}
 
+	return 0;
+
 	/*char buf[255];
 	sprintf_s(buf, "%s", "MYMESSAGE");
 	printf("Plain: %s\n", buf);
@@ -59,6 +61,4 @@ int main(int argc, char *argv[])
 	printf("Ciphered: %s\n", buf);
 	CeasarCipher(buf, -7);
 	printf("Deciphered: %s\n", buf);*/
-
-	return 0;
 }

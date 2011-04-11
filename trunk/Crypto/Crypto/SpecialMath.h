@@ -5,6 +5,8 @@
 /*****************************\
 * Christiaan Rakowski
 * Crypto Collection
+*
+* Special Math Libary
 \*****************************/
 
 #ifdef __cplusplus
