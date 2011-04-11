@@ -7,7 +7,7 @@
 \*****************************/
 
 #include "Ceasar.h"
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -36,7 +36,7 @@
 #include <time.h>
 #include <string.h>
 #include "MD5.h"
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 /* F, G and H are basic MD5 functions: selection, majority, parity */
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))

@@ -8,7 +8,7 @@
 #include "SHA1.h"
 #include <stdio.h>
 #include <string.h>
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
