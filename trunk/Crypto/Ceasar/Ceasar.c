@@ -9,6 +9,8 @@
 #include "Ceasar.h"
 #include "../Crypto/SpecialMath.h"
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void CeasarCipher(char* message, int shift)
@@ -31,4 +33,32 @@ void CeasarCipher(char* message, int shift)
 			}
 		}
 	}
+}
+
+int main(int argc, char *argv[])
+{
+	int i, shifts;
+
+	if(argc < 3)
+	{
+		printf("Invalid input, usage Ceasar <shifts> <message>\n");
+		return 1;
+	}
+	
+	shifts = atoi(argv[1]);
+	for(i=2; i<argc; i++)
+	{
+		CeasarCipher(argv[i], shifts);
+		printf("%s ", argv[i]);
+	}
+
+	/*char buf[255];
+	sprintf_s(buf, "%s", "MYMESSAGE");
+	printf("Plain: %s\n", buf);
+	CeasarCipher(buf, 7);
+	printf("Ciphered: %s\n", buf);
+	CeasarCipher(buf, -7);
+	printf("Deciphered: %s\n", buf);*/
+
+	return 0;
 }
