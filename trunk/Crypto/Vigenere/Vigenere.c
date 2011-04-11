@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	
 	if(i == 0)
 	{
-		if(strcmp(argv[1], "-e"))
+		if(strcmp(argv[1], "-e") == 0)
 		{
 			for(i=3; i<argc; i++)
 			{
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 			}
 			return 0;
 		}
-		if(strcmp(argv[1], "-d"))
+		if(strcmp(argv[1], "-d") == 0)
 		{
 			for(i=3; i<argc; i++)
 			{
