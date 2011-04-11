@@ -1,3 +1,11 @@
+
+/*****************************\
+* Christiaan Rakowski
+* Crypto Collection
+*
+* Special Math Libary
+\*****************************/
+
 #include "SpecialMath.h"
 #include <stdlib.h>
 #include <time.h>

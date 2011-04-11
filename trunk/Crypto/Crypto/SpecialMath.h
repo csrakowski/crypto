@@ -1,13 +1,13 @@
 #pragma once
 
-#include <math.h>
-
 /*****************************\
 * Christiaan Rakowski
 * Crypto Collection
 *
 * Special Math Libary
 \*****************************/
+
+#include <math.h>
 
 #ifdef __cplusplus
 extern "C" {
