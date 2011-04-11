@@ -7,7 +7,7 @@
 \*****************************/
 
 #include "3DES.h"
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 void encryptDES()
 {

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crypto", "Crypto\Crypto.vcxproj", "{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpecialMath", "SpecialMath\SpecialMath.vcxproj", "{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MD5", "MD5\MD5.vcxproj", "{556E83EB-141F-41A0-B230-5B189693708B}"
 	ProjectSection(ProjectDependencies) = postProject

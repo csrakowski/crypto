@@ -9,7 +9,7 @@
 #include "RSA.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 /****************
  * Public key operation. Encrypt INPUT with PKEY and put result into OUTPUT.

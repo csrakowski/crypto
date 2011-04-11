@@ -10,7 +10,7 @@
 * FunFact:	SHA = "Schneier has access" SHA2 = "Schneier has access - and a spare too" http://www.schneierfacts.com/fact/867
 \*****************************/
 
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 #ifdef __cplusplus
 extern "C" {

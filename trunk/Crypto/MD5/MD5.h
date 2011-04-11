@@ -50,7 +50,7 @@
  **********************************************************************
  */
 
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 
 #ifdef __cplusplus
 extern "C" {

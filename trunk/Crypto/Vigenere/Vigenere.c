@@ -7,7 +7,7 @@
 \*****************************/
 
 #include "Vigenere.h"
-#include "../Crypto/SpecialMath.h"
+#include "../SpecialMath/SpecialMath.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
