@@ -15,18 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="MD5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialMath.c">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecialMath.h">
+    <ClInclude Include="MD5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Vigenere.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialMath.c">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h">
+    <ClInclude Include="Vigenere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialMath.h">
+    <ClInclude Include="VigenereTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

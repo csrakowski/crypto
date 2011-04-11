@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}</ProjectGuid>
-    <RootNamespace>Crypto</RootNamespace>
+    <ProjectGuid>{E177D27A-64F3-49B1-8930-C2784F6251F4}</ProjectGuid>
+    <RootNamespace>Vigenere</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -61,11 +61,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SpecialMath.c" />
+    <ClCompile Include="Vigenere.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crypto.h" />
-    <ClInclude Include="SpecialMath.h" />
+    <ClInclude Include="Vigenere.h" />
+    <ClInclude Include="VigenereTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
