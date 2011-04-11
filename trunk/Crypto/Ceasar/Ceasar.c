@@ -15,7 +15,7 @@ void CeasarCipher(char* message, int shift)
 {
 	uint i, j;
 	uint len = strlen(message);
-
+	
 	for(j=0; j < len; j++)
 	{
 		if(isalpha(message[j]))

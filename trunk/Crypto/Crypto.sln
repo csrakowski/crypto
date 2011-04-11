@@ -4,16 +4,34 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crypto", "Crypto\Crypto.vcxproj", "{63E23974-F5DD-4516-B4E4-6AEEF60A95CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MD5", "MD5\MD5.vcxproj", "{556E83EB-141F-41A0-B230-5B189693708B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SHA1", "SHA1\SHA1.vcxproj", "{0D3B2AB0-2808-4A94-8536-8CBEBC0156D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RSA", "RSA\RSA.vcxproj", "{64F0DABF-5FCA-4AAA-97C5-A747F0CEB636}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vigenere", "Vigenere\Vigenere.vcxproj", "{E177D27A-64F3-49B1-8930-C2784F6251F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ceasar", "Ceasar\Ceasar.vcxproj", "{60F043D4-7B14-4CC7-80FC-921D785E364A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DES", "DES\DES.vcxproj", "{A77F55DE-BDBD-4BBE-AF81-EBA2BEBC423A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63E23974-F5DD-4516-B4E4-6AEEF60A95CF} = {63E23974-F5DD-4516-B4E4-6AEEF60A95CF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
