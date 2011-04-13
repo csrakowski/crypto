@@ -5,6 +5,7 @@
 * Crypto Collection
 *
 * http://en.wikipedia.org/wiki/DES_supplementary_material
+* http://orlingrabbe.com/des.htm
 *
 * 3DES (Triple DES) Encryption
 * Safety	Due to the key size it's not as secure as you can get with RSA, but it is still a valid choice
@@ -18,11 +19,16 @@
 extern "C" {
 #endif
 
+
 typedef struct {
-	ulong k1;
-	ulong k2;
-	ulong k3;
+	ulong k;
 } DES_KEY;
+
+typedef struct {
+	DES_KEY k1;
+	DES_KEY k2;
+	DES_KEY k3;
+} TDES_KEY;
 
 /* Tables defined in the Data Encryption Standard documents
  * Three of these tables, the initial permutation, the final
@@ -198,12 +204,14 @@ static const int bytebit[] = {
 	   0200,0100,040,020,010,04,02,01
 };
 
+void createDESKey(DES_KEY* key, ulong data);
+void create3DESKey(TDES_KEY* key, ulong data[3]);
 
-void encryptDES();
-void decryptDES();
+void encryptDES(DES_KEY* key);
+void decryptDES(DES_KEY* key);
 
-void encrypt3DES();
-void decrypt3DES();
+void encrypt3DES(TDES_KEY* key);
+void decrypt3DES(TDES_KEY* key);
 
 #ifdef __cplusplus
 }
