@@ -4,6 +4,8 @@
 * Christiaan Rakowski
 * Crypto Collection
 *
+* http://en.wikipedia.org/wiki/DES_supplementary_material
+*
 * 3DES (Triple DES) Encryption
 * Safety	Due to the key size it's not as secure as you can get with RSA, but it is still a valid choice
 * FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
@@ -32,6 +34,12 @@ typedef struct {
  */
 
 /* initial permutation IP */
+/*
+This table specifies the input permutation on a 64-bit block.
+The meaning is as follows: the first bit of the output is taken from the 58th bit of the input;
+the second bit from the 50th bit, and so on,
+with the last bit of the output taken from the 7th bit of the input.
+*/
 static byte ip[] = {
 	   58, 50, 42, 34, 26, 18, 10,  2,
 	   60, 52, 44, 36, 28, 20, 12,  4,
@@ -44,6 +52,7 @@ static byte ip[] = {
 };
 
 /* final permutation IP^-1 */
+/* See IP */
 static byte fp[] = {
 	   40,  8, 48, 16, 56, 24, 64, 32,
 	   39,  7, 47, 15, 55, 23, 63, 31,
@@ -54,7 +63,14 @@ static byte fp[] = {
 	   34,  2, 42, 10, 50, 18, 58, 26,
 	   33,  1, 41,  9, 49, 17, 57, 25
 };
+
 /* expansion operation matrix */
+/*
+The expansion function is interpreted as for the initial and final permutations.
+Note that some bits from the input are duplicated at the output;
+e.g. the fifth bit of the input is duplicated in both the sixth and eighth bit of the output.
+Thus, the 32-bit half-block is expanded to 48 bits
+*/
 static byte ei[] = {
 	   32,  1,  2,  3,  4,  5,
 		4,  5,  6,  7,  8,  9,
@@ -65,7 +81,16 @@ static byte ei[] = {
 	   24, 25, 26, 27, 28, 29,
 	   28, 29, 30, 31, 32,  1
 };
+
 /* The (in)famous S-boxes */
+/*
+This table lists the eight S-boxes used in DES.
+Each S-box replaces a 6-bit input with a 4-bit output.
+Given a 6-bit input, the 4-bit output is found by selecting the row using the outer two bits, and the column using the inner four bits.
+For example, an input "011011" has outer bits "01" and inner bits "1101";
+noting that the first row is "00" and the first column is "0000", the corresponding output for S-box S5 would be "1001" (=9),
+the value in the second row, 14th column. (See S-box).
+*/
 static byte sbox[8][64] = {
 	   /* S1 */
 	   14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
@@ -117,6 +142,7 @@ static byte sbox[8][64] = {
 };
 
 /* 32-bit permutation function P used on the output of the S-boxes */
+/* The P permutation shuffles the bits of a 32-bit half-block */
 static byte p32i[] = {
 	   16,  7, 20, 21,
 	   29, 12, 28, 17,
@@ -129,12 +155,18 @@ static byte p32i[] = {
 };
 
 /* permuted choice table (key) */
+/*
+The "Left" and "Right" halves of the table show which bits from the input key form the left and right sections of the key schedule state.
+Note that only 56 bits of the 64 bits of the input are selected; the remaining eight were specified for use as parity bits.
+*/
 static const byte pc1[] = {
+		//Left
 	   57, 49, 41, 33, 25, 17,  9,
 		1, 58, 50, 42, 34, 26, 18,
 	   10,  2, 59, 51, 43, 35, 27,
 	   19, 11,  3, 60, 52, 44, 36,
-
+	   
+	   //Right
 	   63, 55, 47, 39, 31, 23, 15,
 		7, 62, 54, 46, 38, 30, 22,
 	   14,  6, 61, 53, 45, 37, 29,
@@ -147,6 +179,7 @@ static const byte totrot[] = {
 };
 
 /* permuted choice key (table) */
+/* This permutation selects the 48-bit subkey for each round from the 56-bit key-schedule state */
 static const byte pc2[] = {
 	   14, 17, 11, 24,  1,  5,
 		3, 28, 15,  6, 21, 10,
