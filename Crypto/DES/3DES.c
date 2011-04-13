@@ -12,28 +12,40 @@
 #include <string.h>
 #include "../SpecialMath/SpecialMath.h"
 
-void encryptDES(ulong key)
+void createDESKey(DES_KEY* key, ulong data)
+{
+	key->k = data;
+}
+
+void create3DESKey(TDES_KEY* key, ulong data[3])
+{
+	createDESKey(&key->k1, data[0]);
+	createDESKey(&key->k2, data[1]);
+	createDESKey(&key->k3, data[2]);
+}
+
+void encryptDES(DES_KEY* key)
 {
 	//TODO
 }
 
-void decryptDES(ulong key)
+void decryptDES(DES_KEY* key)
 {
 	//TODO
 }
 
-void encrypt3DES(DES_KEY key)
+void encrypt3DES(TDES_KEY* key)
 {
-	encryptDES(key.k1);	//k1
-	decryptDES(key.k2);	//k2
-	encryptDES(key.k3);	//k3
+	encryptDES(&key->k1);
+	decryptDES(&key->k2);
+	encryptDES(&key->k3);
 }
 
-void decrypt3DES(DES_KEY key)
+void decrypt3DES(TDES_KEY* key)
 {
-	decryptDES(key.k3);	//k3
-	encryptDES(key.k2);	//k2
-	decryptDES(key.k1);	//k1
+	decryptDES(&key->k3);
+	encryptDES(&key->k2);
+	decryptDES(&key->k1);
 }
 
 
@@ -48,14 +60,13 @@ int main(int argc, char *argv[])
 		i = 1;
 	}
 
-	DES_KEY key;
+	TDES_KEY key;
 
-	key.k1 = 1;
-	key.k2 = 2;
-	key.k3 = 3;
+	ulong data[3] = {1, 2, 3};
+	create3DESKey(&key, data);
 
-	encrypt3DES(key);
-	decrypt3DES(key);
+	encrypt3DES(&key);
+	decrypt3DES(&key);
 	
 	if(i == 0)
 	{
