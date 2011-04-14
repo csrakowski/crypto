@@ -85,18 +85,37 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
-void xor(byte r[32], byte a[], byte b[])
+byte* f(byte R[32], byte k[48])
 {
+	byte E[48];
+	byte out[32];
 	int i;
-	for(i=0; i<32; i++)
+
+	//Expand R and xor key with Expanded R
+	for(i=0; i<48; i++)
 	{
-		r[i] = ((a[i]^b[i])&1);
+		E[i] = ((k[i]^R[ei[i]])&1);
 	}
-}
 
-int f(byte R[32], byte k[48])
-{
+	/*
+	We now have 48 bits, or eight groups of six bits.
+	We now do something strange with each group of six bits: we use them as addresses in tables called "S boxes".
+	Each group of six bits will give us an address in a different S box.
+	Located at that address will be a 4 bit number.
 
+	This 4 bit number will replace the original 6 bits.
+	The net result is that the eight groups of 6 bits are transformed into eight groups of 4 bits (the 4-bit outputs from the S boxes) for 32 bits total.
+	Write the previous result, which is 48 bits, in the form:
+
+	Kn + E(Rn-1) =B1B2B3B4B5B6B7B8,
+	where each Bi is a group of six bits. We now calculate
+
+	S1(B1)S2(B2)S3(B3)S4(B4)S5(B5)S6(B6)S7(B7)S8(B8)
+	where Si(Bi) referres to the output of the i-th S box.
+
+	To repeat, each of the functions S1, S2,..., S8, takes a 6-bit block as input and yields a 4-bit block as output. The table to determine S1 is shown and explained below:
+	*/
+	sbox[8][64];
 }
 
 void encryptDES(DES_KEY* key)
@@ -128,7 +147,13 @@ void encryptDES(DES_KEY* key)
 	for(i=1; i<17; i++)
 	{
 		memcpy(L[i], R[i-1], 32); //L[i] = R[i-1];
-		memcpy(R[i], L[i-1] ^ (f(R[i-1], key->k2[i])), 32); //R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
+
+		//R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
+		memcpy(tmp, f(R[i-1], key->k2[i]), 32);
+		for(j=0; j<32; j++)
+		{
+			R[j][i] = ((L[i-1][j]^tmp[j])&1);
+		}		
 	}
 }
 
