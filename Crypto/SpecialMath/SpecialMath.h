@@ -33,6 +33,8 @@ typedef unsigned char		byte;
 #define MIN(a,b) ((a<b)?a:b)
 #define MIN3(a,b,c) ((MIN(a,b)<c)?MIN(a,b):c)
 
+//#define xorswap(x, y) ( x^=y; y^=x; x^=y; )
+//#define xorswap(x, y) _asm { xor x, y; xor y, x; xor x, y; }
 void swap(ulong* a, ulong* b);
 ulong gcd(ulong a, ulong b);
 ulong crandom(void);
