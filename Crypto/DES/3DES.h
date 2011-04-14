@@ -21,7 +21,8 @@ extern "C" {
 
 
 typedef struct {
-	byte k[64];			//The 56 bit key, with parity bits
+	byte k[64];			//The 64 bit input key
+	byte k2[16][48];	//The 16 48 bit keys
 	byte kPlus[56];		//The permuted key
 	byte c[17][28];		//The 16 left keys
 	byte d[17][28];		//The 16 right keys
@@ -185,6 +186,11 @@ static const byte pc1[] = {
 /* number left rotations of pc1 */
 static const byte totrot[] = {
 	   1,2,4,6,8,10,12,14,15,17,19,21,23,25,27,28
+};
+
+/* number left rotations of pc1 */
+static const byte rolls[] = {
+	1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1
 };
 
 /* permuted choice key (table) */
