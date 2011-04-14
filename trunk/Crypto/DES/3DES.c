@@ -14,7 +14,7 @@
 
 void createDESKey(DES_KEY* key)
 {
-	int i;
+	int i,j;
 
 	//for (j=0; j<56; j++)		/* convert pc1 to bits of key */
 	//{
@@ -62,8 +62,20 @@ void createDESKey(DES_KEY* key)
 
 		memcpy(key->d[i], &key->d[i-1][rolls[i-1]], 28-rolls[i-1]);
 		memcpy(&key->d[i][28-rolls[i-1]], &key->d[i-1][0], rolls[i-1]);
+
+		for(j=0; j<48; j++)
+		{
+			int val = pc2[j];
+			if(val < 28)
+			{
+				key->k2[i][j] = key->c[i][val];
+			}
+			else
+			{
+				key->k2[i][j] = key->d[i][val-28];
+			}
+		}
 	}
-	i++;
 }
 
 void create3DESKey(TDES_KEY* key)
@@ -76,6 +88,19 @@ void create3DESKey(TDES_KEY* key)
 void encryptDES(DES_KEY* key)
 {
 	//TODO
+	byte M[8];
+	byte IP[64];
+	int i,j;
+
+	for(i=0; i<8; i++)
+	{
+		for(j=0; j<8; j++)
+		{
+			IP[(8*i)+j] = ((M[i]>>(8-j))&1);
+		}
+	}
+
+	
 }
 
 void decryptDES(DES_KEY* key)
