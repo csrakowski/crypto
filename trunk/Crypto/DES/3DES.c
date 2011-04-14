@@ -12,16 +12,33 @@
 #include <string.h>
 #include "../SpecialMath/SpecialMath.h"
 
-void createDESKey(DES_KEY* key, ulong data)
+void createDESKey(DES_KEY* key)
 {
-	key->k = data;
+	int i;
+
+	//for (j=0; j<56; j++)		/* convert pc1 to bits of key */
+	//{
+	//	l=pc1[j]-1;				/* integer bit location */
+	//	m = l & 07;				/* find bit */
+	//	pc1m[j]=(key[l>>3] &	/* find which key byte l is in */
+	//		bytebit[m])			/* and which bit of that byte */
+	//		? 1 : 0;			/* and store 1-bit result */
+	//}
+	for(i=0; i<56; i++)
+	{
+		key->kPlus[i] = (key->k[pc1[i]-1]&1);
+	}
+	
+	memcpy(key->c[0], &key->kPlus[0], 28);
+	memcpy(key->d[0], &key->kPlus[28], 28);
+	
 }
 
-void create3DESKey(TDES_KEY* key, ulong data[3])
+void create3DESKey(TDES_KEY* key)
 {
-	createDESKey(&key->k1, data[0]);
-	createDESKey(&key->k2, data[1]);
-	createDESKey(&key->k3, data[2]);
+	createDESKey(&key->k1);
+	createDESKey(&key->k2);
+	createDESKey(&key->k3);
 }
 
 void encryptDES(DES_KEY* key)
@@ -52,18 +69,17 @@ void decrypt3DES(TDES_KEY* key)
 int main(int argc, char *argv[])
 {
 	int i = 0;
-
-	printf("%d bytes - %d bits", sizeof(ulong), 8*sizeof(ulong));
+	TDES_KEY key;
+	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
 
 	if(argc < 3)
 	{
 		i = 1;
 	}
+	
+	memcpy( key.k1.k, data, 64 );
 
-	TDES_KEY key;
-
-	ulong data[3] = {1, 2, 3};
-	create3DESKey(&key, data);
+	create3DESKey(&key);
 
 	encrypt3DES(&key);
 	decrypt3DES(&key);

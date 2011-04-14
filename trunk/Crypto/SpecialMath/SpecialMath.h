@@ -33,7 +33,7 @@ ulong gcd(ulong a, ulong b);
 ulong crandom(void);
 ulong generatePrime(void);
 ulong totient(ulong p, ulong q);
-ulong ipow(uint base, uint exp);
+ulong ipow(ulong base, ulong exp);
 int mod(int a, int n);
 ulong invm(ulong e, ulong n);
 

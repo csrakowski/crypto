@@ -76,7 +76,7 @@ ulong totient(ulong p, ulong q)
 	return ((p-1)*(q-1));
 }
 
-ulong ipow(uint base, uint exp)
+ulong ipow(ulong base, ulong exp)
 {
 	//if(exp == 0) return 1;
 	//if(base== 0) return 0;
