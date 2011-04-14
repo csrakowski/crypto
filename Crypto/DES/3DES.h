@@ -208,11 +208,6 @@ static const byte pc2[] = {
 
 /* End of DES-defined tables */
 
-/* bit 0 is left-most in byte */
-static const int bytebit[] = {
-	   0200,0100,040,020,010,04,02,01
-};
-
 void createDESKey(DES_KEY* key);
 void create3DESKey(TDES_KEY* key);
 
