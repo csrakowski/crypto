@@ -90,7 +90,7 @@ void xor(byte r[32], byte a[], byte b[])
 	int i;
 	for(i=0; i<32; i++)
 	{
-		r[i] = ((a^b)&1);
+		r[i] = ((a[i]^b[i])&1);
 	}
 }
 
