@@ -85,22 +85,51 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
+void xor(byte r[32], byte a[], byte b[])
+{
+	int i;
+	for(i=0; i<32; i++)
+	{
+		r[i] = ((a^b)&1);
+	}
+}
+
+int f(byte R[32], byte k[48])
+{
+
+}
+
 void encryptDES(DES_KEY* key)
 {
 	//TODO
 	byte M[8];
+	byte tmp[64];
 	byte IP[64];
+	byte L[17][32];
+	byte R[17][32];
 	int i,j;
 
 	for(i=0; i<8; i++)
 	{
 		for(j=0; j<8; j++)
 		{
-			IP[(8*i)+j] = ((M[i]>>(8-j))&1);
+			tmp[(8*i)+j] = ((M[i]>>(8-j))&1);
 		}
 	}
 
-	
+	for(i=0; i<64; i++)
+	{
+		IP[i] = tmp[ip[i]];
+	}
+
+	memcpy(L[0], &IP[0], 32);
+	memcpy(R[0], &IP[32], 32);
+
+	for(i=1; i<17; i++)
+	{
+		memcpy(L[i], R[i-1], 32); //L[i] = R[i-1];
+		memcpy(R[i], L[i-1] ^ (f(R[i-1], key->k2[i])), 32); //R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
+	}
 }
 
 void decryptDES(DES_KEY* key)
