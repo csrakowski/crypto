@@ -32,6 +32,7 @@ void createDESKey(DES_KEY* key)
 	memcpy(key->c[0], &key->kPlus[0], 28);
 	memcpy(key->d[0], &key->kPlus[28], 28);
 	
+	
 }
 
 void create3DESKey(TDES_KEY* key)

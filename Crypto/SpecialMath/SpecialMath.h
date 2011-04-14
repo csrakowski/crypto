@@ -22,6 +22,11 @@ typedef unsigned char		byte;
 #define BIT(b) (1<<b)
 #define TOGGLEBIT(x, b) (x^=BIT(b))
 
+#define ROLL(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
+#define ROLR(value, bits) (((value) >> (bits)) | ((value) << (32 - (bits))))
+//#define ROLL(value, bits) _asm { rol value, bits }
+//#define ROLR(value, bits) _asm { ror value, bits }
+
 #define MAX(a,b) ((a>b)?a:b)
 #define MAX3(a,b,c) ((MAX(a,b)>c)?MAX(a,b):c)
 

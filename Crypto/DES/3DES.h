@@ -23,8 +23,8 @@ extern "C" {
 typedef struct {
 	byte k[64];			//The 56 bit key, with parity bits
 	byte kPlus[56];		//The permuted key
-	byte c[16][28];		//The 16 left keys
-	byte d[16][28];		//The 16 right keys
+	byte c[17][28];		//The 16 left keys
+	byte d[17][28];		//The 16 right keys
 } DES_KEY;
 
 typedef struct {
