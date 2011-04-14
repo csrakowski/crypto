@@ -21,7 +21,10 @@ extern "C" {
 
 
 typedef struct {
-	ulong k;
+	byte k[64];			//The 56 bit key, with parity bits
+	byte kPlus[56];		//The permuted key
+	byte c[16][28];		//The 16 left keys
+	byte d[16][28];		//The 16 right keys
 } DES_KEY;
 
 typedef struct {
@@ -204,8 +207,8 @@ static const int bytebit[] = {
 	   0200,0100,040,020,010,04,02,01
 };
 
-void createDESKey(DES_KEY* key, ulong data);
-void create3DESKey(TDES_KEY* key, ulong data[3]);
+void createDESKey(DES_KEY* key);
+void create3DESKey(TDES_KEY* key);
 
 void encryptDES(DES_KEY* key);
 void decryptDES(DES_KEY* key);
