@@ -32,7 +32,38 @@ void createDESKey(DES_KEY* key)
 	memcpy(key->c[0], &key->kPlus[0], 28);
 	memcpy(key->d[0], &key->kPlus[28], 28);
 	
-	
+	//for (i=0; i<16; i++) {          /* key chunk for each iteration */
+	//	memset(ks,0,8);         /* Clear key schedule */
+	//	for (j=0; j<56; j++)    /* rotate pc1 the right amount */
+	//		pcr[j] = pc1m[(l=j+totrot[i])<(j<28? 28 : 56) ? l: l-28];
+	//	/* rotate left and right halves independently */
+	//	for (j=0; j<48; j++){   /* select bits individually */
+	//		/* check bit that goes to ks[j] */
+	//		if (pcr[pc2[j]-1]){
+	//			/* mask it in if it's there */
+	//			l= j % 6;
+	//			ks[j/6] |= bytebit[l] >> 2;
+	//		}
+	//	}
+	//	/* Now convert to odd/even interleaved form for use in F */
+	//	k[2*i] = ((word32)ks[0] << 24)
+	//		| ((word32)ks[2] << 16)
+	//		| ((word32)ks[4] << 8)
+	//		| ((word32)ks[6]);
+	//	k[2*i+1] = ((word32)ks[1] << 24)
+	//		| ((word32)ks[3] << 16)
+	//		| ((word32)ks[5] << 8)
+	//		| ((word32)ks[7]);
+	//}	
+	for(i=1; i<=16; i++)
+	{
+		memcpy(key->c[i], &key->c[i-1][rolls[i-1]], 28-rolls[i-1]);
+		memcpy(&key->c[i][28-rolls[i-1]], &key->c[i-1][0], rolls[i-1]);
+
+		memcpy(key->d[i], &key->d[i-1][rolls[i-1]], 28-rolls[i-1]);
+		memcpy(&key->d[i][28-rolls[i-1]], &key->d[i-1][0], rolls[i-1]);
+	}
+	i++;
 }
 
 void create3DESKey(TDES_KEY* key)
@@ -71,6 +102,7 @@ int main(int argc, char *argv[])
 {
 	int i = 0;
 	TDES_KEY key;
+	//Test key, one used on the site.
 	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
 
 	if(argc < 3)
