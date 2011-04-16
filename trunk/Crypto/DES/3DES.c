@@ -97,7 +97,7 @@ void f(byte out[32], byte R[32], byte k[48])
 	{
 		E[i] = ((k[i]^R[ei[i]])&1);
 
-		//E |= ((k>>(47-i))&1)^((R>>(32-[ei[i]]))&1);
+		//E |= ((k>>(48-i))&1)^((R>>(32-[ei[i]]))&1);
 	}
 
 	/*
@@ -141,7 +141,7 @@ void f(byte out[32], byte R[32], byte k[48])
 	{
 		out[i] = preout[p32i[i]];
 
-		//out |= ((preout>>(31-p32i[i]))&1);
+		//out |= ((preout>>(32-p32i[i]))&1);
 	}
 }
 
