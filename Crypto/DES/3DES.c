@@ -85,6 +85,7 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
+//void f(uint out, uint R, ulong k)
 void f(byte out[32], byte R[32], byte k[48])
 {
 	byte E[48];
@@ -95,6 +96,8 @@ void f(byte out[32], byte R[32], byte k[48])
 	for(i=0; i<48; i++)
 	{
 		E[i] = ((k[i]^R[ei[i]])&1);
+
+		//E |= ((k>>(47-i))&1)^((R>>(32-[ei[i]]))&1);
 	}
 
 	/*
@@ -137,6 +140,8 @@ void f(byte out[32], byte R[32], byte k[48])
 	for(i=0; i<32; i++)
 	{
 		out[i] = preout[p32i[i]];
+
+		//out |= ((preout>>(31-p32i[i]))&1);
 	}
 }
 
