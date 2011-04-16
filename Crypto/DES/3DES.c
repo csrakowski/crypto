@@ -130,7 +130,7 @@ void f(byte out[32], byte R[32], byte k[48])
 
 	for(i=0; i<8; i++)
 	{
-		int r = sbox[i][(E[((6*i)+0]<<1 | E[(6*i)+5]) * (E[(6*i)+1]<<3 | E[(6*i)+2]<<2 | E[(6*i)+3]<<1 | E[(6*i)+4])];
+		int r = sbox[i][(E[(6*i)+0]<<1 | E[(6*i)+5]) * (E[(6*i)+1]<<3 | E[(6*i)+2]<<2 | E[(6*i)+3]<<1 | E[(6*i)+4])];
 		preout[(4*i)+0] = (r>>3)&1;
 		preout[(4*i)+1] = (r>>2)&1;
 		preout[(4*i)+2] = (r>>1)&1;
@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 		printf("Encrypted: %x\n",data);
 	decrypt3DES(&key, message, data);
 		printf("Decrypted: %s\n", data);
-	
+
 	system("pause");
 
 	if(i == 0)
