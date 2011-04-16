@@ -140,6 +140,8 @@ void f(byte out[32], byte R[32], byte k[48])
 	}
 }
 
+//void encryptDES(DES_KEY* key, byte M[8], byte out[8])
+//void encryptDES(DES_KEY* key, ulong M, ulong out)
 void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 {
 	//TODO
@@ -152,6 +154,7 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 	byte Right[32];
 	int i,j;
 
+	//Obsolete
 	for(i=0; i<8; i++)
 	{
 		for(j=0; j<8; j++)
@@ -165,11 +168,20 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 		IP[i] = tmp[ip[i]];
 	}
 
+	//IP ^= IP;
+	//for(i=0; i<64; i++)
+	//{
+	//	IP |= ((M>>(64-ip[i]))&1);
+	//}
+
 	//memcpy(L[0], &IP[0], 32);
 	//memcpy(R[0], &IP[32], 32);
 
 	memcpy(Left, &IP[0], 32);
 	memcpy(Right, &IP[32], 32);
+
+	//L = (IP>>32);
+	//R = (IP&UINT_MAX);
 
 	for(i=1; i<17; i++)
 	{
@@ -177,16 +189,22 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 		memcpy(Left2, Left, 32); //L[i] = R[i-1];
 		memcpy(Left, Right, 32); //L[i] = R[i-1];
 
+		//L2 = L;
+		//L = R;
+
 		//R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
 		//f(tmp, R[i-1], key->k2[i]);
 		f(tmp, Right, key->k2[i]);
+
+		//f(M, R, key->k2[i]);
 		for(j=0; j<32; j++)
-		{
-		//	R[j][i] = ((L[i-1][j]^tmp[j])&1);
+		{			
 			Right[i] = ((Left2[j]^tmp[j])&1);
+
+			//R |= (((L2>>(32-[i]))&1)^(M>>(32-[i]))&1)&1;
 		}
 	}
-
+	
 	for(i=0; i<64; i++)
 	{
 		int s = fp[i];
@@ -201,6 +219,12 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 			out[i] = Left[s];
 		}
 	}
+
+	//ulong res = ((R<<32)|L);
+	//for(i=0; i<64; i++)
+	//{
+	//	M |= ((res>>(64-fp[i]))&1);
+	//}
 }
 
 void decryptDES(DES_KEY* key, byte M[8], byte out[64])
@@ -228,7 +252,7 @@ int main(int argc, char *argv[])
 	TDES_KEY key;
 	//Test key, one used on the site.
 	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
-	byte message[8] = {  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+	byte message[8] = {  'A', 'B', 'C', 'D', 'E', 'F', 'G', '\0'};
 
 	if(argc < 3)
 	{
@@ -241,7 +265,7 @@ int main(int argc, char *argv[])
 
 		printf("Plain: %s\n", message);
 	encrypt3DES(&key, message, data);
-		printf("Encrypted: %s\n",data);
+		printf("Encrypted: %x\n",data);
 	decrypt3DES(&key, message, data);
 		printf("Decrypted: %s\n", data);
 	
