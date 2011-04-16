@@ -211,11 +211,11 @@ static const byte pc2[] = {
 void createDESKey(DES_KEY* key);
 void create3DESKey(TDES_KEY* key);
 
-void encryptDES(DES_KEY* key);
-void decryptDES(DES_KEY* key);
+void encryptDES(DES_KEY* key, byte M[8], byte out[64]);
+void decryptDES(DES_KEY* key, byte M[8], byte out[64]);
 
-void encrypt3DES(TDES_KEY* key);
-void decrypt3DES(TDES_KEY* key);
+void encrypt3DES(TDES_KEY* key, byte M[8], byte out[64]);
+void decrypt3DES(TDES_KEY* key, byte M[8], byte out[64]);
 
 #ifdef __cplusplus
 }

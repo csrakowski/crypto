@@ -85,10 +85,10 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
-byte* f(byte R[32], byte k[48])
+void f(byte out[32], byte R[32], byte k[48])
 {
 	byte E[48];
-	byte out[32];
+	byte preout[32];
 	int i;
 
 	//Expand R and xor key with Expanded R
@@ -113,19 +113,43 @@ byte* f(byte R[32], byte k[48])
 	S1(B1)S2(B2)S3(B3)S4(B4)S5(B5)S6(B6)S7(B7)S8(B8)
 	where Si(Bi) referres to the output of the i-th S box.
 
-	To repeat, each of the functions S1, S2,..., S8, takes a 6-bit block as input and yields a 4-bit block as output. The table to determine S1 is shown and explained below:
+	To repeat, each of the functions S1, S2,..., S8, takes a 6-bit block as input and yields a 4-bit block as output.
+
+	If S1 is the function defined in this table and B is a block of 6 bits, then S1(B) is determined as follows:
+	The first and last bits of B represent in base 2 a number in the decimal range 0 to 3 (or binary 00 to 11).
+	Let that number be i. The middle 4 bits of B represent in base 2 a number in the decimal range 0 to 15 (binary 0000 to 1111).
+	Let that number be j. Look up in the table the number in the i-th row and j-th column.
+	It is a number in the range 0 to 15 and is uniquely represented by a 4 bit block.
+	That block is the output S1(B) of S1 for the input B. For example, for input block B = 011011 the first bit is "0" and the last bit "1" giving 01 as the row.
+	This is row 1. The middle four bits are "1101". This is the binary equivalent of decimal 13, so the column is column number 13. In row 1, column 13 appears 5.
+	This determines the output; 5 is binary 0101, so that the output is 0101. Hence S1(011011) = 0101.
 	*/
-	sbox[8][64];
+
+	for(i=0; i<8; i++)
+	{
+		int r = sbox[i][(E[(6*i)+0]<<1 | E[(6*i)+5]) * (E[(6*i)+1]<<3 | E[(6*i)+2]<<2 | E[(6*i)+3]<<1 | E[(6*i)+4])];
+		preout[(4*i)+0] = (r>>3)&1;
+		preout[(4*i)+1] = (r>>2)&1;
+		preout[(4*i)+2] = (r>>1)&1;
+		preout[(4*i)+3] = (r>>0)&1;
+	}
+
+	for(i=0; i<32; i++)
+	{
+		out[i] = preout[p32i[i]];
+	}
 }
 
-void encryptDES(DES_KEY* key)
+void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 {
 	//TODO
-	byte M[8];
 	byte tmp[64];
 	byte IP[64];
-	byte L[17][32];
-	byte R[17][32];
+	//byte L[17][32];
+	//byte R[17][32];
+	byte Left[32];
+	byte Left2[32];
+	byte Right[32];
 	int i,j;
 
 	for(i=0; i<8; i++)
@@ -141,41 +165,62 @@ void encryptDES(DES_KEY* key)
 		IP[i] = tmp[ip[i]];
 	}
 
-	memcpy(L[0], &IP[0], 32);
-	memcpy(R[0], &IP[32], 32);
+	//memcpy(L[0], &IP[0], 32);
+	//memcpy(R[0], &IP[32], 32);
+
+	memcpy(Left, &IP[0], 32);
+	memcpy(Right, &IP[32], 32);
 
 	for(i=1; i<17; i++)
 	{
-		memcpy(L[i], R[i-1], 32); //L[i] = R[i-1];
+		//memcpy(L[i], R[i-1], 32); //L[i] = R[i-1];
+		memcpy(Left2, Left, 32); //L[i] = R[i-1];
+		memcpy(Left, Right, 32); //L[i] = R[i-1];
 
 		//R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
-		memcpy(tmp, f(R[i-1], key->k2[i]), 32);
+		//f(tmp, R[i-1], key->k2[i]);
+		f(tmp, Right, key->k2[i]);
 		for(j=0; j<32; j++)
 		{
-			R[j][i] = ((L[i-1][j]^tmp[j])&1);
-		}		
+		//	R[j][i] = ((L[i-1][j]^tmp[j])&1);
+			Right[i] = ((Left2[j]^tmp[j])&1);
+		}
+	}
+
+	for(i=0; i<64; i++)
+	{
+		int s = fp[i];
+		if(s<32)
+		{
+			//out[i] = R[17][s];
+			out[i] = Right[s];
+		}
+		else
+		{
+			//out[i] = L[17][s];
+			out[i] = Left[s];
+		}
 	}
 }
 
-void decryptDES(DES_KEY* key)
+void decryptDES(DES_KEY* key, byte M[8], byte out[64])
 {
 	//TODO
 }
 
-void encrypt3DES(TDES_KEY* key)
+void encrypt3DES(TDES_KEY* key, byte M[8], byte out[64])
 {
-	encryptDES(&key->k1);
-	decryptDES(&key->k2);
-	encryptDES(&key->k3);
+	encryptDES(&key->k1, M, out);
+	decryptDES(&key->k2, M, out);
+	encryptDES(&key->k3, M, out);
 }
 
-void decrypt3DES(TDES_KEY* key)
+void decrypt3DES(TDES_KEY* key, byte M[8], byte out[64])
 {
-	decryptDES(&key->k3);
-	encryptDES(&key->k2);
-	decryptDES(&key->k1);
+	decryptDES(&key->k3, M, out);
+	encryptDES(&key->k2, M, out);
+	decryptDES(&key->k1, M, out);
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -183,6 +228,7 @@ int main(int argc, char *argv[])
 	TDES_KEY key;
 	//Test key, one used on the site.
 	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
+	byte message[8] = {  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
 
 	if(argc < 3)
 	{
@@ -193,9 +239,14 @@ int main(int argc, char *argv[])
 
 	create3DESKey(&key);
 
-	encrypt3DES(&key);
-	decrypt3DES(&key);
+		printf("Plain: %s\n", message);
+	encrypt3DES(&key, message, data);
+		printf("Encrypted: %s\n",data);
+	decrypt3DES(&key, message, data);
+		printf("Decrypted: %s\n", data);
 	
+	system("pause");
+
 	if(i == 0)
 	{
 		char* buf;
@@ -213,7 +264,6 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 	}
-
 
 	return 0;
 }
