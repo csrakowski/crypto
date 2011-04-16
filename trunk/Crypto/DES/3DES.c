@@ -97,7 +97,7 @@ void f(byte out[32], byte R[32], byte k[48])
 	{
 		E[i] = ((k[i]^R[ei[i]])&1);
 
-		//E |= ((k>>(48-i))&1)^((R>>(32-[ei[i]]))&1);
+		//E |= (((k>>(48-i))&1)^((R>>(32-[ei[i]]))&1)<<(48-i));
 	}
 
 	/*
@@ -136,7 +136,7 @@ void f(byte out[32], byte R[32], byte k[48])
 		preout[(4*i)+2] = (r>>1)&1;
 		preout[(4*i)+3] = (r>>0)&1;
 	}
-
+	
 	for(i=0; i<32; i++)
 	{
 		out[i] = preout[p32i[i]];
@@ -176,7 +176,7 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 	//IP ^= IP;
 	//for(i=0; i<64; i++)
 	//{
-	//	IP |= ((M>>(64-ip[i]))&1);
+	//	IP |= (((M>>(64-ip[i]))&1)<<(64-i));
 	//}
 
 	//memcpy(L[0], &IP[0], 32);
@@ -206,7 +206,7 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 		{			
 			Right[i] = ((Left2[j]^tmp[j])&1);
 
-			//R |= (((L2>>(32-[i]))&1)^(M>>(32-[i]))&1)&1;
+			//R |= (((((L2>>(32-[i]))&1)^(M>>(32-[i]))&1)&1)<<(32-i));
 		}
 	}
 	
@@ -228,7 +228,7 @@ void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 	//ulong res = ((R<<32)|L);
 	//for(i=0; i<64; i++)
 	//{
-	//	M |= ((res>>(64-fp[i]))&1);
+	//	M |= (((res>>(64-fp[i]))&1)<<(64-i));
 	//}
 }
 
