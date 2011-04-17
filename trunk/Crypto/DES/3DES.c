@@ -26,11 +26,11 @@ void createDESKey(DES_KEY* key)
 	//}
 	for(i=0; i<56; i++)
 	{
-		key->kPlus[i] = (key->k[pc1[i]-1]&1);
+		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(56-i);
 	}
-	
-	memcpy(key->c[0], &key->kPlus[0], 28);
-	memcpy(key->d[0], &key->kPlus[28], 28);
+
+	key->c[0] = ((key->kPlus>>28)&0xFFFFFFF);
+	key->d[0] = ((key->kPlus)&0xFFFFFFF);
 	
 	//for (i=0; i<16; i++) {          /* key chunk for each iteration */
 	//	memset(ks,0,8);         /* Clear key schedule */
@@ -57,22 +57,20 @@ void createDESKey(DES_KEY* key)
 	//}	
 	for(i=1; i<=16; i++)
 	{
-		memcpy(key->c[i], &key->c[i-1][rolls[i-1]], 28-rolls[i-1]);
-		memcpy(&key->c[i][28-rolls[i-1]], &key->c[i-1][0], rolls[i-1]);
-
-		memcpy(key->d[i], &key->d[i-1][rolls[i-1]], 28-rolls[i-1]);
-		memcpy(&key->d[i][28-rolls[i-1]], &key->d[i-1][0], rolls[i-1]);
+		key->c[i] = ROLL(key->c[i-1], rolls[i-1]);
+		key->d[i] = ROLL(key->d[i-1], rolls[i-1]);
 
 		for(j=0; j<48; j++)
 		{
 			int val = pc2[j];
 			if(val < 28)
 			{
-				key->k2[i][j] = key->c[i][val];
+				key->k2[i] |= (((key->c[i]>>(28-val))&1)<<(28-i));
+				//key->k2[i] |= (key->c[i]&(1<<(28-val)));				
 			}
 			else
 			{
-				key->k2[i][j] = key->d[i][val-28];
+				key->k2[i] |= (((key->c[i]>>(28-(val-28)))&1)<<(28-i));
 			}
 		}
 	}
@@ -85,19 +83,16 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
-//void f(uint out, uint R, ulong k)
-void f(byte out[32], byte R[32], byte k[48])
+void f(uint out, uint R, ulong k)
 {
-	byte E[48];
-	byte preout[32];
+	ulong E;
+	uint preout;
 	int i;
 
 	//Expand R and xor key with Expanded R
 	for(i=0; i<48; i++)
 	{
-		E[i] = ((k[i]^R[ei[i]])&1);
-
-		//E |= (((k>>(48-i))&1)^((R>>(32-[ei[i]]))&1)<<(48-i));
+		E |= (((k>>(48-i))&1)^((R>>(32-ei[i]))&1)<<(48-i));
 	}
 
 	/*
@@ -130,124 +125,70 @@ void f(byte out[32], byte R[32], byte k[48])
 
 	for(i=0; i<8; i++)
 	{
-		int r = sbox[i][(E[(6*i)+0]<<1 | E[(6*i)+5]) * (E[(6*i)+1]<<3 | E[(6*i)+2]<<2 | E[(6*i)+3]<<1 | E[(6*i)+4])];
-		preout[(4*i)+0] = (r>>3)&1;
-		preout[(4*i)+1] = (r>>2)&1;
-		preout[(4*i)+2] = (r>>1)&1;
-		preout[(4*i)+3] = (r>>0)&1;
-
-		//int r = sbox[i][((((E>>(46-(6*i)))&2) | ((E>>(43-(6*i)))&1)) * ((E>>(46-(6*i)))&15))];
-		//preout |= (r<<(32-(4*i)));
+		int r = sbox[i][((((E>>(46-(6*i)))&2) | ((E>>(43-(6*i)))&1)) * ((E>>(46-(6*i)))&15))];
+		preout |= (r<<(32-(4*i)));
 	}
 	
 	for(i=0; i<32; i++)
 	{
-		out[i] = preout[p32i[i]];
-
-		//out |= ((preout>>(32-p32i[i]))&1);
+		out |= ((preout>>(32-p32i[i]))&1);
 	}
 }
 
+void encryptDES(DES_KEY* key, ulong M, ulong out)
 //void encryptDES(DES_KEY* key, byte M[8], byte out[8])
-//void encryptDES(DES_KEY* key, ulong M, ulong out)
-void encryptDES(DES_KEY* key, byte M[8], byte out[64])
 {
-	//TODO
-	byte tmp[64];
-	byte IP[64];
-	//byte L[17][32];
-	//byte R[17][32];
-	byte Left[32];
-	byte Left2[32];
-	byte Right[32];
+	//TODO FIX MEH D:
+	ulong IP;
+	uint Left;
+	uint Left2;
+	uint Right;
+	ulong res;
+	uint tmp;
 	int i,j;
 
-	//Obsolete
-	for(i=0; i<8; i++)
-	{
-		for(j=0; j<8; j++)
-		{
-			tmp[(8*i)+j] = ((M[i]>>(8-j))&1);
-		}
-	}
-
+	IP ^= IP;
 	for(i=0; i<64; i++)
 	{
-		IP[i] = tmp[ip[i]];
+		IP |= (((M>>(64-ip[i]))&1)<<(64-i));
 	}
 
-	//IP ^= IP;
-	//for(i=0; i<64; i++)
-	//{
-	//	IP |= (((M>>(64-ip[i]))&1)<<(64-i));
-	//}
-
-	//memcpy(L[0], &IP[0], 32);
-	//memcpy(R[0], &IP[32], 32);
-
-	memcpy(Left, &IP[0], 32);
-	memcpy(Right, &IP[32], 32);
-
-	//L = (IP>>32);
-	//R = (IP&UINT_MAX);
+	Left = (IP>>32);
+	Right = (IP&UINT_MAX);
 
 	for(i=1; i<17; i++)
 	{
-		//memcpy(L[i], R[i-1], 32); //L[i] = R[i-1];
-		memcpy(Left2, Left, 32); //L[i] = R[i-1];
-		memcpy(Left, Right, 32); //L[i] = R[i-1];
+		Left2 = Left;
+		Left = Right;
 
-		//L2 = L;
-		//L = R;
-
-		//R[i] = L[i-1] ^ (f(R[i-1], key->k2[i]));
-		//f(tmp, R[i-1], key->k2[i]);
+		tmp =0;
 		f(tmp, Right, key->k2[i]);
-
-		//f(M, R, key->k2[i]);
 		for(j=0; j<32; j++)
-		{			
-			Right[i] = ((Left2[j]^tmp[j])&1);
-
-			//R |= (((((L2>>(32-[i]))&1)^(M>>(32-[i]))&1)&1)<<(32-i));
+		{
+			Right |= (((((Left2>>(32-i))&1)^(tmp>>(32-i))&1)&1)<<(32-i));
 		}
 	}
 	
+	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		int s = fp[i];
-		if(s<32)
-		{
-			//out[i] = R[17][s];
-			out[i] = Right[s];
-		}
-		else
-		{
-			//out[i] = L[17][s];
-			out[i] = Left[s];
-		}
+		M |= (((res>>(64-fp[i]))&1)<<(64-i));
 	}
-
-	//ulong res = ((R<<32)|L);
-	//for(i=0; i<64; i++)
-	//{
-	//	M |= (((res>>(64-fp[i]))&1)<<(64-i));
-	//}
 }
 
-void decryptDES(DES_KEY* key, byte M[8], byte out[64])
+void decryptDES(DES_KEY* key, ulong M, ulong out)
 {
 	//TODO
 }
 
-void encrypt3DES(TDES_KEY* key, byte M[8], byte out[64])
+void encrypt3DES(TDES_KEY* key, ulong M, ulong out)
 {
 	encryptDES(&key->k1, M, out);
 	decryptDES(&key->k2, M, out);
 	encryptDES(&key->k3, M, out);
 }
 
-void decrypt3DES(TDES_KEY* key, byte M[8], byte out[64])
+void decrypt3DES(TDES_KEY* key, ulong M, ulong out)
 {
 	decryptDES(&key->k3, M, out);
 	encryptDES(&key->k2, M, out);
@@ -261,21 +202,24 @@ int main(int argc, char *argv[])
 	//Test key, one used on the site.
 	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
 	byte message[8] = {  'A', 'B', 'C', 'D', 'E', 'F', 'G', '\0'};
+	ulong M;
+	ulong D;
 
 	if(argc < 3)
 	{
 		i = 1;
 	}
 	
-	memcpy( key.k1.k, data, 64 );
-
 	create3DESKey(&key);
 
+	M = *(ulong*)message;
+	D = 0;
+
 		printf("Plain: %s\n", message);
-	encrypt3DES(&key, message, data);
-		printf("Encrypted: %x\n",data);
-	decrypt3DES(&key, message, data);
-		printf("Decrypted: %s\n", data);
+	encrypt3DES(&key, M, D);
+		printf("Encrypted: %X\n",D);
+	decrypt3DES(&key, M, D);
+		printf("Decrypted: %X\n", D);
 
 	system("pause");
 
