@@ -200,26 +200,40 @@ int main(int argc, char *argv[])
 	int i = 0;
 	TDES_KEY key;
 	//Test key, one used on the site.
-	byte data[64] = { 0,0,0,1,0,0,1,1, 0,0,1,1,0,1,0,0, 0,1,0,1,0,1,1,1, 0,1,1,1,1,0,0,1, 1,0,0,1,1,0,1,1, 1,0,1,1,1,1,0,0, 1,1,0,1,1,1,1,1, 1,1,1,1,0,0,0,1 };
-	byte message[8] = {  'A', 'B', 'C', 'D', 'E', 'F', 'G', '\0'};
-	ulong M;
-	ulong D;
+	ulong data = 1383827165325090801;
+	union
+	{
+		byte message[8];
+		ulong M;
+	} in;
+	in.message[0] = 'A';
+	in.message[1] = 'B';
+	in.message[2] = 'C';
+	in.message[3] = 'D';
+	in.message[4] = 'E';
+	in.message[5] = 'F';
+	in.message[6] = 'G';
+	in.message[7] = '\0';
 
 	if(argc < 3)
 	{
 		i = 1;
 	}
 	
+	key.k1.k = data;
+	key.k2.k = data;
+	key.k3.k = data;
 	create3DESKey(&key);
+	
+	printf("Plain: %s\n", in.message);
+	printf("Hex: %X\n", in.M);
 
-	M = *(ulong*)message;
-	D = 0;
+	encrypt3DES(&key, in.M, data);
+	printf("Encrypted: %X\n",data);
 
-		printf("Plain: %s\n", message);
-	encrypt3DES(&key, M, D);
-		printf("Encrypted: %X\n",D);
-	decrypt3DES(&key, M, D);
-		printf("Decrypted: %X\n", D);
+	decrypt3DES(&key, data, in.M);
+	printf("Decrypted: %X\n", in.M);
+	printf("Result: %s\n", in.message);
 
 	system("pause");
 
