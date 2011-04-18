@@ -196,7 +196,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=16; i>0; i--)
+	for(i=1; i<17; i++)
 	{
 		Left2 = Left;
 		Left = Right;
@@ -235,7 +235,8 @@ int main(int argc, char *argv[])
 	int i = 0;
 	TDES_KEY key;
 	//Test key, one used on the site.
-	ulong data = 1383827165325090801;
+	ulong data = 0x133457799BBCDFF1;
+	
 	union
 	{
 		byte message[8];
@@ -250,6 +251,7 @@ int main(int argc, char *argv[])
 	in.message[6] = 'G';
 	in.message[7] = '\0';
 
+	
 	if(argc < 3)
 	{
 		i = 1;
