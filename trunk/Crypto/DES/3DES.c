@@ -178,7 +178,42 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 {
-	//TODO
+	//TODO FIX MEH D:
+	ulong IP;
+	uint Left;
+	uint Left2;
+	uint Right;
+	ulong res;
+	uint tmp;
+	int i,j;
+
+	IP ^= IP;
+	for(i=0; i<64; i++)
+	{
+		IP |= (((*M>>(64-ip[i]))&1)<<(64-i));
+	}
+
+	Left = (IP>>32);
+	Right = (IP&UINT_MAX);
+
+	for(i=16; i>0; i--)
+	{
+		Left2 = Left;
+		Left = Right;
+
+		tmp =0;
+		f(&tmp, &Right, &key->k2[i]);
+		for(j=0; j<32; j++)
+		{
+			Right |= (((((Left2>>(32-i))&1)^(tmp>>(32-i))&1)&1)<<(32-i));
+		}
+	}
+	
+	res = ((Right<<31)|Left);
+	for(i=0; i<64; i++)
+	{
+		*M |= (((res>>(64-fp[i]))&1)<<(64-i));
+	}
 }
 
 void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
@@ -226,13 +261,13 @@ int main(int argc, char *argv[])
 	create3DESKey(&key);
 	
 	printf("Plain: %s\n", in.message);
-	printf("Hex: %X\n", in.M);
+	printf("Hex: %lX\n", in.M);
 
 	encrypt3DES(&key, &in.M, &data);
-	printf("Encrypted: %X\n",data);
+	printf("Encrypted: %lX\n",data);
 
 	decrypt3DES(&key, &data, &in.M);
-	printf("Decrypted: %X\n", in.M);
+	printf("Decrypted: %lX\n", in.M);
 	printf("Result: %s\n", in.message);
 
 	system("pause");
