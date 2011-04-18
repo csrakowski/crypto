@@ -196,7 +196,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=16; i>0; i--)
+	for(i=0; i<17; i++)
 	{
 		Left2 = Left;
 		Left = Right;
@@ -397,8 +397,8 @@ void RawSetKey(CipherDir dir, const byte *key)
 	if (dir==DECRYPTION)     // reverse key schedule order
 		for (i=0; i<16; i+=2)
 		{
-			std::swap(k[i], k[32-2-i]);
-			std::swap(k[i+1], k[32-1-i]);
+			swap(k[i], k[32-2-i]);
+			swap(k[i+1], k[32-1-i]);
 		}
 }
 
@@ -435,27 +435,4 @@ void RawProcessBlock(word32 &l_, word32 &r_)
 	l_ = l; r_ = r;
 }
 
-void UncheckedSetKey(const byte *userKey, unsigned int length, const NameValuePairs &)
-{
-	AssertValidKeyLength(length);
-
-	m_des1.RawSetKey(GetCipherDirection(), userKey + (IsForwardTransformation() ? 0 : 16));
-	m_des2.RawSetKey(ReverseCipherDir(GetCipherDirection()), userKey + 8);
-	m_des3.RawSetKey(GetCipherDirection(), userKey + (IsForwardTransformation() ? 16 : 0));
-}
-
-void ProcessAndXorBlock(const byte *inBlock, const byte *xorBlock, byte *outBlock) const
-{
-	word32 l,r;
-	Block::Get(inBlock)(l)(r);
-	IPERM(l,r);
-	m_des1.RawProcessBlock(l, r);
-	m_des2.RawProcessBlock(r, l);
-	m_des1.RawProcessBlock(l, r);
-	FPERM(l,r);
-	Block::Put(xorBlock, outBlock)(r)(l);
-}
-
-
-
-#endif	// #ifndef CRYPTOPP_IMPORTS
+#endif
