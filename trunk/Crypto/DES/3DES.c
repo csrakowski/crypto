@@ -196,7 +196,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=1; i<17; i++)
+	for(i=16; i>0; i--)
 	{
 		Left2 = Left;
 		Left = Right;
@@ -242,16 +242,17 @@ int main(int argc, char *argv[])
 		byte message[8];
 		ulong M;
 	} in;
-	in.message[0] = '1';
+	in.message[0] = 'A';
 	in.message[1] = '2';
-	in.message[2] = '3';
+	in.message[2] = 'B';
 	in.message[3] = '4';
-	in.message[4] = '5';
+	in.message[4] = 'C';
 	in.message[5] = '6';
-	in.message[6] = '7';
+	in.message[6] = 'D';
 	in.message[7] = '\0';
 
-	
+	in.M = 0x0123456789ABCDEF;
+
 	if(argc < 3)
 	{
 		i = 1;
