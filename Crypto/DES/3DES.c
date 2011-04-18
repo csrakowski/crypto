@@ -83,7 +83,7 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
-void f(uint out, uint R, ulong k)
+void f(uint* out, uint* R, ulong* k)
 {
 	ulong E;
 	uint preout;
@@ -92,7 +92,7 @@ void f(uint out, uint R, ulong k)
 	//Expand R and xor key with Expanded R
 	for(i=0; i<48; i++)
 	{
-		E |= (((k>>(48-i))&1)^((R>>(32-ei[i]))&1)<<(48-i));
+		E |= (((*k>>(48-i))&1)^((*R>>(32-ei[i]))&1)<<(48-i));
 	}
 
 	/*
@@ -131,11 +131,11 @@ void f(uint out, uint R, ulong k)
 	
 	for(i=0; i<32; i++)
 	{
-		out |= ((preout>>(32-p32i[i]))&1);
+		*out |= ((preout>>(32-p32i[i]))&1);
 	}
 }
 
-void encryptDES(DES_KEY* key, ulong M, ulong out)
+void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 //void encryptDES(DES_KEY* key, byte M[8], byte out[8])
 {
 	//TODO FIX MEH D:
@@ -150,7 +150,7 @@ void encryptDES(DES_KEY* key, ulong M, ulong out)
 	IP ^= IP;
 	for(i=0; i<64; i++)
 	{
-		IP |= (((M>>(64-ip[i]))&1)<<(64-i));
+		IP |= (((*M>>(64-ip[i]))&1)<<(64-i));
 	}
 
 	Left = (IP>>32);
@@ -162,7 +162,7 @@ void encryptDES(DES_KEY* key, ulong M, ulong out)
 		Left = Right;
 
 		tmp =0;
-		f(tmp, Right, key->k2[i]);
+		f(&tmp, &Right, &key->k2[i]);
 		for(j=0; j<32; j++)
 		{
 			Right |= (((((Left2>>(32-i))&1)^(tmp>>(32-i))&1)&1)<<(32-i));
@@ -172,23 +172,23 @@ void encryptDES(DES_KEY* key, ulong M, ulong out)
 	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		M |= (((res>>(64-fp[i]))&1)<<(64-i));
+		*M |= (((res>>(64-fp[i]))&1)<<(64-i));
 	}
 }
 
-void decryptDES(DES_KEY* key, ulong M, ulong out)
+void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 {
 	//TODO
 }
 
-void encrypt3DES(TDES_KEY* key, ulong M, ulong out)
+void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 {
 	encryptDES(&key->k1, M, out);
 	decryptDES(&key->k2, M, out);
 	encryptDES(&key->k3, M, out);
 }
 
-void decrypt3DES(TDES_KEY* key, ulong M, ulong out)
+void decrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 {
 	decryptDES(&key->k3, M, out);
 	encryptDES(&key->k2, M, out);
@@ -228,10 +228,10 @@ int main(int argc, char *argv[])
 	printf("Plain: %s\n", in.message);
 	printf("Hex: %X\n", in.M);
 
-	encrypt3DES(&key, in.M, data);
+	encrypt3DES(&key, &in.M, &data);
 	printf("Encrypted: %X\n",data);
 
-	decrypt3DES(&key, data, in.M);
+	decrypt3DES(&key, &data, &in.M);
 	printf("Decrypted: %X\n", in.M);
 	printf("Result: %s\n", in.message);
 
