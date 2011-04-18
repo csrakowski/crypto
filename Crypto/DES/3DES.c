@@ -163,16 +163,17 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 		tmp =0;
 		f(&tmp, &Right, &key->k2[i]);
+		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(32-i))&1)^(tmp>>(32-i))&1)&1)<<(32-i));
+			Right |= (((((Left2>>(31-i))&1)^(tmp>>(31-i))&1)&1)<<(32-i));
 		}
 	}
 	
 	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		*M |= (((res>>(64-fp[i]))&1)<<(64-i));
+		*out |= (((res>>(64-fp[i]))&1)<<(64-i));
 	}
 }
 
@@ -196,23 +197,24 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=0; i<17; i++)
+	for(i=16; i>0; i--)
 	{
 		Left2 = Left;
 		Left = Right;
 
 		tmp =0;
 		f(&tmp, &Right, &key->k2[i]);
+		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(32-i))&1)^(tmp>>(32-i))&1)&1)<<(32-i));
+			Right |= (((((Left2>>(31-i))&1)^(tmp>>(31-i))&1)&1)<<(31-i));
 		}
 	}
 	
 	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		*M |= (((res>>(64-fp[i]))&1)<<(64-i));
+		*out |= (((res>>(64-fp[i]))&1)<<(64-i));
 	}
 }
 
@@ -234,7 +236,7 @@ int main(int argc, char *argv[])
 {
 	int i = 0;
 	TDES_KEY key;
-	//Test key, one used on the site.
+	//Bytes for k1, k2 and k3
 	ulong data = 0x133457799BBCDFF1;
 	
 	union
@@ -243,15 +245,13 @@ int main(int argc, char *argv[])
 		ulong M;
 	} in;
 	in.message[0] = 'A';
-	in.message[1] = '2';
-	in.message[2] = 'B';
-	in.message[3] = '4';
-	in.message[4] = 'C';
-	in.message[5] = '6';
-	in.message[6] = 'D';
+	in.message[1] = '1';
+	in.message[2] = 'C';
+	in.message[3] = '3';
+	in.message[4] = 'E';
+	in.message[5] = '5';
+	in.message[6] = 'G';
 	in.message[7] = '\0';
-
-	in.M = 0x0123456789ABCDEF;
 
 	if(argc < 3)
 	{
@@ -264,13 +264,14 @@ int main(int argc, char *argv[])
 	create3DESKey(&key);
 	
 	printf("Plain: %s\n", in.message);
-	printf("Hex: %lX\n", in.M);
+	printf("Hex: %llX\n", in.M);
 
-	encrypt3DES(&key, &in.M, &data);
-	printf("Encrypted: %lX\n",data);
+	data^=data;
+	encryptDES(&key.k1, &in.M, &data);
+	printf("Encrypted: %llX\n",data);
 
-	decrypt3DES(&key, &data, &in.M);
-	printf("Decrypted: %lX\n", in.M);
+	decryptDES(&key.k1, &data, &in.M);
+	printf("Decrypted: %llX\n", in.M);
 	printf("Result: %s\n", in.message);
 
 	system("pause");
