@@ -242,13 +242,13 @@ int main(int argc, char *argv[])
 		byte message[8];
 		ulong M;
 	} in;
-	in.message[0] = 'A';
-	in.message[1] = 'B';
-	in.message[2] = 'C';
-	in.message[3] = 'D';
-	in.message[4] = 'E';
-	in.message[5] = 'F';
-	in.message[6] = 'G';
+	in.message[0] = '1';
+	in.message[1] = '2';
+	in.message[2] = '3';
+	in.message[3] = '4';
+	in.message[4] = '5';
+	in.message[5] = '6';
+	in.message[6] = '7';
 	in.message[7] = '\0';
 
 	
