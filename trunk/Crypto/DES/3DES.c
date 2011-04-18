@@ -267,10 +267,10 @@ int main(int argc, char *argv[])
 	printf("Hex: %llX\n", in.M);
 
 	data^=data;
-	encryptDES(&key.k1, &in.M, &data);
+	encrypt3DES(&key, &in.M, &data);
 	printf("Encrypted: %llX\n",data);
 
-	decryptDES(&key.k1, &data, &in.M);
+	decrypt3DES(&key, &data, &in.M);
 	printf("Decrypted: %llX\n", in.M);
 	printf("Result: %s\n", in.message);
 
