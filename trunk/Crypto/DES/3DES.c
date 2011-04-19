@@ -89,14 +89,19 @@ void parse3DESKey(TDES_KEY* key, char* file)
 	FILE* f; //= fopen(file, "r");
 	int r = fopen_s(&f, file, "r");
 	
-	r = fread(buf, sizeof(char), 20, f);
-	key->k1.k = atoi(buf);
+	printf("Parsing keyfile %s\n", file);
 
 	r = fread(buf, sizeof(char), 20, f);
-	key->k2.k = atoi(buf);
+	key->k1.k = (ulong)atoi(buf);
+	printf("\tKey1: %llX\n", key->k1.k);
 
 	r = fread(buf, sizeof(char), 20, f);
-	key->k3.k = atoi(buf);
+	key->k2.k = (ulong)atoi(buf);
+	printf("\tKey2: %llX\n", key->k1.k);
+
+	r = fread(buf, sizeof(char), 20, f);
+	key->k3.k = (ulong)atoi(buf);
+	printf("\tKey3: %llX\n", key->k1.k);
 }
 
 void f(uint* out, uint* R, ulong* k)
@@ -193,6 +198,47 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 	}
 }
 
+void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
+{
+	encryptDES(&key->k1, M, out);
+	decryptDES(&key->k2, M, out);
+	encryptDES(&key->k3, M, out);
+}
+
+void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
+{
+	TDES_KEY key;
+	FILE* fin;
+	FILE* fout;	
+	int r;
+	union
+	{
+		byte ch[8];
+		ulong ul;
+	} buf;
+
+	parse3DESKey(&key, keyFile);
+		
+	r = fopen_s(&fin, fileIn, "r");
+	if(r)
+	{
+
+	}
+	r = fopen_s(&fout, fileOut, "w");
+	if(r)
+	{
+
+	}
+
+	r = fread(buf.ch, sizeof(char), 8, fin);
+	while(r)
+	{
+		encrypt3DES(&key, &buf.ul, &buf.ul);
+		fwrite(buf.ch, sizeof(char), 8, fout);
+		r = fread(buf.ch, sizeof(char), 8, fin);
+	}
+}
+
 void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 {
 	//TODO FIX MEH D:
@@ -234,24 +280,11 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	}
 }
 
-void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
-{
-	encryptDES(&key->k1, M, out);
-	decryptDES(&key->k2, M, out);
-	encryptDES(&key->k3, M, out);
-}
-
 void decrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 {
 	decryptDES(&key->k3, M, out);
 	encryptDES(&key->k2, M, out);
 	decryptDES(&key->k1, M, out);
-}
-
-void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
-{
-	TDES_KEY key;
-	parse3DESKey(&key, keyFile);
 }
 
 void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
@@ -262,23 +295,6 @@ void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 int main(int argc, char *argv[])
 {
 	int i = 0;
-	
-	//Bytes for k1, k2 and k3
-	ulong data = 0x133457799BBCDFF1;
-	
-	union
-	{
-		byte message[8];
-		ulong M;
-	} in;
-	in.message[0] = 'A';
-	in.message[1] = '1';
-	in.message[2] = 'C';
-	in.message[3] = '3';
-	in.message[4] = 'E';
-	in.message[5] = '5';
-	in.message[6] = 'G';
-	in.message[7] = '\0';
 
 	if(argc > 4)
 	{
