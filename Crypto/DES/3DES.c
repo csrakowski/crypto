@@ -95,18 +95,19 @@ void parse3DESKey(TDES_KEY* key, char* file)
 	int r = fopen_s(&f, file, "r");
 	
 	printf("Parsing keyfile %s\n", file);
+	printf("--------------------------\n");
 
 	r = fread(buf.ch, sizeof(char), 8, f);
 	key->k1.k = buf.ul;//(ulong)atoi(buf);
-	printf("\tKey1: %llX\n", key->k1.k);
+	printf("\tKey1: %llX - %lld\n", key->k1.k, key->k1.k);
 
 	r = fread(buf.ch, sizeof(char), 8, f);
 	key->k2.k = buf.ul;//(ulong)atoi(buf);
-	printf("\tKey2: %llX\n", key->k1.k);
+	printf("\tKey2: %llX - %lld\n", key->k2.k, key->k2.k);
 
 	r = fread(buf.ch, sizeof(char), 8, f);
 	key->k3.k = buf.ul;//(ulong)atoi(buf);
-	printf("\tKey3: %llX\n", key->k1.k);
+	printf("\tKey3: %llX - %lld\n", key->k3.k, key->k3.k);
 }
 
 void f(uint* out, uint* R, ulong* k)
@@ -294,7 +295,36 @@ void decrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 
 void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 {
+	TDES_KEY key;
+	FILE* fin;
+	FILE* fout;	
+	int r;
+	union
+	{
+		byte ch[8];
+		ulong ul;
+	} buf, buf2;
 
+	parse3DESKey(&key, keyFile);
+		
+	r = fopen_s(&fin, fileIn, "r");
+	if(r)
+	{
+
+	}
+	r = fopen_s(&fout, fileOut, "w");
+	if(r)
+	{
+
+	}
+
+	r = fread(buf.ch, sizeof(char), 8, fin);
+	while(r)
+	{
+		decrypt3DES(&key, &buf.ul, &buf2.ul);
+		fwrite(buf2.ch, sizeof(char), 8, fout);
+		r = fread(buf.ch, sizeof(char), 8, fin);
+	}
 }
 
 int main(int argc, char *argv[])
