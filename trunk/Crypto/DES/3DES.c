@@ -193,7 +193,7 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-i))&1)^(tmp>>(31-i))&1)&1)<<(32-i));
+			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(32-j));
 		}
 	}
 	
@@ -239,6 +239,9 @@ void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	r = fread(buf.ch, sizeof(char), 8, fin);
 	while(r)
 	{
+		buf.ul <<= ((8-r)*8);	//Pad with 0's if not multiple of 8
+		buf2.ul^=buf2.ul;		//Clear Previous
+
 		encrypt3DES(&key, &buf.ul, &buf2.ul);
 		fwrite(buf2.ch, sizeof(char), 8, fout);
 		r = fread(buf.ch, sizeof(char), 8, fin);
@@ -265,7 +268,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=16; i>0; i--)
+	for(i=1; i<17; i++)
 	{
 		Left2 = Left;
 		Left = Right;
@@ -275,7 +278,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-i))&1)^(tmp>>(31-i))&1)&1)<<(31-i));
+			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(32-j));
 		}
 	}
 	
@@ -321,6 +324,9 @@ void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	r = fread(buf.ch, sizeof(char), 8, fin);
 	while(r)
 	{
+		buf.ul <<= ((8-r)*8);	//Pad with 0's if not multiple of 8
+		buf2.ul^=buf2.ul;		//Clear Previous
+
 		decrypt3DES(&key, &buf.ul, &buf2.ul);
 		fwrite(buf2.ch, sizeof(char), 8, fout);
 		r = fread(buf.ch, sizeof(char), 8, fin);
@@ -340,18 +346,20 @@ int main(int argc, char *argv[])
 		if(strcmp(argv[1], "-e") == 0)
 		{
 			encryptFile3DES(keyFile, fileIn, fileOut);
-			return 0;
 		}
 		else if(strcmp(argv[1], "-d") == 0)
 		{
 			decryptFile3DES(keyFile, fileIn, fileOut);
-			return 0;
 		}
 	}
 	else
 	{
 		printf("Usage: DES <-e or -d> <KeyFile> <InputFile> <OutputFile>");
 	}
+
+#ifdef _DEBUG
+	system("pause");
+#endif
 	return 0;
 }
 
