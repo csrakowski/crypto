@@ -31,5 +31,11 @@
     <None Include="Key.3DES">
       <Filter>Files</Filter>
     </None>
+    <None Include="Sensitive.data">
+      <Filter>Files</Filter>
+    </None>
+    <None Include="Encrypted.data">
+      <Filter>Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

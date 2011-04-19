@@ -113,7 +113,11 @@
     <ClInclude Include="3DES.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Key.3DES" />
+    <None Include="Encrypted.data" />
+    <None Include="Key.3DES">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Sensitive.data" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
