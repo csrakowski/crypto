@@ -213,10 +213,12 @@ void create3DESKey(TDES_KEY* key);
 void parse3DESKey(TDES_KEY* key, char* file);
 
 void encryptDES(DES_KEY* key, ulong* M, ulong* out);
-void decryptDES(DES_KEY* key, ulong* M, ulong* out);
-
 void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out);
+void encryptFile3DES(char* key, char* fileIn, char* fileOut);
+
+void decryptDES(DES_KEY* key, ulong* M, ulong* out);
 void decrypt3DES(TDES_KEY* key, ulong* M, ulong* out);
+void decryptFile3DES(char* key, char* fileIn, char* fileOut);
 
 #ifdef __cplusplus
 }
