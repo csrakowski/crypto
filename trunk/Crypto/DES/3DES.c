@@ -83,6 +83,22 @@ void create3DESKey(TDES_KEY* key)
 	createDESKey(&key->k3);
 }
 
+void parse3DESKey(TDES_KEY* key, char* file)
+{
+	char* buf;
+	FILE* f = fopen(file, "r");
+	int r;
+
+	r = fread(buf, sizeof(char), 20, f);
+	key->k1.k = atoi(buf);
+
+	r = fread(buf, sizeof(char), 20, f);
+	key->k2.k = atoi(buf);
+
+	r = fread(buf, sizeof(char), 20, f);
+	key->k3.k = atoi(buf);
+}
+
 void f(uint* out, uint* R, ulong* k)
 {
 	ulong E;
@@ -256,44 +272,33 @@ int main(int argc, char *argv[])
 	if(argc < 3)
 	{
 		i = 1;
-	}
+	}	
 	
-	key.k1.k = data;
-	key.k2.k = data;
-	key.k3.k = data;
-	create3DESKey(&key);
-	
-	printf("Plain: %s\n", in.message);
-	printf("Hex: %llX\n", in.M);
-
-	data^=data;
-	encrypt3DES(&key, &in.M, &data);
-	printf("Encrypted: %llX\n",data);
-
-	decrypt3DES(&key, &data, &in.M);
-	printf("Decrypted: %llX\n", in.M);
-	printf("Result: %s\n", in.message);
-
-	system("pause");
-
 	if(i == 0)
 	{
-		char* buf;
-		for(i=2; i<argc; i++)
-		{
-			buf = argv[i];
-			buf += strlen(argv[i]);
-		}
+		char* keyFile = argv[2];
+		char* file = argv[3];
+		parse3DESKey(&key, keyFile);
+		//create3DESKey(&key);
+
 		if(strcmp(argv[1], "-e") == 0)
 		{
+			printf("Plain: %s\n", in.message);
+			printf("Hex: %llX\n", in.M);
+			encrypt3DES(&key, &in.M, &data);
+			printf("Encrypted: %llX\n",data);
+
 			return 0;
 		}
 		else if(strcmp(argv[1], "-d") == 0)
 		{
+			printf("Encrypted: %llX\n",data);
+			decrypt3DES(&key, &data, &in.M);
+			printf("Plain: %s\n", in.message);
+			printf("Hex: %llX\n", in.M);
 			return 0;
 		}
 	}
-
 	return 0;
 }
 
