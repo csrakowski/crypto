@@ -85,22 +85,27 @@ void create3DESKey(TDES_KEY* key)
 
 void parse3DESKey(TDES_KEY* key, char* file)
 {
-	char* buf = ((char*)malloc(sizeof(char)*20));
+	//char* buf = ((char*)malloc(sizeof(char)*20));
+	union
+	{
+		byte ch[8];
+		ulong ul;
+	} buf;
 	FILE* f; //= fopen(file, "r");
 	int r = fopen_s(&f, file, "r");
 	
 	printf("Parsing keyfile %s\n", file);
 
-	r = fread(buf, sizeof(char), 20, f);
-	key->k1.k = (ulong)atoi(buf);
+	r = fread(buf.ch, sizeof(char), 8, f);
+	key->k1.k = buf.ul;//(ulong)atoi(buf);
 	printf("\tKey1: %llX\n", key->k1.k);
 
-	r = fread(buf, sizeof(char), 20, f);
-	key->k2.k = (ulong)atoi(buf);
+	r = fread(buf.ch, sizeof(char), 8, f);
+	key->k2.k = buf.ul;//(ulong)atoi(buf);
 	printf("\tKey2: %llX\n", key->k1.k);
 
-	r = fread(buf, sizeof(char), 20, f);
-	key->k3.k = (ulong)atoi(buf);
+	r = fread(buf.ch, sizeof(char), 8, f);
+	key->k3.k = buf.ul;//(ulong)atoi(buf);
 	printf("\tKey3: %llX\n", key->k1.k);
 }
 
@@ -215,7 +220,7 @@ void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	{
 		byte ch[8];
 		ulong ul;
-	} buf;
+	} buf, buf2;
 
 	parse3DESKey(&key, keyFile);
 		
@@ -233,8 +238,8 @@ void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	r = fread(buf.ch, sizeof(char), 8, fin);
 	while(r)
 	{
-		encrypt3DES(&key, &buf.ul, &buf.ul);
-		fwrite(buf.ch, sizeof(char), 8, fout);
+		encrypt3DES(&key, &buf.ul, &buf2.ul);
+		fwrite(buf2.ch, sizeof(char), 8, fout);
 		r = fread(buf.ch, sizeof(char), 8, fin);
 	}
 }
