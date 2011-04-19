@@ -210,6 +210,7 @@ static const byte pc2[] = {
 
 void createDESKey(DES_KEY* key);
 void create3DESKey(TDES_KEY* key);
+void parse3DESKey(TDES_KEY* key, char* file);
 
 void encryptDES(DES_KEY* key, ulong* M, ulong* out);
 void decryptDES(DES_KEY* key, ulong* M, ulong* out);
