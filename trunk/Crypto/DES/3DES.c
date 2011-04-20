@@ -26,9 +26,10 @@ void createDESKey(DES_KEY* key)
 	//		bytebit[m])			/* and which bit of that byte */
 	//		? 1 : 0;			/* and store 1-bit result */
 	//}
+	key->kPlus ^= key->kPlus;
 	for(i=0; i<56; i++)
 	{
-		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(56-i);
+		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(56-i); 
 	}
 
 	key->c[0] = ((key->kPlus>>28)&0xFFFFFFF);
@@ -190,12 +191,12 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=1; i<17; i++)
+	for(i=0; i<16; i++)
 	{
 		Left2 = Left;
 		Left = Right;
 
-		tmp =0;
+		tmp ^= tmp;
 		f(&tmp, &Right, &key->k2[i]);
 		Right^=Right;
 		for(j=0; j<32; j++)
