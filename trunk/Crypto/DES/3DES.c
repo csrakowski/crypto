@@ -13,8 +13,10 @@
 #include "../SpecialMath/SpecialMath.h"
 
 void createDESKey(DES_KEY* key)
-{
+{	
 	int i,j;
+
+	printf("Creating DES key: %llX\n", key->k);
 
 	//for (j=0; j<56; j++)		/* convert pc1 to bits of key */
 	//{
@@ -60,20 +62,23 @@ void createDESKey(DES_KEY* key)
 		key->c[i] = ROLL(key->c[i-1], rolls[i-1]);
 		key->d[i] = ROLL(key->d[i-1], rolls[i-1]);
 
+		key->k2[i-1] ^= key->k2[i-1];
 		for(j=0; j<48; j++)
 		{
 			int val = pc2[j];
 			if(val < 28)
 			{
-				key->k2[i] |= (((key->c[i]>>(28-val))&1)<<(28-i));
-				//key->k2[i] |= (key->c[i]&(1<<(28-val)));				
+				//key->k2[i] |= (((key->c[i]>>(28-val))&1)<<(28-i));
+				key->k2[i-1] |= (key->c[i]&(1<<(28-val)));
 			}
 			else
 			{
-				key->k2[i] |= (((key->c[i]>>(28-(val-28)))&1)<<(28-i));
+				//key->k2[i] |= (((key->c[i]>>(28-(val-28)))&1)<<(28-i));
+				key->k2[i-1] |= (key->d[i]&(1<<(56-val)));
 			}
 		}
 	}
+	printf("Key Created\n");
 }
 
 void create3DESKey(TDES_KEY* key)
@@ -108,6 +113,8 @@ void parse3DESKey(TDES_KEY* key, char* file)
 	r = fread(buf.ch, sizeof(char), 8, f);
 	key->k3.k = buf.ul;//(ulong)atoi(buf);
 	printf("\tKey3: %llX - %lld\n", key->k3.k, key->k3.k);
+
+	create3DESKey(key);
 }
 
 void f(uint* out, uint* R, ulong* k)
