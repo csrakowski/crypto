@@ -27,6 +27,7 @@
 *			Keying option 3 is equivalent to DES, with only 56 key bits.
 *			This option provides backward compatibility with DES, because the first and second DES operations cancel out.
 *			It is no longer recommended by the National Institute of Standards and Technology (NIST),[6] and is not supported by ISO/IEC 18033-3.
+*			http://en.wikipedia.org/wiki/3DES
 *
 * FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
 *			There was no DES fun fact, so I'll leave the PGP one.
