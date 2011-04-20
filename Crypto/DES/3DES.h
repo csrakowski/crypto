@@ -50,7 +50,7 @@ The meaning is as follows: the first bit of the output is taken from the 58th bi
 the second bit from the 50th bit, and so on,
 with the last bit of the output taken from the 7th bit of the input.
 */
-static byte ip[] = {
+static const byte ip[] = {
 	   58, 50, 42, 34, 26, 18, 10,  2,
 	   60, 52, 44, 36, 28, 20, 12,  4,
 	   62, 54, 46, 38, 30, 22, 14,  6,
@@ -63,7 +63,7 @@ static byte ip[] = {
 
 /* final permutation IP^-1 */
 /* See IP */
-static byte fp[] = {
+static const byte fp[] = {
 	   40,  8, 48, 16, 56, 24, 64, 32,
 	   39,  7, 47, 15, 55, 23, 63, 31,
 	   38,  6, 46, 14, 54, 22, 62, 30,
@@ -81,7 +81,7 @@ Note that some bits from the input are duplicated at the output;
 e.g. the fifth bit of the input is duplicated in both the sixth and eighth bit of the output.
 Thus, the 32-bit half-block is expanded to 48 bits
 */
-static byte ei[] = {
+static const byte ei[] = {
 	   32,  1,  2,  3,  4,  5,
 		4,  5,  6,  7,  8,  9,
 		8,  9, 10, 11, 12, 13,
@@ -101,7 +101,7 @@ For example, an input "011011" has outer bits "01" and inner bits "1101";
 noting that the first row is "00" and the first column is "0000", the corresponding output for S-box S5 would be "1001" (=9),
 the value in the second row, 14th column. (See S-box).
 */
-static byte sbox[8][64] = {
+static const byte sbox[8][64] = {
 	   /* S1 */
 	   14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,
 		0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8,
@@ -153,7 +153,7 @@ static byte sbox[8][64] = {
 
 /* 32-bit permutation function P used on the output of the S-boxes */
 /* The P permutation shuffles the bits of a 32-bit half-block */
-static byte p32i[] = {
+static const byte p32i[] = {
 	   16,  7, 20, 21,
 	   29, 12, 28, 17,
 		1, 15, 23, 26,

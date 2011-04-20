@@ -29,7 +29,7 @@ void createDESKey(DES_KEY* key)
 	key->kPlus ^= key->kPlus;
 	for(i=0; i<56; i++)
 	{
-		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(56-i); 
+		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(55-i); 
 	}
 
 	key->c[0] = ((key->kPlus>>28)&0xFFFFFFF);
@@ -67,7 +67,7 @@ void createDESKey(DES_KEY* key)
 		for(j=0; j<48; j++)
 		{
 			int val = pc2[j];
-			if(val < 28)
+			if(val <= 28)
 			{
 				//key->k2[i] |= (((key->c[i]>>(28-val))&1)<<(28-i));
 				key->k2[i-1] |= (key->c[i]&(1<<(28-val)));
@@ -120,14 +120,14 @@ void parse3DESKey(TDES_KEY* key, char* file)
 
 void f(uint* out, uint* R, ulong* k)
 {
-	ulong E;
-	uint preout;
+	ulong E = 0;
+	uint preout = 0;
 	int i;
 
 	//Expand R and xor key with Expanded R
 	for(i=0; i<48; i++)
 	{
-		E |= (((*k>>(48-i))&1)^((*R>>(32-ei[i]))&1)<<(48-i));
+		E |= (((*k>>(47-i))&1)^((*R>>(32-ei[i]))&1)<<(47-i));
 	}
 
 	/*
@@ -161,9 +161,10 @@ void f(uint* out, uint* R, ulong* k)
 	for(i=0; i<8; i++)
 	{
 		int r = sbox[i][((((E>>(46-(6*i)))&2) | ((E>>(43-(6*i)))&1)) * ((E>>(46-(6*i)))&15))];
-		preout |= (r<<(32-(4*i)));
+		preout |= (r<<(31-(4*i)));
 	}
 	
+	*out ^= *out;
 	for(i=0; i<32; i++)
 	{
 		*out |= ((preout>>(32-p32i[i]))&1);
@@ -182,10 +183,12 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 	uint tmp;
 	int i,j;
 
+	printf("Encryping block\n");
+
 	IP ^= IP;
 	for(i=0; i<64; i++)
 	{
-		IP |= (((*M>>(64-ip[i]))&1)<<(64-i));
+		IP |= (((*M>>(64-ip[i]))&1)<<(63-i));
 	}
 
 	Left = (IP>>32);
@@ -201,14 +204,14 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(32-j));
+			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
 	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		*out |= (((res>>(64-fp[i]))&1)<<(64-i));
+		*out |= (((res>>(64-fp[i]))&1)<<(63-i));
 	}
 }
 
@@ -267,33 +270,35 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	uint tmp;
 	int i,j;
 
+	printf("Decryping block\n");
+
 	IP ^= IP;
 	for(i=0; i<64; i++)
 	{
-		IP |= (((*M>>(64-ip[i]))&1)<<(64-i));
+		IP |= (((*M>>(64-ip[i]))&1)<<(63-i));
 	}
 
 	Left = (IP>>32);
 	Right = (IP&UINT_MAX);
 
-	for(i=1; i<17; i++)
+	for(i=0; i<16; i++)
 	{
 		Left2 = Left;
 		Left = Right;
 
-		tmp =0;
+		tmp ^= tmp;
 		f(&tmp, &Right, &key->k2[i]);
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(32-j));
+			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
 	res = ((Right<<31)|Left);
 	for(i=0; i<64; i++)
 	{
-		*out |= (((res>>(64-fp[i]))&1)<<(64-i));
+		*out |= (((res>>(64-fp[i]))&1)<<(63-i));
 	}
 }
 
