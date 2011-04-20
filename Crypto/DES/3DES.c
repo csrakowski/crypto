@@ -204,7 +204,8 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
+			Right = Left2^tmp;
+			//Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
@@ -287,11 +288,12 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Left = Right;
 
 		tmp ^= tmp;
-		f(&tmp, &Right, &key->k2[i]);
+		f(&tmp, &Right, &key->k2[15-i]);
 		Right^=Right;
 		for(j=0; j<32; j++)
 		{
-			Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
+			Right = Left2^tmp;
+			//Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
