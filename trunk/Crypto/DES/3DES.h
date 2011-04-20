@@ -8,7 +8,26 @@
 * http://orlingrabbe.com/des.htm
 *
 * 3DES (Triple DES) Encryption
-* Safety	Due to the key size it's not as secure as you can get with RSA, but it is still a valid choice
+* Safety	Triple DES uses a "key bundle" which comprises three DES keys, K1, K2 and K3, each of 56 bits (excluding parity bits).
+*			This improves the strength of the algorithm when using keying option 1 an 2, and provides backward compatibility with DES with keying option 3.
+*
+*			The standards define three keying options:
+*			Keying option 1: All three keys are independent.
+*			Keying option 2: K1 and K2 are independent, and K3 = K1.
+*			Keying option 3: All three keys are identical, i.e. K1 = K2 = K3.
+*
+*			Keying option 1 is the strongest, with 3 × 56 = 168 independent key bits.
+*			But due to the meet-in-the-middle attack the effective security it provides is only 112 bits.
+*			The best attack known on keying option 1 requires around 232 known plaintexts, 2113 steps, 290 single DES encryptions, and 288 memory.
+*			This is not currently practical and NIST considers keying option 1 to be appropriate through 2030.
+*
+*			Keying option 2 provides less security, with 2 × 56 = 112 key bits.
+*			However, this option is susceptible to certain chosen-plaintext or known-plaintext attacks and thus it is designated by NIST to have only 80 bits of security.
+*
+*			Keying option 3 is equivalent to DES, with only 56 key bits.
+*			This option provides backward compatibility with DES, because the first and second DES operations cancel out.
+*			It is no longer recommended by the National Institute of Standards and Technology (NIST),[6] and is not supported by ISO/IEC 18033-3.
+*
 * FunFact	Bruce Schneier PGP signs his grocery lists so that he can detect if someone has tampered with his milk. http://www.schneierfacts.com/fact/76
 *			There was no DES fun fact, so I'll leave the PGP one.
 \*****************************/
