@@ -183,7 +183,7 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 	uint tmp;
 	int i,j;
 
-	printf("Encryping block\n");
+	printf("\tEncrypting round\n");
 
 	IP ^= IP;
 	for(i=0; i<64; i++)
@@ -219,9 +219,11 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 void encrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 {
+	printf("Encrypting block %llX\n", *M);
 	encryptDES(&key->k1, M, out);
 	decryptDES(&key->k2, M, out);
 	encryptDES(&key->k3, M, out);
+	printf("\n");
 }
 
 void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
@@ -241,14 +243,15 @@ void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	r = fopen_s(&fin, fileIn, "r");
 	if(r)
 	{
-
+		printf("bleh");
 	}
 	r = fopen_s(&fout, fileOut, "w");
 	if(r)
 	{
-
+		printf("bleh");
 	}
 
+	printf("Encrypting file \'%s\'\n", fileIn);
 	r = fread(buf.ch, sizeof(char), 8, fin);
 	while(r)
 	{
@@ -259,6 +262,7 @@ void encryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 		fwrite(buf2.ch, sizeof(char), 8, fout);
 		r = fread(buf.ch, sizeof(char), 8, fin);
 	}
+	printf("Encrypting done!\nOutput written to \'%s\'\n", fileOut);
 }
 
 void decryptDES(DES_KEY* key, ulong* M, ulong* out)
@@ -272,7 +276,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 	uint tmp;
 	int i,j;
 
-	printf("Decryping block\n");
+	printf("\tDecrypting round\n");
 
 	IP ^= IP;
 	for(i=0; i<64; i++)
@@ -289,7 +293,7 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 		Left = Right;
 
 		tmp ^= tmp;
-		f(&tmp, &Right, &key->k2[15-i]);
+		f(&tmp, &Right, &key->k2[i]);
 		//Right^=Right;
 		Right = Left2^tmp;
 		for(j=0; j<32; j++)
@@ -308,9 +312,11 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 void decrypt3DES(TDES_KEY* key, ulong* M, ulong* out)
 {
+	printf("Decrypting block %llX\n", *M);
 	decryptDES(&key->k3, M, out);
 	encryptDES(&key->k2, M, out);
 	decryptDES(&key->k1, M, out);
+	printf("\n");
 }
 
 void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
@@ -330,14 +336,15 @@ void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 	r = fopen_s(&fin, fileIn, "r");
 	if(r)
 	{
-
+		printf("bleh");
 	}
 	r = fopen_s(&fout, fileOut, "w");
 	if(r)
 	{
-
+		printf("bleh");
 	}
 
+	printf("Decrypting file \'%s\'\n", fileIn);
 	r = fread(buf.ch, sizeof(char), 8, fin);
 	while(r)
 	{
@@ -348,6 +355,7 @@ void decryptFile3DES(char* keyFile, char* fileIn, char* fileOut)
 		fwrite(buf2.ch, sizeof(char), 8, fout);
 		r = fread(buf.ch, sizeof(char), 8, fin);
 	}
+	printf("Decrypting done!\nOutput written to \'%s\'\n", fileOut);
 }
 
 int main(int argc, char *argv[])
