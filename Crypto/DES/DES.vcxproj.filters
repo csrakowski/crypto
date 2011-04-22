@@ -37,5 +37,8 @@
     <None Include="Encrypted.data">
       <Filter>Files</Filter>
     </None>
+    <None Include="Decrypted.data">
+      <Filter>Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

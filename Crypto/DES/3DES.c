@@ -29,7 +29,7 @@ void createDESKey(DES_KEY* key)
 	key->kPlus ^= key->kPlus;
 	for(i=0; i<56; i++)
 	{
-		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(55-i); 
+		key->kPlus |= ((key->k>>(56-pc1[i]))&1)<<(55-i);
 	}
 
 	key->c[0] = ((key->kPlus>>28)&0xFFFFFFF);
@@ -161,7 +161,7 @@ void f(uint* out, uint* R, ulong* k)
 	for(i=0; i<8; i++)
 	{
 		int r = sbox[i][((((E>>(46-(6*i)))&2) | ((E>>(43-(6*i)))&1)) * ((E>>(46-(6*i)))&15))];
-		preout |= (r<<(31-(4*i)));
+		preout |= (r<<(32-(4*i)));
 	}
 	
 	*out ^= *out;
@@ -201,15 +201,16 @@ void encryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 		tmp ^= tmp;
 		f(&tmp, &Right, &key->k2[i]);
-		Right^=Right;
+		//Right^=Right;
+		Right = Left2^tmp;
 		for(j=0; j<32; j++)
 		{
-			Right = Left2^tmp;
+			
 			//Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
-	res = ((Right<<31)|Left);
+	res = ((Right<<32)|Left);
 	for(i=0; i<64; i++)
 	{
 		*out |= (((res>>(64-fp[i]))&1)<<(63-i));
@@ -289,15 +290,16 @@ void decryptDES(DES_KEY* key, ulong* M, ulong* out)
 
 		tmp ^= tmp;
 		f(&tmp, &Right, &key->k2[15-i]);
-		Right^=Right;
+		//Right^=Right;
+		Right = Left2^tmp;
 		for(j=0; j<32; j++)
 		{
-			Right = Left2^tmp;
+			
 			//Right |= (((((Left2>>(31-j))&1)^(tmp>>(31-j))&1)&1)<<(31-j));
 		}
 	}
 	
-	res = ((Right<<31)|Left);
+	res = ((Right<<32)|Left);
 	for(i=0; i<64; i++)
 	{
 		*out |= (((res>>(64-fp[i]))&1)<<(63-i));

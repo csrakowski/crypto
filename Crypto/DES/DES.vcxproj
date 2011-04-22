@@ -113,6 +113,7 @@
     <ClInclude Include="3DES.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Decrypted.data" />
     <None Include="Encrypted.data" />
     <None Include="Key.3DES">
       <FileType>Document</FileType>
